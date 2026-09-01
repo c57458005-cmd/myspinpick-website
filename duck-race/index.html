@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🎡%3C/text%3E%3C/svg%3E" />
+  <title>Duck Race — A Fun Random Winner Picker for the Classroom</title>
+  <meta name="description" content="Free duck race picker. Type names, start the race, and watch the ducks cross the line to pick a random winner. No sign-up, runs in your browser." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://myspinpick.com/duck-race/" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4W9M7STTLM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4W9M7STTLM');
+    function track(name, params) { if (typeof gtag === 'function') { gtag('event', name, params); } }
+  </script>
+
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:title" content="Duck Race" />
+  <meta property="og:description" content="A fun classroom race picker." />
+  <meta property="og:url" content="https://myspinpick.com/duck-race/" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Duck Race",
+    "url": "https://myspinpick.com/duck-race/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Free classroom duck race picker."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the duck race work?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Type the racers' names, click Start Race, and each duck moves forward at a random speed. The first duck to cross the line wins — a random, suspenseful pick." }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
+      --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+    header { padding: 18px 0 6px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .brand-mini { font-weight: 700; font-size: 14px; color: var(--accent); }
+    .back { padding: 6px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; }
+    .back:hover { color: var(--accent); border-color: var(--accent); }
+    h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
+    @media (max-width: 640px) { .brand-mini { display: none; } }
+    input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+    .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+    .wheel-wrap { text-align: center; margin-bottom: 16px; }
+    canvas { max-width: 100%; }
+    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: #bfdbfe; border-color: #60a5fa; }
+    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
+    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
+    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history:empty { display: none; }
+    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    section { margin-top: 26px; }
+    h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
+    section p, section li { color: #334155; font-size: 15px; }
+    ul, ol { padding-left: 20px; }
+    .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
+    .related a:hover { border-color: var(--accent); color: var(--accent); }
+    .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+    details p { margin-top: 8px; color: #475569; }
+    footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { h1 { font-size: 23px; } button { min-height: 44px; } }
+  
+    /* ---- tool-specific ---- */
+    .track { margin-top:14px; background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:10px 12px; overflow:hidden; }
+    .lane { display:flex; align-items:center; gap:8px; padding:6px 0; }
+    .lane .nm { width:90px; font-size:13px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .lane .bar { flex:1; height:26px; background:#eef2ff; border-radius:8px; position:relative; }
+    .lane .duck { position:absolute; top:1px; left:0; font-size:20px; transition:left 1.6s cubic-bezier(.2,.7,.3,1); }
+    .winner { margin-top:14px; font-size:20px; font-weight:700; color:var(--accent); text-align:center; min-height:28px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <h1>Duck Race</h1>
+        <div class="topright"><span class="brand-mini">SpinPick</span><a class="back" href="../">← All Tools</a></div>
+      </div>
+      <p class="sub">A fun classroom race that picks a random winner.</p>
+    </header>
+<main>
+                  <div class="tool">
+        <input type="text" id="names" aria-label="List of names" value="Lily,Max,Sam,Zoe">
+        <div class="btns">
+          <button type="button" id="startBtn" class="primary" onclick="startRace()">Start Race</button>
+        </div>
+        <div class="track" id="track"></div>
+        <div class="winner" id="winner" aria-live="polite"></div>
+      </div>
+
+      <section id="related">
+        <h2>Related Tools</h2>
+        <div class="related">
+          <a href="../wheel-spinner/">Wheel Spinner <span>Spin names</span></a>
+          <a href="../random-group-generator/">Random Group Generator <span>Split groups</span></a>
+          <a href="../random-letter-picker/">Random Letter Picker <span>Pick a letter</span></a>
+          <a href="../yes-no-wheel/">Yes No Wheel <span>Quick choice</span></a>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>How does the duck race work?</summary>
+          <p>Type the racers' names, click Start Race, and each duck moves forward at a random speed. The first duck to cross the line wins — a random, suspenseful pick.</p>
+        </details>
+      </section>
+    </main>
+
+    <footer><p>SpinPick — free wheel spinner &amp; random decision tools.</p></footer>
+  </div>
+
+  <script>
+    var racers = [];
+    function buildLanes() {
+      var raw = document.getElementById('names').value;
+      racers = raw.split(/[\n,]/).map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 0; });
+      if (racers.length < 2) racers = ['Lily','Max','Sam','Zoe'];
+      var track = document.getElementById('track');
+      track.innerHTML = '';
+      racers.forEach(function(nm, i){
+        var lane = document.createElement('div');
+        lane.className = 'lane';
+        lane.innerHTML = '<div class="nm">' + nm + '</div><div class="bar"><div class="duck" id="duck' + i + '">🦆</div></div>';
+        track.appendChild(lane);
+      });
+      document.getElementById('winner').textContent = '';
+    }
+    var raceTimer = null;
+    var startBtn = document.getElementById('startBtn');
+    function startRace() {
+      if (raceTimer) { clearTimeout(raceTimer); raceTimer = null; }
+      buildLanes();
+      startBtn.disabled = true;
+      var durs = racers.map(function(){ return 1200 + Math.random() * 1600; });
+      var winner = 0, best = Infinity;
+      durs.forEach(function(d, i){ if (d < best) { best = d; winner = i; } });
+      // 1. commit start positions (no animation)
+      racers.forEach(function(_, i){
+        var duck = document.getElementById('duck' + i);
+        duck.style.transitionDuration = '0s';
+        duck.style.left = '0px';
+      });
+      // 2. force reflow so the browser registers the start position
+      void document.getElementById('track').offsetWidth;
+      // 3. animate each duck to the finish line at its own speed
+      racers.forEach(function(_, i){
+        var duck = document.getElementById('duck' + i);
+        duck.style.transitionDuration = (durs[i] / 1000) + 's';
+        duck.style.left = 'calc(100% - 28px)';
+      });
+      // 4. when the first duck finishes, freeze everyone at their current spot
+      raceTimer = setTimeout(function(){
+        var trackEl = document.getElementById('track');
+        var pos = racers.map(function(_, i){
+          return getComputedStyle(document.getElementById('duck' + i)).left;
+        });
+        racers.forEach(function(_, i){
+          var duck = document.getElementById('duck' + i);
+          duck.style.transitionDuration = '0s';
+          duck.style.left = pos[i];
+        });
+        document.getElementById('winner').textContent = '🏁 ' + racers[winner] + ' wins!';
+        track('race', { tool: 'duck-race' });
+        startBtn.disabled = false;
+        raceTimer = null;
+      }, best + 100);
+    }
+    buildLanes();
+  </script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🎡%3C/text%3E%3C/svg%3E" />
+  <title>Wheel Spinner — Spin a Wheel of Names to Pick a Random Winner</title>
+  <meta name="description" content="Free wheel spinner. Add names, spin the wheel, and pick a random winner for classrooms, raffles and decisions. No sign-up, runs in your browser." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://myspinpick.com/wheel-spinner/" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4W9M7STTLM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4W9M7STTLM');
+    function track(name, params) { if (typeof gtag === 'function') { gtag('event', name, params); } }
+  </script>
+
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:title" content="Wheel Spinner — Spin a Wheel of Names to Pick a Random Winner" />
+  <meta property="og:description" content="Free wheel spinner. Add names, spin the wheel, and pick a random winner for classrooms, raffles and decisions. No sign-up, runs in your browser." />
+  <meta property="og:url" content="https://myspinpick.com/wheel-spinner/" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Wheel Spinner",
+    "url": "https://myspinpick.com/wheel-spinner/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Free wheel spinner. Add names or options, spin the wheel, and get a random picker for classrooms, raffles and decisions. No sign-up, works in your browser."
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I spin a wheel of names?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Type your names or options into the box (comma separated), then click "Spin". The wheel rotates and stops on a random entry. You can remove a winner and spin again." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this wheel spinner free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. This wheel spinner is 100% free, runs in your browser, and never requires a sign-up or download." }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
+      --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+    header { padding: 18px 0 6px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .brand-mini { font-weight: 700; font-size: 14px; color: var(--accent); }
+    .back { padding: 6px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; }
+    .back:hover { color: var(--accent); border-color: var(--accent); }
+    h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
+    @media (max-width: 640px) { .brand-mini { display: none; } }
+    input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+    .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+    .wheel-wrap { text-align: center; margin-bottom: 16px; }
+    canvas { max-width: 100%; }
+    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: #bfdbfe; border-color: #60a5fa; }
+    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
+    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
+    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history:empty { display: none; }
+    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    section { margin-top: 26px; }
+    h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
+    section p, section li { color: #334155; font-size: 15px; }
+    ul, ol { padding-left: 20px; }
+    .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
+    .related a:hover { border-color: var(--accent); color: var(--accent); }
+    .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+    details p { margin-top: 8px; color: #475569; }
+    footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { h1 { font-size: 23px; } button { min-height: 44px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <h1>Wheel Spinner</h1>
+        <div class="topright"><span class="brand-mini">SpinPick</span><a class="back" href="../">← All Tools</a></div>
+      </div>
+      <p class="sub">Add names or options, spin the wheel, and let it pick a random winner. Great for classrooms, raffles and quick decisions.</p>
+    </header>
+
+    <main>
+      <div class="tool">
+        <div class="wheel-wrap">
+          <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
+        </div>
+        <div class="btns">
+          <button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
+          <button type="button" onclick="removeWinner()">Remove Winner</button>
+          <button type="button" onclick="resetAll()">Reset</button>
+        </div>
+        <div class="result" id="result" aria-live="polite">Spin the wheel to pick a winner</div>
+        <div class="history" id="history" aria-live="polite"></div>
+        <div class="meta" id="meta"></div>
+        <p class="meta">Separate options with commas.</p>
+        <input type="text" id="options" aria-label="Wheel options" value="Alice,Bob,Carol,David,Eve,Frank,Grace,Henry,Ivy,Jack,Kate,Liam">
+      </div>
+
+      <section id="about">
+        <h2>How to Use the Wheel Spinner</h2>
+        <p>Type your names or choices into the box (comma separated), then click "Spin". The wheel spins and lands on a random entry. Use "Remove Winner" to take the picked entry out and spin again — perfect for picking multiple winners without repeats.</p>
+      </section>
+
+      <section id="related">
+        <h2>Related Tools</h2>
+        <div class="related">
+          <a href="../decision-wheel-spinner/">Decision Wheel Spinner <span>Spin to decide</span></a>
+          <a href="../what-to-eat-wheel/">What to Eat Wheel <span>Pick dinner</span></a>
+          <a href="../yes-no-wheel/">Yes No Wheel <span>Quick choice</span></a>
+          <a href="../random-group-generator/">Random Group Generator <span>Split into groups</span></a>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>How do I spin a wheel of names?</summary>
+          <p>Type your names or options into the box (comma separated), then click "Spin". The wheel rotates and stops on a random entry. You can remove a winner and spin again.</p>
+        </details>
+        <details>
+          <summary>Is this wheel spinner free?</summary>
+          <p>Yes. This wheel spinner is 100% free, runs in your browser, and never requires a sign-up or download.</p>
+        </details>
+      </section>
+    </main>
+
+    <footer><p>SpinPick — free wheel spinner &amp; random decision tools.</p></footer>
+  </div>
+  <script>
+    var canvas = document.getElementById('wheel');
+    var ctx = canvas.getContext('2d');
+    var colors = ['#db2777','#7c3aed','#2563eb','#059669','#d97706','#dc2626','#0891b2','#65a30d'];
+    var RESULT_PREFIX = "Winner: ";
+    var RESULT_INIT = "Spin the wheel to pick a winner";
+    var options = [];
+    var currentAngle = 0;
+    var spinning = false;
+    var historyCount = 0;
+
+    function addHistory(name, colorIdx) {
+      historyCount++;
+      var chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.style.background = colors[colorIdx % colors.length];
+      chip.title = name;
+      chip.textContent = historyCount + '. ' + name;
+      document.getElementById('history').appendChild(chip);
+    }
+
+    function getOptions() {
+      var raw = document.getElementById('options').value;
+      return raw.split(/[\n,]/).map(function(s){ return s.trim(); }).filter(Boolean);
+    }
+
+    function drawWheel(angle) {
+      var n = options.length;
+      var cw = canvas.width, ch = canvas.height;
+      var cx = cw / 2, cy = ch / 2, r = Math.min(cx, cy) - 12;
+      ctx.clearRect(0, 0, cw, ch);
+      if (n === 0) {
+        ctx.fillStyle = '#e2e8f0'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#64748b'; ctx.font = '16px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('Add options to spin', cx, cy);
+        return;
+      }
+      var slice = (Math.PI * 2) / n;
+      for (var i = 0; i < n; i++) {
+        var start = angle + i * slice;
+        var end = start + slice;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, end);
+        ctx.closePath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(start + slice / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 14px sans-serif';
+        var label = options[i];
+        if (label.length > 14) label = label.slice(0, 13) + '…';
+        ctx.fillText(label, r - 14, 5);
+        ctx.restore();
+      }
+      ctx.beginPath();
+      ctx.moveTo(cx + r + 4, cy);
+      ctx.lineTo(cx + r - 18, cy - 12);
+      ctx.lineTo(cx + r - 18, cy + 12);
+      ctx.closePath();
+      ctx.fillStyle = '#1a202c';
+      ctx.fill();
+    }
+
+    function pickWinner() {
+      var n = options.length;
+      var slice = (Math.PI * 2) / n;
+      var a = ((currentAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+      var idx = Math.floor(((Math.PI * 2 - a) % (Math.PI * 2)) / slice) % n;
+      return idx;
+    }
+
+    function setBtnsDisabled(d) { var b = document.querySelectorAll('.btns button'); for (var i = 0; i < b.length; i++) { b[i].disabled = d; } }
+
+    function animate(total, duration) {
+      if (!spinning) return;
+      var start = null;
+      function step(ts) {
+        if (!start) start = ts;
+        var t = Math.min((ts - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - t, 3);
+        var angle = currentAngle + total * eased;
+        drawWheel(angle);
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          currentAngle = (currentAngle + total) % (Math.PI * 2);
+          var idx = pickWinner();
+          document.getElementById('result').textContent = RESULT_PREFIX + options[idx];
+          addHistory(options[idx], idx);
+          document.getElementById('meta').textContent = options.length + ' options on the wheel.';
+          spinning = false;
+          setBtnsDisabled(false);
+          track('spin', { options: options.length, winner: options[idx] });
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    function buildAndSpin() {
+      options = getOptions();
+      if (options.length === 0) { document.getElementById('meta').textContent = 'Please add at least one option.'; return; }
+      if (spinning) return;
+      spinning = true;
+      setBtnsDisabled(true);
+      document.getElementById('result').textContent = 'Spinning…';
+      drawWheel(currentAngle);
+      var spins = 5 + Math.floor(Math.random() * 3);
+      var total = spins * Math.PI * 2 + Math.random() * Math.PI * 2;
+      animate(total, 3000);
+    }
+
+    function removeWinner() {
+      var idx = pickWinner();
+      if (options.length > 0) {
+        var removed = options.splice(idx, 1);
+        document.getElementById('options').value = options.join(',');
+        document.getElementById('result').textContent = 'Removed: ' + removed[0];
+        drawWheel(currentAngle);
+        document.getElementById('meta').textContent = options.length + ' options left.';
+      }
+    }
+
+    function resetAll() {
+      document.getElementById('options').value = 'Alice,Bob,Carol,David,Eve,Frank,Grace,Henry,Ivy,Jack,Kate,Liam';
+      options = getOptions();
+      currentAngle = 0;
+      spinning = false;
+      setBtnsDisabled(false);
+      document.getElementById('result').textContent = RESULT_INIT;
+      document.getElementById('meta').textContent = options.length + ' options on the wheel.';
+      document.getElementById('history').innerHTML = '';
+      historyCount = 0;
+      drawWheel(0);
+    }
+
+    document.getElementById('options').addEventListener('input', function() {
+      options = getOptions();
+      drawWheel(currentAngle);
+    });
+
+    options = getOptions();
+    if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
+    drawWheel(0);
+  </script>
+</body>
+</html>

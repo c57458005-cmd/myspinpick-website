@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🎡%3C/text%3E%3C/svg%3E" />
+  <title>Random Number Generator - Generate Random Numbers Online Free</title>
+  <meta name="description" content="Free random number generator. Pick a range and count, get random numbers instantly. Optional no-repeat mode. Copy with one click." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://myspinpick.com/random-number-generator/" />
+
+  <!-- Google Analytics 4 — replace G-4W9M7STTLM with your Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4W9M7STTLM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4W9M7STTLM');
+    function track(name, params) { if (typeof gtag === 'function') { gtag('event', name, params); } }
+  </script>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:title" content="Random Number Generator - Generate Random Numbers Online Free" />
+  <meta property="og:description" content="Generate random numbers in any range. Pick a range, choose a count, and copy the results instantly." />
+  <meta property="og:url" content="https://myspinpick.com/random-number-generator/" />
+
+  <!-- JSON-LD: WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Random Number Generator",
+    "url": "https://myspinpick.com/random-number-generator/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Free online tool to generate random numbers within any range."
+  }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I generate a random number?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Enter a minimum and maximum value, choose how many numbers you want, then click Generate. The tool returns random numbers within that range instantly."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I generate random numbers without repeats?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Turn on the No-repeat mode to get unique random numbers with no duplicates. Note the count must not exceed the size of your range."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
+      --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+    header { padding: 18px 0 6px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .brand-mini { font-weight: 700; font-size: 14px; color: var(--accent); }
+    .back { padding: 6px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; }
+    .back:hover { color: var(--accent); border-color: var(--accent); }
+    h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
+    @media (max-width: 640px) { .brand-mini { display: none; } }
+    input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+    .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+    .wheel-wrap { text-align: center; margin-bottom: 16px; }
+    canvas { max-width: 100%; }
+    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: #bfdbfe; border-color: #60a5fa; }
+    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
+    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
+    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history:empty { display: none; }
+    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    section { margin-top: 26px; }
+    h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
+    section p, section li { color: #334155; font-size: 15px; }
+    ul, ol { padding-left: 20px; }
+    .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
+    .related a:hover { border-color: var(--accent); color: var(--accent); }
+    .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+    details p { margin-top: 8px; color: #475569; }
+    footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { h1 { font-size: 23px; } button { min-height: 44px; } }
+  
+    /* ---- tool-specific ---- */
+    .controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:14px; }
+    .field { display:flex; flex-direction:column; }
+    .field label { font-size:13px; color:var(--muted); margin-bottom:4px; }
+    #result { min-height:90px; background:#f8fafc; border:1px dashed var(--border); border-radius:10px; padding:14px; font-size:22px; font-weight:700; word-break:break-all; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .num { background:#fff; border:1px solid var(--border); border-radius:8px; padding:6px 12px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <h1>Number Generator</h1>
+        <div class="topright"><span class="brand-mini">SpinPick</span><a class="back" href="../">← All Tools</a></div>
+      </div>
+      <p class="sub">Generate random numbers in any range, with optional no-repeat mode.</p>
+    </header>
+<main>
+      <div class="tool">
+        <div class="controls">
+          <div class="field">
+            <label for="min">Minimum</label>
+            <input type="number" id="min" value="1" />
+          </div>
+          <div class="field">
+            <label for="max">Maximum</label>
+            <input type="number" id="max" value="100" />
+          </div>
+          <div class="field">
+            <label for="count">How many</label>
+            <input type="number" id="count" value="5" min="1" max="1000" />
+          </div>
+          <div class="field" style="justify-content:flex-end;">
+            <label><input type="checkbox" id="unique" style="width:auto; margin-right:4px;" /> No-repeat</label>
+          </div>
+        </div>
+        <div class="btns">
+          <button type="button" id="genBtn" class="primary" onclick="generate()">Generate</button>
+          <button type="button" onclick="copyResult()">Copy Result</button>
+        </div>
+        <div class="meta" id="meta" aria-live="polite"></div>
+        <div id="result" aria-label="Generated numbers"></div>
+      </div>
+<section id="about">
+        <h2>How to Generate Random Numbers</h2>
+        <p>Enter a minimum and maximum value to set your range, choose how many numbers you want, then click "Generate". Turn on "No-repeat" to get unique numbers with no duplicates. Everything runs in your browser — nothing is uploaded.</p>
+      </section>
+
+      <section id="use-cases">
+        <h2>When to Use a Random Number Generator</h2>
+        <ul>
+          <li><strong>Games &amp; raffles</strong> — draw a random winner or roll a number.</li>
+          <li><strong>Math practice</strong> — generate practice problems for kids.</li>
+          <li><strong>Sampling</strong> — pick random rows or IDs without bias.</li>
+          <li><strong>Lotteries &amp; decisions</strong> — pick a number for any choice.</li>
+        </ul>
+      </section>
+
+      <section id="related">
+        <h2>Related Tools</h2>
+        <div class="related">
+          <a href="../wheel-spinner/">Wheel Spinner <span>Spin a random name or decision</span></a>
+          <a href="../dice-roller/">Dice Roller <span>Roll dice online</span></a>
+          <a href="../coin-flip/">Coin Flip <span>Flip a coin</span></a>
+          <a href="../random-group-generator/">Random Group Generator <span>Split names into groups</span></a>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>How do I generate a random number?</summary>
+          <p>Enter a minimum and maximum value, choose how many numbers you want, then click "Generate". The tool returns random numbers within that range instantly.</p>
+        </details>
+        <details>
+          <summary>Can I generate random numbers without repeats?</summary>
+          <p>Yes. Turn on the "No-repeat" mode to get unique random numbers with no duplicates. Note the count must not exceed the size of your range.</p>
+        </details>
+        <details>
+          <summary>Does this tool work on mobile?</summary>
+          <p>Yes. The random number generator is fully responsive and works on phones, tablets and desktops alike.</p>
+        </details>
+        <details>
+          <summary>Are the numbers truly random?</summary>
+          <p>Yes. The tool uses your browser's built-in random number source to generate unbiased random numbers within your chosen range.</p>
+        </details>
+      </section>
+    </main>
+
+    <footer><p>SpinPick — free wheel spinner &amp; random decision tools.</p></footer>
+  </div>
+
+  <script>
+    var lastResult = [];
+    var genTimer = null;
+    var genBtn = document.getElementById('genBtn');
+
+    function flashNum(min, rangeSize) {
+      return '<span class="num">' + (Math.floor(Math.random() * rangeSize) + min) + '</span>';
+    }
+
+    function generate() {
+      if (genTimer) { clearInterval(genTimer); genTimer = null; }
+      var min = parseInt(document.getElementById('min').value, 10);
+      var max = parseInt(document.getElementById('max').value, 10);
+      var count = parseInt(document.getElementById('count').value, 10);
+      var unique = document.getElementById('unique').checked;
+      var meta = document.getElementById('meta');
+      var box = document.getElementById('result');
+
+      if (isNaN(min) || isNaN(max)) { meta.textContent = 'Please enter valid numbers.'; return; }
+      if (min > max) { var t = min; min = max; max = t; }
+      if (!count || count < 1) count = 1;
+      if (count > 1000) count = 1000;
+
+      var rangeSize = max - min + 1;
+
+      if (unique && count > rangeSize) {
+        meta.textContent = 'No-repeat needs a bigger range (only ' + rangeSize + ' unique numbers available).';
+        box.innerHTML = '';
+        return;
+      }
+
+      if (unique) {
+        var pool = [];
+        for (var i = min; i <= max; i++) pool.push(i);
+        for (var j = pool.length - 1; j > 0; j--) { var k = Math.floor(Math.random() * (j + 1)); var tmp = pool[j]; pool[j] = pool[k]; pool[k] = tmp; }
+        var result = pool.slice(0, count);
+      } else {
+        var result = [];
+        for (var n = 0; n < count; n++) {
+          result.push(Math.floor(Math.random() * rangeSize) + min);
+        }
+      }
+
+      // rolling animation: flash random values, then settle on the real result
+      genBtn.disabled = true;
+      lastResult = result;
+      var previewCount = Math.min(result.length, 24);
+      var ticks = 0, maxTicks = 12;
+      var finalMeta = count + ' random number' + (count > 1 ? 's' : '') + ' between ' + min + ' and ' + max + (unique ? ' (no repeats)' : '') + '.';
+      meta.textContent = 'Rolling…';
+      genTimer = setInterval(function() {
+        ticks++;
+        var flash = [];
+        for (var f = 0; f < previewCount; f++) flash.push(flashNum(min, rangeSize));
+        box.innerHTML = flash.join('');
+        if (ticks >= maxTicks) {
+          clearInterval(genTimer);
+          genTimer = null;
+          box.innerHTML = result.map(function(v){ return '<span class="num">' + v + '</span>'; }).join('');
+          meta.textContent = finalMeta;
+          track('generate_numbers', { count: count, unique: unique });
+          genBtn.disabled = false;
+        }
+      }, 75);
+    }
+
+    function copyResult() {
+      var text = lastResult.join(', ');
+      if (!text) { document.getElementById('meta').textContent = 'Nothing to copy — generate numbers first.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy'); }).catch(function(){ fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
+    }
+  </script>
+</body>
+</html>

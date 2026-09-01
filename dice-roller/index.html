@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🎡%3C/text%3E%3C/svg%3E" />
+  <title>Dice Roller — Roll One or More Dice Online</title>
+  <meta name="description" content="Free dice roller. Roll one or more dice online and see the total. Great for board games, D&D and decisions. No sign-up, runs in your browser." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://myspinpick.com/dice-roller/" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4W9M7STTLM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4W9M7STTLM');
+    function track(name, params) { if (typeof gtag === 'function') { gtag('event', name, params); } }
+  </script>
+
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:title" content="Dice Roller" />
+  <meta property="og:description" content="Roll one or more dice online." />
+  <meta property="og:url" content="https://myspinpick.com/dice-roller/" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Dice Roller",
+    "url": "https://myspinpick.com/dice-roller/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Free online dice roller."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How many dice can I roll?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Choose 1 to 6 standard six-sided dice, roll, and the dice roller shows each result plus the total." }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
+      --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+    header { padding: 18px 0 6px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .brand-mini { font-weight: 700; font-size: 14px; color: var(--accent); }
+    .back { padding: 6px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; }
+    .back:hover { color: var(--accent); border-color: var(--accent); }
+    h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
+    @media (max-width: 640px) { .brand-mini { display: none; } }
+    input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+    .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+    .wheel-wrap { text-align: center; margin-bottom: 16px; }
+    canvas { max-width: 100%; }
+    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: #bfdbfe; border-color: #60a5fa; }
+    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
+    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
+    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history:empty { display: none; }
+    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    section { margin-top: 26px; }
+    h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
+    section p, section li { color: #334155; font-size: 15px; }
+    ul, ol { padding-left: 20px; }
+    .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
+    .related a:hover { border-color: var(--accent); color: var(--accent); }
+    .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+    details p { margin-top: 8px; color: #475569; }
+    footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { h1 { font-size: 23px; } button { min-height: 44px; } }
+  
+    /* ---- tool-specific ---- */
+    .row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .row label { font-size:14px; color:var(--muted); }
+    .dice { display:flex; gap:12px; flex-wrap:wrap; margin-top:14px; min-height:58px; perspective:800px; }
+    .die { width:54px; height:54px; perspective:420px; }
+    .cube { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform .9s cubic-bezier(.2,.7,.3,1); }
+    .face { position:absolute; inset:0; background:#fff; border:1px solid var(--border); border-radius:10px; box-sizing:border-box; display:grid; grid-template:repeat(3,1fr)/repeat(3,1fr); padding:7px; box-shadow:inset 0 0 6px rgba(15,23,42,.06); }
+    .pip { width:9px; height:9px; border-radius:50%; background:#1e293b; place-self:center; }
+    .f1 { transform: translateZ(27px); }
+    .f6 { transform: rotateY(180deg) translateZ(27px); }
+    .f2 { transform: rotateY(90deg) translateZ(27px); }
+    .f5 { transform: rotateY(-90deg) translateZ(27px); }
+    .f3 { transform: rotateX(90deg) translateZ(27px); }
+    .f4 { transform: rotateX(-90deg) translateZ(27px); }
+    .f1 .pip:nth-child(1) { grid-area:2/2; }
+    .f2 .pip:nth-child(1) { grid-area:1/1; } .f2 .pip:nth-child(2) { grid-area:3/3; }
+    .f3 .pip:nth-child(1) { grid-area:1/1; } .f3 .pip:nth-child(2) { grid-area:2/2; } .f3 .pip:nth-child(3) { grid-area:3/3; }
+    .f4 .pip:nth-child(1) { grid-area:1/1; } .f4 .pip:nth-child(2) { grid-area:1/3; } .f4 .pip:nth-child(3) { grid-area:3/1; } .f4 .pip:nth-child(4) { grid-area:3/3; }
+    .f5 .pip:nth-child(1) { grid-area:1/1; } .f5 .pip:nth-child(2) { grid-area:1/3; } .f5 .pip:nth-child(3) { grid-area:2/2; } .f5 .pip:nth-child(4) { grid-area:3/1; } .f5 .pip:nth-child(5) { grid-area:3/3; }
+    .f6 .pip:nth-child(1) { grid-area:1/1; } .f6 .pip:nth-child(2) { grid-area:2/1; } .f6 .pip:nth-child(3) { grid-area:3/1; } .f6 .pip:nth-child(4) { grid-area:1/3; } .f6 .pip:nth-child(5) { grid-area:2/3; } .f6 .pip:nth-child(6) { grid-area:3/3; }
+    .total { margin-top:12px; font-size:18px; font-weight:700; color:var(--accent); min-height:26px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <h1>Dice Roller</h1>
+        <div class="topright"><span class="brand-mini">SpinPick</span><a class="back" href="../">← All Tools</a></div>
+      </div>
+      <p class="sub">Roll one or more dice online, instantly.</p>
+    </header>
+<main>
+      <div class="tool">
+        <div class="row">
+          <label for="count">Number of dice (1–6):</label>
+          <input type="number" id="count" aria-label="Number of dice" min="1" max="6" value="2" />
+        </div>
+        <div class="dice" id="dice"></div>
+        <div class="total" id="total"></div>
+        <div class="btns">
+          <button type="button" id="rollBtn" class="primary" onclick="roll()">Roll Dice</button>
+        </div>
+      </div>
+
+      <section id="about">
+        <h2>How to Roll Dice</h2>
+        <ol>
+          <li>Set how many dice you want (1 to 6).</li>
+          <li>Click <strong>Roll Dice</strong>.</li>
+          <li>Each die shows its face and the total appears below.</li>
+        </ol>
+        <p>Handy for board games, D&D, math class, or any random-number need.</p>
+      </section>
+
+      <section id="related">
+        <h2>Related Tools</h2>
+        <div class="related">
+          <a href="../coin-flip/">Coin Flip <span>50/50 call</span></a>
+          <a href="../random-number-generator/">Random Number Generator <span>Any range</span></a>
+          <a href="../wheel-spinner/">Wheel Spinner <span>Spin names</span></a>
+          <a href="../yes-no-wheel/">Yes No Wheel <span>Quick choice</span></a>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>How many dice can I roll?</summary>
+          <p>Choose 1 to 6 standard six-sided dice, roll, and the dice roller shows each result plus the total.</p>
+        </details>
+      </section>
+    </main>
+
+    <footer><p>SpinPick — free wheel spinner &amp; random decision tools.</p></footer>
+  </div>
+
+  <script>
+    var rollTimer = null;
+    var rollBtn = document.getElementById('rollBtn');
+    // which base rotation [rotateX, rotateY] brings each face to the front
+    var FACE = { 1:[0,0], 2:[0,-90], 3:[-90,0], 4:[90,0], 5:[0,90], 6:[0,180] };
+    var cubeEls = [];  // one cube per die, reused between rolls
+    var cubeRot = [];  // accumulated rotation {x, y} per cube (monotonic, like coin-flip)
+
+    function makeDie() {
+      var d = document.createElement('div');
+      d.className = 'die';
+      var cube = document.createElement('div');
+      cube.className = 'cube';
+      for (var v = 1; v <= 6; v++) {
+        var f = document.createElement('div');
+        f.className = 'face f' + v;
+        for (var p = 0; p < v; p++) {
+          var pip = document.createElement('span');
+          pip.className = 'pip';
+          f.appendChild(pip);
+        }
+        cube.appendChild(f);
+      }
+      d.appendChild(cube);
+      return cube;
+    }
+
+    // next accumulated angle: keep spinning forward, land on target face
+    function nextAngle(cur, target) {
+      var diff = ((target - (cur % 360)) % 360 + 360) % 360;
+      return cur + 360 * (2 + Math.floor(Math.random() * 2)) + diff;
+    }
+
+    function roll() {
+      if (rollTimer) { clearTimeout(rollTimer); rollTimer = null; }
+      var n = parseInt(document.getElementById('count').value, 10);
+      if (isNaN(n) || n < 1) n = 1;
+      if (n > 6) n = 6;
+      var box = document.getElementById('dice');
+      var totalEl = document.getElementById('total');
+      rollBtn.disabled = true;
+
+      // sync number of dice, reusing existing cubes so transitions replay
+      while (cubeEls.length > n) { cubeEls.pop().parentNode.remove(); cubeRot.pop(); }
+      while (cubeEls.length < n) {
+        var cube = makeDie();
+        box.appendChild(cube.parentNode);
+        cubeEls.push(cube);
+        cubeRot.push({ x: 0, y: 0 });
+        cube.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      }
+      // commit start positions before animating (new cubes need this to transition)
+      void box.offsetWidth;
+
+      var total = 0, maxDur = 0;
+      cubeEls.forEach(function(cube, i) {
+        var v = 1 + Math.floor(Math.random() * 6);
+        total += v;
+        var base = FACE[v];
+        cubeRot[i] = { x: nextAngle(cubeRot[i].x, base[0]), y: nextAngle(cubeRot[i].y, base[1]) };
+        var dur = 900 + Math.floor(Math.random() * 400);
+        if (dur > maxDur) maxDur = dur;
+        cube.style.transitionDuration = (dur / 1000) + 's';
+        cube.style.transform = 'rotateX(' + cubeRot[i].x + 'deg) rotateY(' + cubeRot[i].y + 'deg)';
+      });
+
+      totalEl.textContent = 'Rolling…';
+      var result = total, dice = n;
+      rollTimer = setTimeout(function() {
+        totalEl.textContent = 'Total: ' + result;
+        track('roll', { tool: 'dice-roller', count: dice, total: result });
+        rollBtn.disabled = false;
+        rollTimer = null;
+      }, maxDur + 60);
+    }
+    roll();
+  </script>
+</body>
+</html>

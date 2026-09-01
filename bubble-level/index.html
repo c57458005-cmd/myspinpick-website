@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🎡%3C/text%3E%3C/svg%3E" />
+  <title>Bubble Level — A Simple Bubble Level in Your Browser</title>
+  <meta name="description" content="Free bubble level. Use your phone's tilt sensors as a simple spirit level. No sign-up, runs in your browser." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://myspinpick.com/bubble-level/" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4W9M7STTLM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4W9M7STTLM');
+    function track(name, params) { if (typeof gtag === 'function') { gtag('event', name, params); } }
+  </script>
+
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:title" content="Bubble Level" />
+  <meta property="og:description" content="A simple bubble level using your phone's sensors." />
+  <meta property="og:url" content="https://myspinpick.com/bubble-level/" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Bubble Level",
+    "url": "https://myspinpick.com/bubble-level/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Free browser bubble level."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the bubble level work?",
+        "acceptedAnswer": { "@type": "Answer", "text": "On a phone, it reads the device's tilt sensors and moves the bubble. When the bubble sits in the center, the surface is level. On a desktop without sensors it shows a note instead." }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
+      --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+    header { padding: 18px 0 6px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .brand-mini { font-weight: 700; font-size: 14px; color: var(--accent); }
+    .back { padding: 6px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; }
+    .back:hover { color: var(--accent); border-color: var(--accent); }
+    h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
+    @media (max-width: 640px) { .brand-mini { display: none; } }
+    input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+    .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+    .wheel-wrap { text-align: center; margin-bottom: 16px; }
+    canvas { max-width: 100%; }
+    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: #bfdbfe; border-color: #60a5fa; }
+    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
+    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
+    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history:empty { display: none; }
+    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    section { margin-top: 26px; }
+    h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
+    section p, section li { color: #334155; font-size: 15px; }
+    ul, ol { padding-left: 20px; }
+    .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
+    .related a:hover { border-color: var(--accent); color: var(--accent); }
+    .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+    details p { margin-top: 8px; color: #475569; }
+    footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { h1 { font-size: 23px; } button { min-height: 44px; } }
+  
+    /* ---- tool-specific ---- */
+    .level { position:relative; width:240px; height:240px; margin:10px auto; border-radius:50%; background:#eef2f7; border:2px solid var(--border); }
+    .cross-h, .cross-v { position:absolute; background:#cbd5e1; }
+    .cross-h { top:50%; left:8%; right:8%; height:2px; transform:translateY(-50%); }
+    .cross-v { left:50%; top:8%; bottom:8%; width:2px; transform:translateX(-50%); }
+    .bubble { position:absolute; top:50%; left:50%; width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #93c5fd, var(--accent)); transform:translate(-50%,-50%); transition:left .12s ease, top .12s ease; box-shadow:0 2px 6px rgba(15,23,42,.2); }
+    .note { text-align:center; color:var(--muted); font-size:14px; margin-top:10px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <h1>Bubble Level</h1>
+        <div class="topright"><span class="brand-mini">SpinPick</span><a class="back" href="../">← All Tools</a></div>
+      </div>
+      <p class="sub">A simple bubble level using your phone's sensors.</p>
+    </header>
+<main>
+      <div class="tool">
+        <div class="level">
+          <div class="cross-h"></div>
+          <div class="cross-v"></div>
+          <div class="bubble" id="bubble"></div>
+        </div>
+        <div class="note" id="note">Open this page on a phone and tilt it.</div>
+        <div class="btns">
+          <button type="button" class="primary" id="enable" onclick="enableSensors()">Enable Sensors</button>
+        </div>
+      </div>
+
+      <section id="about">
+        <h2>How to Use the Bubble Level</h2>
+        <ol>
+          <li>Open the page on a phone and tap <strong>Enable Sensors</strong> (iOS may ask for permission).</li>
+          <li>Lay the phone on a surface and watch the bubble.</li>
+          <li>When the bubble sits in the center circle, the surface is level.</li>
+        </ol>
+        <p>Desktop browsers usually have no tilt sensor, so the bubble stays centered — use a phone for real readings.</p>
+      </section>
+
+      <section id="related">
+        <h2>Related Tools</h2>
+        <div class="related">
+          <a href="../color-picker/">Color Picker <span>Pick colors</span></a>
+          <a href="../coin-flip/">Coin Flip <span>50/50 call</span></a>
+          <a href="../wheel-spinner/">Wheel Spinner <span>Spin names</span></a>
+          <a href="../metronome/">Metronome <span>Keep tempo</span></a>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>How does the bubble level work?</summary>
+          <p>On a phone, it reads the device's tilt sensors and moves the bubble. When the bubble sits in the center, the surface is level. On a desktop without sensors it shows a note instead.</p>
+        </details>
+      </section>
+    </main>
+
+    <footer><p>SpinPick — free wheel spinner &amp; random decision tools.</p></footer>
+  </div>
+
+  <script>
+    var bubble = document.getElementById('bubble');
+    function setBubble(gx, gy) {
+      // gx, gy in degrees (-90..90); map to position within level
+      var x = Math.max(-45, Math.min(45, gx)) / 45 * 88;
+      var y = Math.max(-45, Math.min(45, gy)) / 45 * 88;
+      bubble.style.left = (50 + x) + '%';
+      bubble.style.top = (50 + y) + '%';
+    }
+    function enableSensors() {
+      var note = document.getElementById('note');
+      if (typeof DeviceOrientationEvent === 'undefined') {
+        note.textContent = 'This device has no tilt sensor. Open on a phone to use the level.';
+        return;
+      }
+      function handler(e) {
+        var gx = e.gamma || 0;
+        var gy = e.beta || 0;
+        setBubble(gx, gy);
+        note.textContent = 'Tilt your phone — bubble shows level.';
+      }
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission().then(function(state){
+          if (state === 'granted') { window.addEventListener('deviceorientation', handler); note.textContent = 'Sensors on — tilt your phone.'; }
+          else { note.textContent = 'Permission denied. Cannot read tilt.'; }
+        }).catch(function(){ note.textContent = 'Permission error.'; });
+      } else {
+        window.addEventListener('deviceorientation', handler);
+        note.textContent = 'Sensors on — tilt your phone.';
+      }
+      track('enable', { tool: 'bubble-level' });
+    }
+  </script>
+</body>
+</html>
