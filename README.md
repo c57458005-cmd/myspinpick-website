@@ -27,7 +27,7 @@
 - 纯静态：每页独立 `<style>` + `<script>`，无外部依赖（无 CDN 库）
 - 动画过程式反馈：转盘、骰子、字母跳动、鸭子赛跑等均有过程动画与按钮防连点
 - SEO：每页独立 title/description/canonical/OG/JSON-LD；站点地图 sitemap.xml
-- 统计：GA4（G-4W9M7STTLM）
+- 统计：GA4（G-VYS6D8Q5NS）
 - 部署：GitHub Pages + 自定义域 myspinpick.com
 
 ## 本地预览
