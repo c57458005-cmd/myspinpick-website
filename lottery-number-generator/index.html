@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🎡%3C/text%3E%3C/svg%3E" />
+  <title>Free Lottery Number Generator (EuroMillions, Powerball)</title>
+  <meta name="description" content="Generate EuroMillions, Powerball, Mega Millions &amp; UK Lotto numbers free — or set your own ranges. No sign-up, runs in your browser." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://myspinpick.com/lottery-number-generator/" />
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VYS6D8Q5NS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VYS6D8Q5NS');
+    function track(name, params) { if (typeof gtag === 'function') { gtag('event', name, params); } }
+  </script>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:title" content="Free Lottery Number Generator (EuroMillions, Powerball)" />
+  <meta property="og:description" content="Generate EuroMillions, Powerball, Mega Millions &amp; UK Lotto numbers free — or set your own ranges. No sign-up, runs in your browser." />
+  <meta property="og:url" content="https://myspinpick.com/lottery-number-generator/" />
+
+  <!-- JSON-LD: WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Lottery Number Generator",
+    "url": "https://myspinpick.com/lottery-number-generator/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Free online lottery number generator for EuroMillions, Powerball, Mega Millions, UK Lotto and custom ranges."
+  }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I generate lottery numbers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pick a lottery format such as EuroMillions, Powerball, Mega Millions or UK Lotto, then click Generate. The tool draws unique random numbers in the correct ranges for that game instantly."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I generate EuroMillions numbers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Choose the EuroMillions preset to draw 5 main numbers from 1 to 50 plus 2 Lucky Stars from 1 to 12, exactly matching the real game format."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I generate Powerball or Mega Millions numbers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The Powerball preset draws 5 numbers from 1 to 69 plus 1 Powerball from 1 to 26, and the Mega Millions preset draws 5 numbers from 1 to 70 plus 1 Mega Ball from 1 to 25."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are the lottery numbers truly random?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The tool uses your browser's built-in random number source to draw unbiased numbers with no repeats within each pool."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use these numbers to play the real lottery?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This tool is for entertainment, practice and random selection only. It is not connected to any official lottery operator and cannot enter you into a real draw or predict winning numbers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the lottery number generator free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The lottery number generator is 100% free, runs in your browser, and never requires a sign-up or download."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
+      --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+    header { padding: 18px 0 6px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .brand-mini { font-weight: 700; font-size: 14px; color: var(--accent); }
+    .back { padding: 6px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; }
+    .back:hover { color: var(--accent); border-color: var(--accent); }
+    h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
+    @media (max-width: 640px) { .brand-mini { display: none; } }
+
+    input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+    .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+    .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: #bfdbfe; border-color: #60a5fa; }
+    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
+    button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    section { margin-top: 26px; }
+    h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
+    section p, section li { color: #334155; font-size: 15px; }
+    ul, ol { padding-left: 20px; }
+    .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
+    .related a:hover { border-color: var(--accent); color: var(--accent); }
+    .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+    details p { margin-top: 8px; color: #475569; }
+    footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 480px) { h1 { font-size: 23px; } button { min-height: 44px; } }
+
+    /* ---- tool-specific: lottery balls ---- */
+    .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; margin-bottom: 6px; }
+    .controls[hidden] { display: none; }
+    .field { display: flex; flex-direction: column; }
+    .field label { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+    .field input { width: 92px; border: 1px solid var(--border); border-radius: 10px; padding: 9px 10px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    .field input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .balls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; min-height: 56px; margin: 16px 0 6px; }
+    .ball { width: 46px; height: 46px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(219,39,119,.28); }
+    .ball.special { background: #2563eb; box-shadow: 0 2px 6px rgba(37,99,235,.28); }
+    .ball-sep { color: var(--muted); font-size: 22px; font-weight: 700; }
+    .disclaimer { font-size: 13px; color: var(--muted); text-align: center; margin-top: 6px; }
+
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <h1>Lottery Number Generator</h1>
+        <div class="topright"><span class="brand-mini">SpinPick</span><a class="back" href="../">← All Tools</a></div>
+      </div>
+      <p class="sub">Generate random lottery numbers instantly — draw a EuroMillions number generator line (5 from 1-50 plus 2 Lucky Stars), Powerball numbers, Mega Millions or set your own custom ranges. Free, private and runs in your browser.</p>
+    </header>
+    <main>
+      <div class="tool">
+        <div class="btns presets" id="presets">
+          <button type="button" id="btn-euromillions" onclick="loadLottery('euromillions')">🇪🇺 EuroMillions</button>
+          <button type="button" id="btn-powerball" onclick="loadLottery('powerball')">🇺🇸 Powerball</button>
+          <button type="button" id="btn-megamillions" onclick="loadLottery('megamillions')">💰 Mega Millions</button>
+          <button type="button" id="btn-uklotto" onclick="loadLottery('uklotto')">🇬🇧 UK Lotto</button>
+          <button type="button" id="btn-custom" onclick="loadLottery('custom')">⚙️ Custom</button>
+        </div>
+
+        <div class="controls" id="customControls" hidden>
+          <div class="field">
+            <label for="cMain">Main numbers</label>
+            <input type="number" id="cMain" value="5" min="1" max="20" />
+          </div>
+          <div class="field">
+            <label for="cMainMax">Main max</label>
+            <input type="number" id="cMainMax" value="50" min="2" max="999" />
+          </div>
+          <div class="field">
+            <label for="cSpecial">Bonus balls</label>
+            <input type="number" id="cSpecial" value="2" min="0" max="10" />
+          </div>
+          <div class="field">
+            <label for="cSpecialMax">Bonus max</label>
+            <input type="number" id="cSpecialMax" value="12" min="1" max="999" />
+          </div>
+        </div>
+
+        <div class="btns">
+          <button type="button" id="genBtn" onclick="generate()">Generate Numbers</button>
+          <button type="button" onclick="copyResult()">Copy Numbers</button>
+        </div>
+
+        <div class="meta" id="meta" aria-live="polite">Pick a game above to draw your numbers</div>
+        <div class="balls" id="result" aria-label="Generated lottery numbers"></div>
+        <p class="disclaimer">For entertainment, practice and random selection only — not connected to any official lottery operator.</p>
+      </div>
+
+      <section id="about">
+        <h2>How to Generate Lottery Numbers</h2>
+        <p>Choose a game format such as EuroMillions, Powerball, Mega Millions or UK Lotto, then click Generate Numbers. The tool draws the correct amount of unique numbers from the right ranges for that game — main numbers first, followed by any bonus or star balls. Switch to Custom to set your own pool sizes for raffles, classroom draws or any random pick.</p>
+      </section>
+
+      <section id="formats">
+        <h2>Supported Lottery Formats</h2>
+        <ul>
+          <li><strong>EuroMillions</strong> — 5 numbers from 1-50 plus 2 Lucky Stars from 1-12.</li>
+          <li><strong>Powerball</strong> — 5 numbers from 1-69 plus 1 Powerball from 1-26.</li>
+          <li><strong>Mega Millions</strong> — 5 numbers from 1-70 plus 1 Mega Ball from 1-25.</li>
+          <li><strong>UK Lotto</strong> — 6 numbers from 1-59.</li>
+          <li><strong>Custom</strong> — set your own main and bonus pool sizes for any random draw.</li>
+        </ul>
+      </section>
+
+      <section id="related">
+        <h2>Related Tools</h2>
+        <div class="related">
+          <a href="../random-number-generator/">Random Number Generator<span>Any range, no-repeat mode</span></a>
+          <a href="../dice-roller/">Dice Roller<span>Roll dice online</span></a>
+          <a href="../wheel-spinner/">Wheel Spinner<span>Spin a random name or decision</span></a>
+          <a href="../coin-flip/">Coin Flip<span>Flip a coin</span></a>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>How do I generate lottery numbers?</summary>
+          <p>Pick a lottery format such as EuroMillions, Powerball, Mega Millions or UK Lotto, then click Generate. The tool draws unique random numbers in the correct ranges for that game instantly.</p>
+        </details>
+        <details>
+          <summary>Can I generate EuroMillions numbers?</summary>
+          <p>Yes. Choose the EuroMillions preset to draw 5 main numbers from 1 to 50 plus 2 Lucky Stars from 1 to 12, exactly matching the real game format.</p>
+        </details>
+        <details>
+          <summary>Can I generate Powerball or Mega Millions numbers?</summary>
+          <p>Yes. The Powerball preset draws 5 numbers from 1 to 69 plus 1 Powerball from 1 to 26, and the Mega Millions preset draws 5 numbers from 1 to 70 plus 1 Mega Ball from 1 to 25.</p>
+        </details>
+        <details>
+          <summary>Are the lottery numbers truly random?</summary>
+          <p>Yes. The tool uses your browser's built-in random number source to draw unbiased numbers with no repeats within each pool.</p>
+        </details>
+        <details>
+          <summary>Can I use these numbers to play the real lottery?</summary>
+          <p>This tool is for entertainment, practice and random selection only. It is not connected to any official lottery operator and cannot enter you into a real draw or predict winning numbers.</p>
+        </details>
+        <details>
+          <summary>Is the lottery number generator free?</summary>
+          <p>Yes. The lottery number generator is 100% free, runs in your browser, and never requires a sign-up or download.</p>
+        </details>
+        <details>
+          <summary>Does this tool work on mobile?</summary>
+          <p>Yes. The lottery number generator is fully responsive and works on phones, tablets and desktops alike.</p>
+        </details>
+      </section>
+    </main>
+
+    <footer><p>SpinPick — free wheel spinner &amp; random decision tools.</p></footer>
+  </div>
+
+  <script>
+    var LOTTERIES = {
+      euromillions: { name: 'EuroMillions', main: 5, mainMax: 50, special: 2, specialMax: 12, specialLabel: 'Lucky Stars' },
+      powerball:    { name: 'Powerball',    main: 5, mainMax: 69, special: 1, specialMax: 26, specialLabel: 'Powerball' },
+      megamillions: { name: 'Mega Millions',main: 5, mainMax: 70, special: 1, specialMax: 25, specialLabel: 'Mega Ball' },
+      uklotto:      { name: 'UK Lotto',     main: 6, mainMax: 59, special: 0, specialMax: 0,  specialLabel: '' },
+      custom:       { name: 'Custom',       main: 5, mainMax: 50, special: 2, specialMax: 12, specialLabel: 'Bonus' }
+    };
+
+    var currentKey = 'euromillions';
+    var lastResult = '';
+    var genTimer = null;
+
+    function pickUnique(count, max) {
+      var pool = [];
+      for (var i = 1; i <= max; i++) pool.push(i);
+      for (var j = pool.length - 1; j > 0; j--) {
+        var k = Math.floor(Math.random() * (j + 1));
+        var t = pool[j]; pool[j] = pool[k]; pool[k] = t;
+      }
+      return pool.slice(0, count).sort(function (a, b) { return a - b; });
+    }
+
+    function currentConf() {
+      if (currentKey === 'custom') {
+        return {
+          name: 'Custom',
+          main: parseInt(document.getElementById('cMain').value, 10) || 5,
+          mainMax: parseInt(document.getElementById('cMainMax').value, 10) || 50,
+          special: parseInt(document.getElementById('cSpecial').value, 10) || 0,
+          specialMax: parseInt(document.getElementById('cSpecialMax').value, 10) || 12,
+          specialLabel: 'Bonus'
+        };
+      }
+      return LOTTERIES[currentKey];
+    }
+
+    function loadLottery(key) {
+      currentKey = key;
+      var ids = ['euromillions', 'powerball', 'megamillions', 'uklotto', 'custom'];
+      for (var i = 0; i < ids.length; i++) {
+        var b = document.getElementById('btn-' + ids[i]);
+        if (b) b.className = (ids[i] === key) ? 'active' : '';
+      }
+      document.getElementById('customControls').hidden = (key !== 'custom');
+      generate();
+    }
+
+    function render(main, special) {
+      var html = main.map(function (n) { return '<div class="ball">' + n + '</div>'; }).join('');
+      if (special && special.length) {
+        html += '<div class="ball-sep">+</div>' + special.map(function (n) { return '<div class="ball special">' + n + '</div>'; }).join('');
+      }
+      document.getElementById('result').innerHTML = html;
+    }
+
+    function buildText(main, special) {
+      return main.join(', ') + (special && special.length ? ' + ' + special.join(', ') : '');
+    }
+
+    function generate() {
+      if (genTimer) { clearInterval(genTimer); genTimer = null; }
+      var c = currentConf();
+      var meta = document.getElementById('meta');
+      var btn = document.getElementById('genBtn');
+
+      if (c.main < 1 || c.mainMax < 1) { meta.textContent = 'Please enter valid numbers.'; return; }
+      if (c.main > c.mainMax) { meta.textContent = 'Main numbers count cannot exceed the main max.'; return; }
+      if (c.special > 0 && c.specialMax < 1) { meta.textContent = 'Please enter a valid bonus max.'; return; }
+      if (c.special > c.specialMax) { meta.textContent = 'Bonus balls count cannot exceed the bonus max.'; return; }
+
+      var mainNums = pickUnique(c.main, c.mainMax);
+      var specialNums = c.special > 0 ? pickUnique(c.special, c.specialMax) : [];
+
+      btn.disabled = true;
+      var ticks = 0, maxTicks = 12;
+      meta.textContent = 'Picking numbers…';
+
+      genTimer = setInterval(function () {
+        ticks++;
+        render(pickUnique(c.main, c.mainMax), c.special > 0 ? pickUnique(c.special, c.specialMax) : []);
+        if (ticks >= maxTicks) {
+          clearInterval(genTimer);
+          genTimer = null;
+          render(mainNums, specialNums);
+          lastResult = buildText(mainNums, specialNums);
+          meta.textContent = c.name + ': ' + c.main + ' from 1-' + c.mainMax +
+            (c.special > 0 ? ' + ' + c.special + ' ' + c.specialLabel + ' from 1-' + c.specialMax : '') + '.';
+          track('generate_lottery', { lottery: currentKey });
+          btn.disabled = false;
+        }
+      }, 70);
+    }
+
+    function copyResult() {
+      if (!lastResult) { document.getElementById('meta').textContent = 'Nothing to copy — generate numbers first.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(lastResult).then(function () { document.getElementById('meta').textContent = 'Copied!'; track('copy'); })
+          .catch(function () { fallbackCopy(lastResult); });
+      } else { fallbackCopy(lastResult); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
+    }
+
+    // first paint
+    loadLottery('euromillions');
+  </script>
+</body>
+</html>

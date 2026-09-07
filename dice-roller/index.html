@@ -45,6 +45,21 @@
         "@type": "Question",
         "name": "How many dice can I roll?",
         "acceptedAnswer": { "@type": "Answer", "text": "Choose 1 to 6 standard six-sided dice, roll, and the dice roller shows each result plus the total." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this an online dice spinner?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. This online dice spinner works like a virtual die: tap roll and it picks a random side from 1 to 6, just like spinning a real dice." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I roll a d20 or other dice types?",
+        "acceptedAnswer": { "@type": "Answer", "text": "This roller uses standard six-sided dice. For a random number in a custom range, for example 1 to 20 for a d20, use our random number generator." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a virtual dice roller used for?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Board games, D&D sessions, classroom activities and any decision where you need a fair random roll without physical dice." }
       }
     ]
   }
@@ -67,6 +82,7 @@
     h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
     .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
     @media (max-width: 640px) { .brand-mini { display: none; } }
+
     input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
     .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
     .wheel-wrap { text-align: center; margin-bottom: 16px; }
@@ -120,6 +136,7 @@
     .f5 .pip:nth-child(1) { grid-area:1/1; } .f5 .pip:nth-child(2) { grid-area:1/3; } .f5 .pip:nth-child(3) { grid-area:2/2; } .f5 .pip:nth-child(4) { grid-area:3/1; } .f5 .pip:nth-child(5) { grid-area:3/3; }
     .f6 .pip:nth-child(1) { grid-area:1/1; } .f6 .pip:nth-child(2) { grid-area:2/1; } .f6 .pip:nth-child(3) { grid-area:3/1; } .f6 .pip:nth-child(4) { grid-area:1/3; } .f6 .pip:nth-child(5) { grid-area:2/3; } .f6 .pip:nth-child(6) { grid-area:3/3; }
     .total { margin-top:12px; font-size:18px; font-weight:700; color:var(--accent); min-height:26px; }
+
 </style>
 </head>
 <body>
@@ -159,6 +176,7 @@
         <div class="related">
           <a href="../coin-flip/">Coin Flip <span>50/50 call</span></a>
           <a href="../random-number-generator/">Random Number Generator <span>Any range</span></a>
+          <a href="../lottery-number-generator/">Lottery Number Generator <span>Lucky numbers</span></a>
           <a href="../wheel-spinner/">Wheel Spinner <span>Spin names</span></a>
           <a href="../yes-no-wheel/">Yes No Wheel <span>Quick choice</span></a>
         </div>
@@ -169,6 +187,18 @@
         <details>
           <summary>How many dice can I roll?</summary>
           <p>Choose 1 to 6 standard six-sided dice, roll, and the dice roller shows each result plus the total.</p>
+        </details>
+        <details>
+          <summary>Is this an online dice spinner?</summary>
+          <p>Yes. This online dice spinner works like a virtual die: tap roll and it picks a random side from 1 to 6, just like spinning a real dice.</p>
+        </details>
+        <details>
+          <summary>Can I roll a d20 or other dice types?</summary>
+          <p>This roller uses standard six-sided dice. For a random number in a custom range, for example 1 to 20 for a d20, use our random number generator.</p>
+        </details>
+        <details>
+          <summary>What is a virtual dice roller used for?</summary>
+          <p>Board games, D&amp;D sessions, classroom activities and any decision where you need a fair random roll without physical dice.</p>
         </details>
       </section>
     </main>

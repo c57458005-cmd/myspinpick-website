@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🎡%3C/text%3E%3C/svg%3E" />
-  <title>Random Number Generator - Generate Random Numbers Online Free</title>
-  <meta name="description" content="Free random number generator. Pick a range and count, get random numbers instantly. Optional no-repeat mode. Copy with one click." />
+  <title>Random Number Generator — Pick a Number in Any Range</title>
+  <meta name="description" content="Free random number generator: pick a number in any range — 2-20, 1-50, 1-100 or custom. Optional no-repeat mode, copy in one click." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://myspinpick.com/random-number-generator/" />
 
-  <!-- Google Analytics 4 — replace G-VYS6D8Q5NS with your Measurement ID -->
+  <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VYS6D8Q5NS"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -22,8 +22,8 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary" />
-  <meta property="og:title" content="Random Number Generator - Generate Random Numbers Online Free" />
-  <meta property="og:description" content="Generate random numbers in any range. Pick a range, choose a count, and copy the results instantly." />
+  <meta property="og:title" content="Random Number Generator — Pick a Number in Any Range" />
+  <meta property="og:description" content="Free random number generator: pick a number in any range — 2-20, 1-50, 1-100 or custom. Optional no-repeat mode, copy in one click." />
   <meta property="og:url" content="https://myspinpick.com/random-number-generator/" />
 
   <!-- JSON-LD: WebApplication -->
@@ -61,6 +61,30 @@
           "@type": "Answer",
           "text": "Yes. Turn on the No-repeat mode to get unique random numbers with no duplicates. Note the count must not exceed the size of your range."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I use a random number generator 2-20?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Set the minimum to 2 and the maximum to 20, then click Generate. It works like a quick dice-style roll in that range."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I generate a random number between 1 and 100?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use a random number generator 1-100 — set the minimum to 1 and the maximum to 100, then click Generate. Or tap the 1-100 quick range button to fill it in instantly."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I pick a random number between 1 and 50?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. A random number generator 1-50 works the same way — set the range or tap the 1-50 quick range button, then click Generate."
+        }
       }
     ]
   }
@@ -83,6 +107,7 @@
     h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
     .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
     @media (max-width: 640px) { .brand-mini { display: none; } }
+
     input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
     .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
     .wheel-wrap { text-align: center; margin-bottom: 16px; }
@@ -121,16 +146,17 @@
     .field label { font-size:13px; color:var(--muted); margin-bottom:4px; }
     #result { min-height:90px; background:#f8fafc; border:1px dashed var(--border); border-radius:10px; padding:14px; font-size:22px; font-weight:700; word-break:break-all; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
     .num { background:#fff; border:1px solid var(--border); border-radius:8px; padding:6px 12px; }
+
 </style>
 </head>
 <body>
   <div class="wrap">
     <header>
       <div class="topbar">
-        <h1>Number Generator</h1>
+        <h1>Random Number Generator</h1>
         <div class="topright"><span class="brand-mini">SpinPick</span><a class="back" href="../">← All Tools</a></div>
       </div>
-      <p class="sub">Generate random numbers in any range, with optional no-repeat mode.</p>
+      <p class="sub">Generate a random number instantly in any range — try a quick random number generator 2-20 for a dice roll, or set your own min and max with optional no-repeat mode.</p>
     </header>
 <main>
       <div class="tool">
@@ -154,6 +180,12 @@
         <div class="btns">
           <button type="button" id="genBtn" class="primary" onclick="generate()">Generate</button>
           <button type="button" onclick="copyResult()">Copy Result</button>
+        </div>
+        <div class="btns presets" id="presets">
+          <button type="button" onclick="setRange(2,20)">2–20</button>
+          <button type="button" onclick="setRange(1,7)">1–7</button>
+          <button type="button" onclick="setRange(1,50)">1–50</button>
+          <button type="button" onclick="setRange(1,100)">1–100</button>
         </div>
         <div class="meta" id="meta" aria-live="polite"></div>
         <div id="result" aria-label="Generated numbers"></div>
@@ -179,6 +211,7 @@
           <a href="../wheel-spinner/">Wheel Spinner <span>Spin a random name or decision</span></a>
           <a href="../dice-roller/">Dice Roller <span>Roll dice online</span></a>
           <a href="../coin-flip/">Coin Flip <span>Flip a coin</span></a>
+          <a href="../lottery-number-generator/">Lottery Number Generator <span>Powerball &amp; EuroMillions numbers</span></a>
           <a href="../random-group-generator/">Random Group Generator <span>Split names into groups</span></a>
         </div>
       </section>
@@ -192,6 +225,18 @@
         <details>
           <summary>Can I generate random numbers without repeats?</summary>
           <p>Yes. Turn on the "No-repeat" mode to get unique random numbers with no duplicates. Note the count must not exceed the size of your range.</p>
+        </details>
+        <details>
+          <summary>How do I use a random number generator 2-20?</summary>
+          <p>Set the minimum to 2 and the maximum to 20, then click Generate. It works like a quick dice-style roll in that range.</p>
+        </details>
+        <details>
+          <summary>How do I generate a random number between 1 and 100?</summary>
+          <p>Use a random number generator 1-100 — set the minimum to 1 and the maximum to 100, then click Generate. Or tap the 1-100 quick range button to fill it in instantly.</p>
+        </details>
+        <details>
+          <summary>Can I pick a random number between 1 and 50?</summary>
+          <p>Yes. A random number generator 1-50 works the same way — set the range or tap the 1-50 quick range button, then click Generate.</p>
         </details>
         <details>
           <summary>Does this tool work on mobile?</summary>
@@ -271,6 +316,12 @@
           genBtn.disabled = false;
         }
       }, 75);
+    }
+
+    function setRange(min, max) {
+      document.getElementById('min').value = min;
+      document.getElementById('max').value = max;
+      generate();
     }
 
     function copyResult() {

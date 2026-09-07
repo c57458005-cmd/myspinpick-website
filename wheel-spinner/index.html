@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🎡%3C/text%3E%3C/svg%3E" />
-  <title>Wheel Spinner — Spin a Wheel of Names to Pick a Random Winner</title>
-  <meta name="description" content="Free wheel spinner. Add names, spin the wheel, and pick a random winner for classrooms, raffles and decisions. No sign-up, runs in your browser." />
+  <title>Name Wheel Picker — Spin the Wheel to Pick a Name</title>
+  <meta name="description" content="Free name wheel picker to spin a random wheel and pick a name, student or winner. Great for classrooms, giveaways and more — no sign-up needed." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://myspinpick.com/wheel-spinner/" />
 
@@ -20,20 +20,20 @@
 
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary" />
-  <meta property="og:title" content="Wheel Spinner — Spin a Wheel of Names to Pick a Random Winner" />
-  <meta property="og:description" content="Free wheel spinner. Add names, spin the wheel, and pick a random winner for classrooms, raffles and decisions. No sign-up, runs in your browser." />
+  <meta property="og:title" content="Name Wheel Picker — Spin the Wheel to Pick a Name" />
+  <meta property="og:description" content="Free name wheel picker to spin a random wheel and pick a name, student or winner. Great for classrooms, giveaways and more — no sign-up needed." />
   <meta property="og:url" content="https://myspinpick.com/wheel-spinner/" />
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Wheel Spinner",
+    "name": "Name Wheel Picker",
     "url": "https://myspinpick.com/wheel-spinner/",
     "applicationCategory": "UtilityApplication",
     "operatingSystem": "Any",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "description": "Free wheel spinner. Add names or options, spin the wheel, and get a random picker for classrooms, raffles and decisions. No sign-up, works in your browser."
+    "description": "Free name wheel picker. Add names or options, spin the wheel, and get a random picker for classroom tools, Facebook giveaways and decisions. No sign-up, works in your browser."
   }
   </script>
 
@@ -45,12 +45,32 @@
       {
         "@type": "Question",
         "name": "How do I spin a wheel of names?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Type your names or options into the box (comma separated), then click "Spin". The wheel rotates and stops on a random entry. You can remove a winner and spin again." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Type your names or options into the box (comma separated), then click \"Spin\". The random name wheel rotates and stops on a random entry. You can remove a winner and spin again." }
       },
       {
         "@type": "Question",
         "name": "Is this wheel spinner free?",
         "acceptedAnswer": { "@type": "Answer", "text": "Yes. This wheel spinner is 100% free, runs in your browser, and never requires a sign-up or download." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use this as a classroom name picker?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Paste your class list and spin the random name picker wheel to pick a student. It is a quick classroom tool with no repeats when you remove each winner." }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I make my own wheel spinner?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Type your own options into the box (comma separated), then click Spin. You can use names, colors, numbers or any list to build a custom random spinner wheel." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a wheel of colors spinner?",
+        "acceptedAnswer": { "@type": "Answer", "text": "It is a wheel spinner pre-filled with color names. Tap the Wheel of Colors preset to fill the wheel with colors, then spin to pick a random color." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use this as a random wheel picker?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Paste any options and spin — it works as a random wheel picker, a name picker wheel or a wheel of spinner for picks, draws and decisions." }
       }
     ]
   }
@@ -73,6 +93,7 @@
     h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
     .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
     @media (max-width: 640px) { .brand-mini { display: none; } }
+
     input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
     .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
     .wheel-wrap { text-align: center; margin-bottom: 16px; }
@@ -104,16 +125,17 @@
     footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
     @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 480px) { h1 { font-size: 23px; } button { min-height: 44px; } }
-  </style>
+
+</style>
 </head>
 <body>
   <div class="wrap">
     <header>
       <div class="topbar">
-        <h1>Wheel Spinner</h1>
+        <h1>Name Wheel Picker</h1>
         <div class="topright"><span class="brand-mini">SpinPick</span><a class="back" href="../">← All Tools</a></div>
       </div>
-      <p class="sub">Add names or options, spin the wheel, and let it pick a random winner. Great for classrooms, raffles and quick decisions.</p>
+      <p class="sub">Paste a list, spin the name wheel, and get a random winner instantly. Make your own wheel spinner with names, colors or any options — use it as a random spinner wheel, a classroom tool, or a random name picker for a Facebook giveaway.</p>
     </header>
 
     <main>
@@ -128,9 +150,13 @@
         </div>
         <div class="result" id="result" aria-live="polite">Spin the wheel to pick a winner</div>
         <div class="history" id="history" aria-live="polite"></div>
-        <div class="meta" id="meta"></div>
         <p class="meta">Separate options with commas.</p>
         <input type="text" id="options" aria-label="Wheel options" value="Alice,Bob,Carol,David,Eve,Frank,Grace,Henry,Ivy,Jack,Kate,Liam">
+        <div class="btns" id="presets">
+          <button type="button" onclick="loadPreset('colors')">🎨 Wheel of Colors</button>
+          <button type="button" onclick="loadPreset('fate')">🔮 Wheel of Fate</button>
+        </div>
+        <div class="meta" id="meta"></div>
       </div>
 
       <section id="about">
@@ -152,11 +178,27 @@
         <h2>Frequently Asked Questions</h2>
         <details>
           <summary>How do I spin a wheel of names?</summary>
-          <p>Type your names or options into the box (comma separated), then click "Spin". The wheel rotates and stops on a random entry. You can remove a winner and spin again.</p>
+          <p>Type your names or options into the box (comma separated), then click "Spin". The random name wheel rotates and stops on a random entry. You can remove a winner and spin again.</p>
         </details>
         <details>
           <summary>Is this wheel spinner free?</summary>
           <p>Yes. This wheel spinner is 100% free, runs in your browser, and never requires a sign-up or download.</p>
+        </details>
+        <details>
+          <summary>Can I use this as a classroom name picker?</summary>
+          <p>Yes. Paste your class list and spin the random name picker wheel to pick a student — it's a quick classroom tool with no repeats when you remove each winner.</p>
+        </details>
+        <details>
+          <summary>How do I make my own wheel spinner?</summary>
+          <p>Type your own options into the box (comma separated), then click Spin. You can use names, colors, numbers or any list to build a custom random spinner wheel.</p>
+        </details>
+        <details>
+          <summary>What is a wheel of colors spinner?</summary>
+          <p>It's a wheel spinner pre-filled with color names. Tap the Wheel of Colors preset to fill the wheel with colors, then spin to pick a random color.</p>
+        </details>
+        <details>
+          <summary>Can I use this as a random wheel picker?</summary>
+          <p>Yes. Paste any options and spin — it works as a random wheel picker, a name picker wheel or a wheel of spinner for picks, draws and decisions.</p>
         </details>
       </section>
     </main>
@@ -301,6 +343,23 @@
       document.getElementById('history').innerHTML = '';
       historyCount = 0;
       drawWheel(0);
+    }
+
+    var PRESETS = {
+      colors: 'Red,Orange,Yellow,Green,Blue,Purple,Pink,Black,White,Teal',
+      fate: 'Yes,No,Maybe,Not now,Try again,Ask later,Go for it,Sleep on it'
+    };
+
+    function loadPreset(key) {
+      if (spinning) return;
+      document.getElementById('options').value = PRESETS[key];
+      options = getOptions();
+      currentAngle = 0;
+      drawWheel(0);
+      document.getElementById('result').textContent = RESULT_INIT;
+      document.getElementById('history').innerHTML = '';
+      historyCount = 0;
+      document.getElementById('meta').textContent = options.length + ' options on the wheel.';
     }
 
     document.getElementById('options').addEventListener('input', function() {

@@ -45,12 +45,17 @@
       {
         "@type": "Question",
         "name": "How does the decision wheel work?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Add your choices (comma separated), click "Spin", and the wheel stops on a random option which becomes the decision. You can remove it and spin again to narrow down." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Add your choices (comma separated), click \"Spin\", and the wheel stops on a random option which becomes the decision. You can remove it and spin again to narrow down." }
       },
       {
         "@type": "Question",
         "name": "Is the decision wheel free?",
         "acceptedAnswer": { "@type": "Answer", "text": "Yes. The decision wheel spinner is 100% free, runs in your browser, and never requires a sign-up or download." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a wheel of fate spinner?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A wheel of fate spinner is a decision wheel that picks a random answer for you. Add your options, spin the wheel, and let fate make the call." }
       }
     ]
   }
@@ -73,6 +78,7 @@
     h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
     .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
     @media (max-width: 640px) { .brand-mini { display: none; } }
+
     input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
     .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
     .wheel-wrap { text-align: center; margin-bottom: 16px; }
@@ -104,7 +110,8 @@
     footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
     @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 480px) { h1 { font-size: 23px; } button { min-height: 44px; } }
-  </style>
+
+</style>
 </head>
 <body>
   <div class="wrap">
@@ -113,7 +120,7 @@
         <h1>Decision Wheel Spinner</h1>
         <div class="topright"><span class="brand-mini">SpinPick</span><a class="back" href="../">← All Tools</a></div>
       </div>
-      <p class="sub">Can't decide? Add your options, spin the wheel and let it make the choice for you. Great for everyday dilemmas, games and group calls.</p>
+      <p class="sub">Can't decide? Add your options, spin the wheel and let it make the choice for you. Use it as a wheel of fate spinner or a simple "the wheel" choice maker for everyday dilemmas, games and group calls.</p>
     </header>
 
     <main>
@@ -157,6 +164,10 @@
         <details>
           <summary>Is the decision wheel free?</summary>
           <p>Yes. The decision wheel spinner is 100% free, runs in your browser, and never requires a sign-up or download.</p>
+        </details>
+        <details>
+          <summary>What is a wheel of fate spinner?</summary>
+          <p>A wheel of fate spinner is a decision wheel that picks a random answer for you. Add your options, spin the wheel, and let fate make the call.</p>
         </details>
       </section>
     </main>
