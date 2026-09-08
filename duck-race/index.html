@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🎡%3C/text%3E%3C/svg%3E" />
-  <title>Duck Race — A Fun Random Winner Picker for the Classroom</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20'%20cy='22'%20r='15'%20fill='%23fff'%20stroke='%231a202c'%20stroke-width='2'/%3E%3Cpath%20d='M20,22%20L20,8.5%20A13.5,13.5%200%200,1%2031.69,15.25%20Z'%20fill='%23f43f5e'/%3E%3Cpath%20d='M20,22%20L31.69,15.25%20A13.5,13.5%200%200,1%2031.69,28.75%20Z'%20fill='%23f97316'/%3E%3Cpath%20d='M20,22%20L31.69,28.75%20A13.5,13.5%200%200,1%2020,35.5%20Z'%20fill='%23facc15'/%3E%3Cpath%20d='M20,22%20L20,35.5%20A13.5,13.5%200%200,1%208.31,28.75%20Z'%20fill='%2322c55e'/%3E%3Cpath%20d='M20,22%20L8.31,28.75%20A13.5,13.5%200%200,1%208.31,15.25%20Z'%20fill='%233b82f6'/%3E%3Cpath%20d='M20,22%20L8.31,15.25%20A13.5,13.5%200%200,1%2020,8.5%20Z'%20fill='%23a855f7'/%3E%3Ccircle%20cx='20'%20cy='22'%20r='3.5'%20fill='%231a202c'/%3E%3Ccircle%20cx='20'%20cy='22'%20r='1.3'%20fill='%23fff'/%3E%3Cpath%20d='M20,1%20L16.5,8.5%20L23.5,8.5%20Z'%20fill='%231a202c'/%3E%3C/svg%3E" />
+  <title>Duck Race — Fun Random Winner Picker | MySpinPick</title>
   <meta name="description" content="Free duck race picker. Type names, start the race, and watch the ducks cross the line to pick a random winner. No sign-up, runs in your browser." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://myspinpick.com/duck-race/" />
@@ -20,7 +20,7 @@
 
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary" />
-  <meta property="og:title" content="Duck Race" />
+  <meta property="og:title" content="Duck Race — Fun Random Winner Picker | MySpinPick" />
   <meta property="og:description" content="A fun classroom race picker." />
   <meta property="og:url" content="https://myspinpick.com/duck-race/" />
 
@@ -59,14 +59,14 @@
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
     .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
     header { padding: 18px 0 6px; }
-    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: nowrap; }
+.topbar h1 { flex: 1 1 auto; min-width: 0; }
     .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-    .brand-mini { font-weight: 700; font-size: 14px; color: var(--accent); }
-    .back { padding: 6px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; }
-    .back:hover { color: var(--accent); border-color: var(--accent); }
-    h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
+    .brand-mini { display: inline-flex; align-items: center; gap: 0; font-weight: 700; font-size: 14px; color: var(--accent); text-decoration: none; }
+    .brand-mini > svg { margin-right: 5px; }
+    h1 { font-size: 24px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
     .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
-    @media (max-width: 640px) { .brand-mini { display: none; } }
+    
 
     input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
     .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
@@ -98,7 +98,8 @@
     details p { margin-top: 8px; color: #475569; }
     footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
     @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 480px) { h1 { font-size: 23px; } button { min-height: 44px; } }
+    @media (max-width: 640px) { h1 { font-size: 21px; } .brand-mini span { display: none; } }
+    @media (max-width: 480px) { h1 { font-size: 20px; } button { min-height: 44px; } }
   
     /* ---- tool-specific ---- */
     .track { margin-top:14px; background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:10px 12px; overflow:hidden; }
@@ -115,7 +116,7 @@
     <header>
       <div class="topbar">
         <h1>Duck Race</h1>
-        <div class="topright"><span class="brand-mini">SpinPick</span><a class="back" href="../">← All Tools</a></div>
+        <div class="topright"><a class="brand-mini" href="../"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" style="width:18px;height:18px;flex-shrink:0;display:block;"><circle cx="20" cy="22" r="15" fill="#fff" stroke="#1a202c" stroke-width="2"/><path d="M20,22 L20,8.5 A13.5,13.5 0 0,1 31.69,15.25 Z" fill="#f43f5e"/><path d="M20,22 L31.69,15.25 A13.5,13.5 0 0,1 31.69,28.75 Z" fill="#f97316"/><path d="M20,22 L31.69,28.75 A13.5,13.5 0 0,1 20,35.5 Z" fill="#facc15"/><path d="M20,22 L20,35.5 A13.5,13.5 0 0,1 8.31,28.75 Z" fill="#22c55e"/><path d="M20,22 L8.31,28.75 A13.5,13.5 0 0,1 8.31,15.25 Z" fill="#3b82f6"/><path d="M20,22 L8.31,15.25 A13.5,13.5 0 0,1 20,8.5 Z" fill="#a855f7"/><circle cx="20" cy="22" r="3.5" fill="#1a202c"/><circle cx="20" cy="22" r="1.3" fill="#fff"/><path d="M20,1 L16.5,8.5 L23.5,8.5 Z" fill="#1a202c"/></svg><span style="color:#ef4444">My</span><span style="color:#f59e0b">Spin</span><span style="color:#3b82f6">Pick</span></a></div>
       </div>
       <p class="sub">A fun classroom race that picks a random winner.</p>
     </header>
@@ -148,7 +149,7 @@
       </section>
     </main>
 
-    <footer><p>SpinPick — free wheel spinner &amp; random decision tools.</p></footer>
+    <footer><p>MySpinPick — free wheel spinner &amp; random decision tools.</p></footer>
   </div>
 
   <script>
@@ -210,7 +211,7 @@
     buildLanes();
   </script>
 <footer style="margin-top:48px;padding:24px 16px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">
-      <p style="margin:0 0 8px;">SpinPick — free wheel spinner &amp; random decision tools.</p>
+      <p style="margin:0 0 8px;">MySpinPick — free wheel spinner &amp; random decision tools.</p>
       <p style="margin:0;">
         <a href="/privacy-policy/" style="color:inherit;text-decoration:underline;">Privacy Policy</a> ·
         <a href="/about/" style="color:inherit;text-decoration:underline;">About</a> ·
