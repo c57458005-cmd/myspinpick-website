@@ -304,8 +304,8 @@ Ethan</textarea>
     </section>
   </div>
 
-  <footer style="margin-top:48px;padding:24px 16px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);" data-page-node-id="feuyKwxqgtwBDMpJcMVqlk">
-      <p style="margin:0 0 8px;" data-page-node-id="JdBmIz8nDUGpH3ucEDukWs">MySpinPick — free wheel spinner &amp; random decision tools.</p>
+  <footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);" data-page-node-id="feuyKwxqgtwBDMpJcMVqlk">
+      <p class="slogan" style="margin:0 0 8px;" data-page-node-id="JdBmIz8nDUGpH3ucEDukWs">MySpinPick — free wheel spinner &amp; random decision tools.</p>
       <p style="margin:0;" data-page-node-id="8CxKR8r0nEVDiAtMe0g0nK">
         <a href="/privacy-policy/" style="color:inherit;text-decoration:underline;" data-page-node-id="BC6yZVdFYHL0yUqwapJyHj">Privacy Policy</a> ·
         <a href="/about/" style="color:inherit;text-decoration:underline;" data-page-node-id="ymATmf5kW3h6kP5VCYKgM3">About</a> ·
@@ -627,5 +627,10 @@ Ethan</textarea>
       paintToys(parseNames().slice(0, 8));
     })();
   </script>
+
+<style>
+  footer .slogan { white-space: nowrap; font-size: 14px; }
+  @media (max-width: 640px) { footer .slogan { font-size: 10.5px; } }
+</style>
 </body>
 </html>
