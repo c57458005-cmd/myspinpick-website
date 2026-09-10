@@ -137,7 +137,7 @@
           <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
         </div>
         <div class="btns">
-          <button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
+          <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button><button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
           <button type="button" onclick="removeWinner()">Remove Winner</button>
           <button type="button" onclick="resetAll()">Reset</button>
         </div>
@@ -267,6 +267,13 @@
         var eased = 1 - Math.pow(1 - t, 3);
         var angle = currentAngle + total * eased;
         drawWheel(angle);
+        var _n = options.length;
+        if (_n > 0) {
+          var _slice = (Math.PI * 2) / _n;
+          var _a = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+          var _idx = Math.floor(((Math.PI * 2 - _a) % (Math.PI * 2)) / _slice) % _n;
+          if (_idx !== lastTickIdx) { lastTickIdx = _idx; tick(); }
+        }
         if (t < 1) {
           requestAnimationFrame(step);
         } else {
@@ -284,6 +291,7 @@
     }
 
     function buildAndSpin() {
+      lastTickIdx = -1; ensureAudio();
       options = getOptions();
       if (options.length === 0) { document.getElementById('meta').textContent = 'Please add at least one option.'; return; }
       if (spinning) return;
@@ -305,6 +313,38 @@
         drawWheel(currentAngle);
         document.getElementById('meta').textContent = options.length + ' options left.';
       }
+    }
+
+    /* ---------- sound (5.3) ---------- */
+    var audioCtx = null, muted = false, lastTickIdx = -1;
+    function ensureAudio() {
+      if (!audioCtx) {
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+    function tick() {
+      if (muted) return;
+      var ac = ensureAudio();
+      if (!ac) return;
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'square'; o.frequency.value = 740;
+      g.gain.setValueAtTime(0.05, ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.05);
+      o.connect(g); g.connect(ac.destination);
+      o.start(); o.stop(ac.currentTime + 0.06);
+    }
+    function toggleMute() {
+      muted = !muted;
+      try { localStorage.setItem('myspinpick.wheel.sound', muted ? 'off' : 'on'); } catch (e) {}
+      var b = document.getElementById('muteBtn');
+      if (b) b.textContent = muted ? '🔇' : '🔊';
+    }
+    function initSound() {
+      try { muted = localStorage.getItem('myspinpick.wheel.sound') === 'off'; } catch (e) {}
+      var b = document.getElementById('muteBtn');
+      if (b) b.textContent = muted ? '🔇' : '🔊';
     }
 
     function setBtnsDisabled(d) { var b = document.querySelectorAll('.btns button'); for (var i = 0; i < b.length; i++) { b[i].disabled = d; } }
@@ -330,7 +370,8 @@
     options = getOptions();
     if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
     drawWheel(0);
-  </script>
+  initSound();
+</script>
 <footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">
       <p class="slogan" style="margin:0 0 8px;">MySpinPick — free wheel spinner &amp; random decision tools.</p>
       <p style="margin:0;">

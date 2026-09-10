@@ -50,6 +50,10 @@
         "@type": "Question",
         "name": "Is it 'coin flip' or 'coinflip'?",
         "acceptedAnswer": { "@type": "Answer", "text": "Both spellings refer to the same thing. Coin flip and coinflip both mean tossing a coin for a 50/50 decision, and this tool works for either term." }
+      },
+      {
+        "name": "Can I flip a coin best of 3 or best of 5?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Choose Best of 3 or Best of 5 above the flip button. The scoreboard keeps tallying Heads and Tails until one side wins the majority, then announces the match winner. Use Reset Match to start a new contest." }
       }
     ]
   }
@@ -108,6 +112,13 @@
   
     /* ---- tool-specific ---- */
     .coin { width:140px; height:140px; margin:10px auto; border-radius:50%; background:linear-gradient(145deg,#fde68a,#f59e0b); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; color:#7c2d12; box-shadow:inset 0 4px 10px rgba(0,0,0,.15), 0 6px 16px rgba(15,23,42,.15); transition:transform .6s ease; }
+    .modes { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:4px 0 2px; }
+    .modes button { padding:7px 14px; font-size:13px; }
+    .modes button.active { background:#93c5fd; border-color:#60a5fa; color:#1e3a8a; }
+    .score { display:none; justify-content:center; gap:18px; margin:10px auto 2px; font-size:14px; font-weight:600; color:#334155; }
+    .score.on { display:flex; }
+    .score b { font-size:18px; color:#1e40af; }
+    .score .winners { color:#15803d; }
 
 </style>
 </head>
@@ -124,8 +135,19 @@
       <div class="tool">
         <div class="coin" id="coin">HEADS</div>
         <div class="result" id="result">Tap flip to decide</div>
+        <div class="modes" id="modes">
+          <button type="button" class="active" data-best="1" onclick="setMode(1)">Single Flip</button>
+          <button type="button" data-best="3" onclick="setMode(3)">Best of 3</button>
+          <button type="button" data-best="5" onclick="setMode(5)">Best of 5</button>
+        </div>
+        <div class="score" id="score">
+          <span>Heads <b id="sH">0</b></span>
+          <span>Tails <b id="sT">0</b></span>
+          <span class="winners" id="sW"></span>
+        </div>
         <div class="btns">
-          <button type="button" class="primary" onclick="flip()">Flip Coin</button>
+          <button type="button" class="primary" onclick="flip()" id="flipBtn">Flip Coin</button>
+          <button type="button" onclick="resetMatch()" id="resetBtn" style="display:none;">Reset Match</button>
         </div>
       </div>
 
@@ -134,6 +156,7 @@
         <ol>
           <li>Click <strong>Flip Coin</strong>.</li>
           <li>The coin spins and lands on Heads or Tails.</li>
+          <li>For a longer contest, switch to <strong>Best of 3</strong> or <strong>Best of 5</strong> — the scoreboard tracks the match until someone takes the majority.</li>
         </ol>
         <p>The simplest way to settle a tie, choose who goes first, or make any 50/50 call.</p>
       </section>
@@ -159,6 +182,10 @@
           <summary>Is it 'coin flip' or 'coinflip'?</summary>
           <p>Both spellings mean the same thing. Coin flip and coinflip both describe tossing a coin for a 50/50 decision, and this tool works for either term.</p>
         </details>
+        <details>
+          <summary>Can I flip a coin best of 3 or best of 5?</summary>
+          <p>Yes. Choose <strong>Best of 3</strong> or <strong>Best of 5</strong> above the flip button. The scoreboard keeps tallying Heads and Tails until one side wins the majority, then announces the match winner. Use Reset Match to start a new contest.</p>
+        </details>
       </section>
     </main>
 
@@ -166,18 +193,59 @@
 
   <script>
     var rot = 0;
+    var bestOf = 1;
+    var scoreH = 0, scoreT = 0, matchOver = false;
+
+    function setMode(n) {
+      bestOf = n; scoreH = 0; scoreT = 0; matchOver = false;
+      document.querySelectorAll('#modes button').forEach(function(b){
+        b.classList.toggle('active', parseInt(b.getAttribute('data-best'), 10) === n);
+      });
+      var on = n > 1;
+      document.getElementById('score').classList.toggle('on', on);
+      document.getElementById('resetBtn').style.display = on ? '' : 'none';
+      document.getElementById('flipBtn').textContent = on ? ('Flip — Best of ' + n) : 'Flip Coin';
+      updateScore();
+      document.getElementById('result').textContent = on ? ('Best of ' + n + ' — flip to start') : 'Tap flip to decide';
+    }
+
+    function updateScore() {
+      if (bestOf < 2) return;
+      document.getElementById('sH').textContent = scoreH;
+      document.getElementById('sT').textContent = scoreT;
+      var need = Math.ceil(bestOf / 2);
+      if (scoreH >= need) { document.getElementById('sW').textContent = 'Heads wins!'; matchOver = true; }
+      else if (scoreT >= need) { document.getElementById('sW').textContent = 'Tails wins!'; matchOver = true; }
+      else document.getElementById('sW').textContent = '';
+    }
+
+    function resetMatch() { setMode(bestOf); }
+
     function flip() {
+      if (matchOver) return;
       var coin = document.getElementById('coin');
-      var btns = document.querySelectorAll('.btns button');
+      var btns = document.querySelectorAll('.btns button, #modes button');
       btns.forEach(function(b){ b.disabled = true; });
       var heads = Math.random() < 0.5;
       rot += 360 * (1 + Math.floor(Math.random() * 2)); /* 每次累加1~2整圈，动画必然重放 */
       coin.style.transform = 'rotateY(' + rot + 'deg)';
       setTimeout(function(){
         coin.textContent = heads ? 'HEADS' : 'TAILS';
-        document.getElementById('result').textContent = heads ? 'Heads' : 'Tails';
-        track('flip', { tool: 'coin-flip' });
+        if (bestOf > 1) {
+          if (heads) scoreH++; else scoreT++;
+          updateScore();
+          var need = Math.ceil(bestOf / 2);
+          var done = matchOver;
+          document.getElementById('result').textContent = done
+            ? (scoreH >= need ? 'Heads wins the match ' : 'Tails wins the match ') + scoreH + '–' + scoreT
+            : (heads ? 'Heads' : 'Tails') + ' — ' + scoreH + ' / ' + scoreT;
+          track('flip', { tool: 'coin-flip', best_of: bestOf, match_over: done });
+        } else {
+          document.getElementById('result').textContent = heads ? 'Heads' : 'Tails';
+          track('flip', { tool: 'coin-flip' });
+        }
         btns.forEach(function(b){ b.disabled = false; });
+        // 若 match 结束，Reset 按钮仍需可点（上面统一恢复，无碍）
       }, 600);
     }
   </script>

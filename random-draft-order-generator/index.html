@@ -36,24 +36,36 @@
     "description": "Free tool to randomize draft order."
   }
   </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do I generate a random draft order?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Type teams or players separated by commas, click Generate, and the list is shuffled into a fair random draft order with pick numbers." }
-      },
-      {
-        "@type": "Question",
-        "name": "Is the draft order really random?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. It uses a Fisher-Yates shuffle in your browser, so every order is equally likely." }
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I generate a random draft order?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Type teams or players separated by commas, click Generate, and the list is shuffled into a fair random draft order with pick numbers."
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "Question",
+      "name": "Is the draft order really random?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It uses a Fisher-Yates shuffle in your browser, so every order is equally likely."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this also a random order generator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. This is a random order generator built for draft picks — paste your names and it shuffles them into a fresh sequence. The same shuffle works for deciding speaking order, seating order, queue position or who goes first in a game."
+      }
+    }
+  ]
+}</script>
 
   <style>
     :root {
@@ -150,6 +162,10 @@
         <details>
           <summary>Is the draft order really random?</summary>
           <p>Yes. It uses a Fisher-Yates shuffle in your browser, so every order is equally likely.</p>
+        </details>
+        <details>
+          <summary>Is this also a random order generator?</summary>
+          <p>Yes. This is a <strong>random order generator</strong> built for draft picks — paste your names and it shuffles them into a fresh sequence. The same shuffle works for deciding speaking order, seating order, queue position or who goes first in a game.</p>
         </details>
       </section>
     </main>
