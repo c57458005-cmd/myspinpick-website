@@ -41,30 +41,44 @@
   </script>
 
   <!-- JSON-LD: FAQPage -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do I randomly split names into groups?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Paste your list of names into the box (comma separated names), choose the number of groups, then click Generate Groups. The tool shuffles the names and splits them into balanced groups instantly."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is this random group generator free?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. This group generator is 100% free, runs in your browser, and never requires a sign-up or download."
-        }
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I randomly split names into groups?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste your list of names into the box (comma separated names), choose the number of groups, then click Generate Groups. The tool shuffles the names and splits them into balanced groups instantly."
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "Question",
+      "name": "Is this random group generator free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. This group generator is 100% free, runs in your browser, and never requires a sign-up or download."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this group generator work on mobile?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The group generator is fully responsive and works on phones, tablets and desktops alike."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are my names kept private?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Group splitting happens locally in your browser. Your list of names never leaves your device and is never stored or uploaded."
+      }
+    }
+  ]
+}</script>
 
   <style>
     :root {
@@ -133,7 +147,7 @@
   <div class="wrap">
     <header>
       <div class="topbar">
-        <h1>Group Generator</h1>
+        <h1>Random Group Generator</h1>
         <div class="topright"><a class="brand-mini" href="../"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" style="width:18px;height:18px;flex-shrink:0;display:block;"><circle cx="20" cy="22" r="15" fill="#fff" stroke="#1a202c" stroke-width="2"/><path d="M20,22 L20,8.5 A13.5,13.5 0 0,1 31.69,15.25 Z" fill="#f43f5e"/><path d="M20,22 L31.69,15.25 A13.5,13.5 0 0,1 31.69,28.75 Z" fill="#f97316"/><path d="M20,22 L31.69,28.75 A13.5,13.5 0 0,1 20,35.5 Z" fill="#facc15"/><path d="M20,22 L20,35.5 A13.5,13.5 0 0,1 8.31,28.75 Z" fill="#22c55e"/><path d="M20,22 L8.31,28.75 A13.5,13.5 0 0,1 8.31,15.25 Z" fill="#3b82f6"/><path d="M20,22 L8.31,15.25 A13.5,13.5 0 0,1 20,8.5 Z" fill="#a855f7"/><circle cx="20" cy="22" r="3.5" fill="#1a202c"/><circle cx="20" cy="22" r="1.3" fill="#fff"/><path d="M20,1 L16.5,8.5 L23.5,8.5 Z" fill="#1a202c"/></svg><span style="color:#ef4444">My</span><span style="color:#f59e0b">Spin</span><span style="color:#3b82f6">Pick</span></a></div>
       </div>
       <p class="sub">Split a list of names into random, balanced groups in one click.</p>
@@ -169,6 +183,8 @@
       <section id="related">
         <h2>Related Tools</h2>
         <div class="related">
+          <a href="../name-picker/">Random Name Picker <span>Pick from a list</span></a>
+
           <a href="../wheel-spinner/">Wheel Spinner <span>Spin a random name or decision</span></a>
           <a href="../random-number-generator/">Random Number Generator <span>Pick random numbers</span></a>
           <a href="../decision-wheel-spinner/">Decision Wheel Spinner <span>Spin to decide</span></a>

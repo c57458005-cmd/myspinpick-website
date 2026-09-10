@@ -41,54 +41,76 @@
   </script>
 
   <!-- JSON-LD: FAQPage -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do I generate a random number?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Enter a minimum and maximum value, choose how many numbers you want, then click Generate. The tool returns random numbers within that range instantly."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can I generate random numbers without repeats?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Turn on the No-repeat mode to get unique random numbers with no duplicates. Note the count must not exceed the size of your range."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I use a random number generator 2-20?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Set the minimum to 2 and the maximum to 20, then click Generate. It works like a quick dice-style roll in that range."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I generate a random number between 1 and 100?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Use a random number generator 1-100 — set the minimum to 1 and the maximum to 100, then click Generate. Or tap the 1-100 quick range button to fill it in instantly."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can I pick a random number between 1 and 50?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. A random number generator 1-50 works the same way — set the range or tap the 1-50 quick range button, then click Generate."
-        }
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I generate a random number?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Enter a minimum and maximum value, choose how many numbers you want, then click Generate. The tool returns random numbers within that range instantly."
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "Question",
+      "name": "Can I generate random numbers without repeats?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Turn on the No-repeat mode to get unique random numbers with no duplicates. Note the count must not exceed the size of your range."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I use a random number generator 2-20?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Set the minimum to 2 and the maximum to 20, then click Generate. It works like a quick dice-style roll in that range."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I generate a random number between 1 and 100?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use a random number generator 1-100 — set the minimum to 1 and the maximum to 100, then click Generate. Or tap the 1-100 quick range button to fill it in instantly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I pick a random number between 1 and 50?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A random number generator 1-50 works the same way — set the range or tap the 1-50 quick range button, then click Generate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this tool work on mobile?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The random number generator is fully responsive and works on phones, tablets and desktops alike."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are the numbers truly random?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The tool uses your browser's built-in random number source to generate unbiased random numbers within your chosen range."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I pick a random number between 1 and 9 or 1 and 25?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the preset buttons: 1-9 and 1-25 set the range in one click. You can also type any custom minimum and maximum — for example 1-10, 2-20 or 1-100 — then press Generate."
+      }
+    }
+  ]
+}</script>
 
   <style>
     :root {
@@ -185,6 +207,8 @@
         <div class="btns presets" id="presets">
           <button type="button" onclick="setRange(2,20)">2–20</button>
           <button type="button" onclick="setRange(1,7)">1–7</button>
+          <button type="button" onclick="setRange(1,9)">1–9</button>
+          <button type="button" onclick="setRange(1,25)">1–25</button>
           <button type="button" onclick="setRange(1,50)">1–50</button>
           <button type="button" onclick="setRange(1,100)">1–100</button>
         </div>
@@ -192,7 +216,7 @@
         <div id="result" aria-label="Generated numbers"></div>
       </div>
 <section id="about">
-        <h2>How to Generate Random Numbers</h2>
+        <h2>How to Generate Random Numbers (1-10, 2-20, 1-25 or Any Range)</h2>
         <p>Enter a minimum and maximum value to set your range, choose how many numbers you want, then click "Generate". Turn on "No-repeat" to get unique numbers with no duplicates. Everything runs in your browser — nothing is uploaded.</p>
       </section>
 
@@ -246,6 +270,10 @@
         <details>
           <summary>Are the numbers truly random?</summary>
           <p>Yes. The tool uses your browser's built-in random number source to generate unbiased random numbers within your chosen range.</p>
+        </details>
+        <details>
+          <summary>How do I pick a random number between 1 and 9 or 1 and 25?</summary>
+          <p>Use the preset buttons: <strong>1–9</strong> and <strong>1–25</strong> set the range in one click. You can also type any custom minimum and maximum — for example 1-10, 2-20 or 1-100 — then press Generate.</p>
         </details>
       </section>
     </main>
