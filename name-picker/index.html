@@ -102,6 +102,22 @@
         "@type": "Answer",
         "text": "Paste your names and press \"Pick One\" — the tool instantly picks a random name for you. It works as a random name generator from list data you already have, such as a class roster, giveaway entrants or team members, and with \"Remove winner after pick\" enabled every name gets drawn exactly once."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I add a countdown timer to this name picker?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Pick 10, 20, 30, 60 or 120 seconds in the response timer above and the countdown starts by itself the moment a name is drawn, so the student can see exactly how long they have to answer. If you were looking for an online stopwatch and a random name picker in one place, this page gives you both in a single tab — no second site, no app, no sign-up. Press the Classroom preset to load a sample list with the 30-second timer already switched on."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this also a random list generator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It can be. Paste any list — names, chores, tasks, quiz questions, prizes — one item per line, then press Pick One to draw a single random item or Shuffle Order to put the whole list in a random sequence. Used one way it is a random name picker, used the other it is a random list generator, and both live on this page."
+      }
     }
   ]
 }</script>
@@ -279,6 +295,20 @@ Ethan</textarea>
         <button id="presetClaw" style="padding:5px 10px;font-size:13px;">Claw Machine</button>
       </div>
 
+      <div class="opt timer-row">
+        <span>⏱️ Response timer:</span>
+        <select id="timerSec" aria-label="Response timer length">
+          <option value="0">Off</option>
+          <option value="10">10s</option>
+          <option value="20">20s</option>
+          <option value="30">30s</option>
+          <option value="60">60s</option>
+          <option value="120">120s</option>
+        </select>
+        <button id="timerToggle" disabled>Start</button>
+        <button id="timerReset">Reset</button>
+      </div>
+      <p class="timer-display" id="timerDisplay" aria-live="polite" style="display:none;">0:30</p>
       <p class="result" id="result"></p>
       <ol class="order-list" id="orderList" style="display:none;"></ol>
       <div class="history" id="history"></div>
@@ -333,6 +363,14 @@ Ethan</textarea>
       <details>
         <summary>How can I pick a random name from a list?</summary>
         <p>Paste your names and press "Pick One" — the tool instantly picks a random name for you. It works as a random name generator from list data you already have, such as a class roster, giveaway entrants or team members, and with "Remove winner after pick" enabled every name gets drawn exactly once.</p>
+      </details>
+      <details>
+        <summary>Can I add a countdown timer to this name picker?</summary>
+        <p>Yes. Pick 10, 20, 30, 60 or 120 seconds in the response timer above and the countdown starts by itself the moment a name is drawn, so the student can see exactly how long they have to answer. If you were looking for an online stopwatch and a random name picker in one place, this page gives you both in a single tab — no second site, no app, no sign-up. Press the Classroom preset to load a sample list with the 30-second timer already switched on.</p>
+      </details>
+      <details>
+        <summary>Is this also a random list generator?</summary>
+        <p>It can be. Paste any list — names, chores, tasks, quiz questions, prizes — one item per line, then press Pick One to draw a single random item or Shuffle Order to put the whole list in a random sequence. Used one way it is a random name picker, used the other it is a random list generator, and both live on this page.</p>
       </details>
     </section>
 
@@ -604,12 +642,87 @@ Ethan</textarea>
             fanfare();
             if (removeChk.checked) addToHistory(winner);
             track('pick_name', { method: 'claw_machine' });
+            autoStartTimer();
             setTimeout(function() { gripEl.innerHTML = ''; }, 900);
             rolling = false;
             updateMeta();
           });
         });
       }
+
+      /* ---------- classroom response timer ---------- */
+      var timerSel = document.getElementById('timerSec');
+      var timerDisplayEl = document.getElementById('timerDisplay');
+      var timerToggle = document.getElementById('timerToggle');
+      var timerResetBtn = document.getElementById('timerReset');
+      var timerTotal = 0, timerLeft = 0, timerId = null, timerRunning = false;
+
+      function fmtTime(s) {
+        s = Math.max(0, Math.ceil(s));
+        var m = Math.floor(s / 60), r = s % 60;
+        return m + ':' + (r < 10 ? '0' : '') + r;
+      }
+      function paintTimer() {
+        if (timerTotal <= 0) { timerToggle.disabled = true; timerToggle.textContent = 'Start'; return; }
+        timerToggle.disabled = false;
+        timerToggle.textContent = timerRunning ? 'Pause' : (timerLeft > 0 && timerLeft < timerTotal ? 'Resume' : 'Start');
+        timerDisplayEl.classList.toggle('running', timerRunning);
+        if (!timerRunning && timerLeft > 0) timerDisplayEl.textContent = fmtTime(timerLeft);
+      }
+      function stopTick() { if (timerId) { clearInterval(timerId); timerId = null; } timerRunning = false; }
+      function setTimerTotal(sec) {
+        stopTick();
+        timerTotal = sec;
+        timerLeft = sec;
+        timerDisplayEl.classList.remove('running', 'up');
+        timerDisplayEl.style.display = sec > 0 ? '' : 'none';
+        if (sec > 0) timerDisplayEl.textContent = fmtTime(sec);
+        paintTimer();
+      }
+      function startTimer() {
+        if (timerTotal <= 0 || timerRunning) return;
+        if (timerLeft <= 0) timerLeft = timerTotal;
+        timerRunning = true;
+        var endAt = Date.now() + timerLeft * 1000;
+        timerId = setInterval(function() {
+          timerLeft = (endAt - Date.now()) / 1000;
+          if (timerLeft <= 0) {
+            timerLeft = 0;
+            stopTick();
+            timerDisplayEl.classList.remove('running');
+            timerDisplayEl.classList.add('up');
+            timerDisplayEl.textContent = "\u23f0 Time's up!";
+            timerToggle.textContent = 'Start';
+            tone(880, .16, 'square', .05);
+            tone(660, .16, 'square', .05, .22);
+            tone(440, .3, 'square', .05, .44);
+            track('timer_finished', { seconds: timerTotal });
+          } else {
+            timerDisplayEl.textContent = fmtTime(timerLeft);
+          }
+        }, 100);
+        track('timer_started', { seconds: timerTotal });
+        paintTimer();
+      }
+      function pauseTimer() { if (!timerRunning) return; stopTick(); paintTimer(); }
+      function autoStartTimer() {
+        if (timerTotal <= 0) return;
+        stopTick();
+        timerLeft = timerTotal;
+        timerDisplayEl.classList.remove('up');
+        startTimer();
+      }
+      function resetTimerView() {
+        stopTick();
+        timerLeft = timerTotal;
+        timerDisplayEl.classList.remove('up');
+        if (timerTotal > 0) timerDisplayEl.textContent = fmtTime(timerTotal);
+        paintTimer();
+      }
+      timerSel.addEventListener('change', function() { setTimerTotal(parseInt(timerSel.value, 10) || 0); });
+      timerToggle.addEventListener('click', function() { if (timerRunning) { pauseTimer(); } else { startTimer(); } });
+      timerResetBtn.addEventListener('click', resetTimerView);
+      document.getElementById('reset').addEventListener('click', resetTimerView);
 
       pickBtn.addEventListener('click', function() { runClaw(); });
 
@@ -646,6 +759,8 @@ Ethan</textarea>
 
       document.getElementById('presetClassroom').addEventListener('click', function() {
         namesEl.value = ['Alice','Bob','Charlie','Diana','Ethan','Fiona','George','Hannah'].join('\n');
+        timerSel.value = '30';
+        setTimerTotal(30);
         document.getElementById('reset').click();
       });
       document.getElementById('presetGiveaway').addEventListener('click', function() {
@@ -675,6 +790,17 @@ Ethan</textarea>
 <style>
   footer .slogan { white-space: nowrap; font-size: 14px; }
   @media (max-width: 640px) { footer .slogan { font-size: 10.5px; } }
+</style>
+<style>
+  .timer-row { flex-wrap: wrap; row-gap: 6px; }
+  .timer-row select { font: inherit; font-size: 13px; padding: 5px 8px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: #0f172a; }
+  .timer-row button { background: #fff; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; cursor: pointer; }
+  .timer-row button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .timer-row button:disabled { opacity: .45; cursor: default; }
+  .timer-display { font-size: 32px; font-weight: 700; line-height: 1.1; text-align: center; color: #0f172a;
+                   font-variant-numeric: tabular-nums; margin: 6px 0 2px; }
+  .timer-display.running { color: var(--accent); }
+  .timer-display.up { color: #dc2626; font-size: 22px; }
 </style>
 </body>
 </html>
