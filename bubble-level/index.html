@@ -63,6 +63,46 @@
         "@type": "Answer",
         "text": "Yes. A spirit level and a bubble level are the same tool — this one uses your phone's tilt sensors instead of a glass vial, so you always have a spirit level in your pocket."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a spirit level used for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Checking whether a surface is horizontal. Builders, DIYers and photographers use one to hang pictures straight, level shelves and furniture, check appliances and set up a tripod. A bubble level and a spirit level are the same instrument."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does the bubble stay centered on my laptop?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because most desktops and laptops have no tilt sensor the browser can read, so there is no reading to move the bubble. Open the same page on a phone and tap Enable Sensors to get a live level."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How accurate is a phone bubble level?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Typically within about one degree, which is fine for pictures, shelves and furniture but not for precision engineering. Let the bubble settle before you read it, and take a thick phone case off so the phone rests on its own flat back."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use it to hang a picture frame?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Rest the phone on the top edge of the frame, wait for the bubble to settle, and adjust the frame until the bubble sits in the center circle. Check the frame rather than the wall, and mark both hanging points at the same height."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work on iPhone and Android?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes on both. On iPhone and iPad you tap Enable Sensors and allow motion access; on Android the reading usually starts as soon as the page loads. No app download and no account is needed either way."
+      }
     }
   ]
 }</script>
@@ -160,6 +200,44 @@
         <p>Desktop browsers usually have no tilt sensor, so the bubble stays centered — use a phone for real readings.</p>
       </section>
 
+      <section id="sensors">
+        <h2>How a Phone Becomes a Spirit Level</h2>
+        <p>A traditional spirit level is a sealed glass vial, partly filled with liquid, with an air bubble that always floats to the highest point. Line the bubble up between the two marks and the surface under the level is horizontal. The physics has not changed in two hundred years — only the vial has.</p>
+        <p>On a phone, the vial is replaced by the accelerometer, the same sensor that rotates your screen when you turn the device. It reports the pull of gravity along each axis, and the browser passes those readings to the page through the device orientation API. What you see is a bubble drawn from those numbers: tilt the phone and the reading changes, so the bubble slides toward the raised edge.</p>
+        <p>Because gravity is the reference, there is nothing to zero and nothing to calibrate before you start. On iPhone and iPad, Safari and Chrome require a tap on <strong>Enable Sensors</strong> and a permission prompt before they will share motion data; on Android the reading usually begins as soon as the page opens.</p>
+      </section>
+
+      <section id="accuracy">
+        <h2>How Accurate Is a Phone Level?</h2>
+        <p>Accurate enough for almost any job around the house, and not accurate enough for precision engineering. Phone tilt sensors are typically good to about one degree, and often better once the device is still and the readings have settled. That is plenty for hanging a picture, leveling a shelf, checking a table or seeing which way a floor slopes. It is not the tool for setting up a lathe or inspecting a machined surface; those jobs want a machinist's level whose sensitivity is measured in fractions of a degree.</p>
+        <p>Three habits make the reading better:</p>
+        <ul>
+          <li><strong>Let it settle.</strong> Give the bubble a second to stop flickering before you read it.</li>
+          <li><strong>Take the case off.</strong> A raised camera bump means the phone is resting on the bump, not on the surface you are measuring.</li>
+          <li><strong>Compare with a level you trust.</strong> Lay the phone on a good worktop or a shop-bought spirit level and check that the bubble sits where you expect. If it is consistently off, the phone's sensors may need recalibrating in the system settings.</li>
+        </ul>
+      </section>
+
+      <section id="everyday-uses">
+        <h2>Jobs a Bubble Level Handles</h2>
+        <ul>
+          <li><strong>Hanging pictures and mirrors</strong> — rest the phone on the top edge of the frame and mark both fixing points at the same height.</li>
+          <li><strong>Shelves and wall units</strong> — a shelf that is a couple of millimeters out shows the moment the books go on it.</li>
+          <li><strong>Furniture</strong> — work around a tabletop to find the wobble and see which leg needs a shim.</li>
+          <li><strong>Appliances</strong> — a fridge, washing machine or dishwasher that sits level runs quieter and drains properly.</li>
+          <li><strong>Campervans and caravans</strong> — level up before you sleep and the doors, drains and cooking surfaces all behave better.</li>
+          <li><strong>Photography</strong> — a level horizon starts with a level camera, and this is quicker than guessing at a tripod.</li>
+          <li><strong>Slope checks</strong> — lay the phone on the ground or a ramp to read the gradient before you lay a path or park a car.</li>
+        </ul>
+      </section>
+
+      <section id="desktops">
+        <h2>Why the Bubble Stays Centered on a Laptop</h2>
+        <p>Opened on a desktop or most laptops, the bubble sits in the middle and does not move. That is not a fault in the page: the sensor is missing, not the reading. Desktop browsers have no tilt hardware to read, so the orientation data never arrives and the page shows a note rather than inventing a number.</p>
+        <p>Laptops are a mixed bag. Some contain an accelerometer used to park the hard drive when the machine is dropped, but that sensor is almost never exposed to the browser, and browsers that do expose motion data ask for permission first. If the bubble is not moving on a laptop, the hardware simply is not reachable from the page.</p>
+        <p>The practical answer is straightforward: open the same page on a phone. It is the same URL, no app is involved, and the bubble comes alive the moment sensors are enabled.</p>
+      </section>
+
       <section id="related">
         <h2>Related Tools</h2>
         <div class="related">
@@ -179,6 +257,27 @@
         <details>
           <summary>Is this the same as a spirit level?</summary>
           <p>Yes. A <strong>spirit level</strong> and a bubble level are the same tool — this one uses your phone's tilt sensors instead of a glass vial, so you always have a spirit level in your pocket.</p>
+        </details>
+        <details>
+          <summary>What is a spirit level used for?</summary>
+          <p>Checking whether a surface is horizontal. Builders, DIYers and photographers use one to hang pictures straight, level shelves and furniture, check appliances and set up a tripod. A bubble level and a spirit level are the same instrument.</p>
+        </details>
+        <details>
+          <summary>Why does the bubble stay centered on my laptop?</summary>
+          <p>Because most desktops and laptops have no tilt sensor the browser can read, so there is no reading to move the bubble. Open the same page on a phone and tap Enable Sensors to get a live level.</p>
+        </details>
+        <details>
+          <summary>How accurate is a phone bubble level?</summary>
+          <p>Typically within about one degree, which is fine for pictures, shelves and furniture but not for precision engineering. Let the bubble settle before you read it, and take a thick phone case off so the phone rests on its own flat back.</p>
+        </details>
+        <details>
+          <summary>Can I use it to hang a picture frame?</summary>
+          <p>Yes. Rest the phone on the top edge of the frame, wait for the bubble to settle, and adjust the frame until the bubble sits in the center circle. Check the frame rather than the wall, and mark both hanging points at the same height.</p>
+        </details>
+        <details>
+          <summary>Does it work on iPhone and Android?</summary>
+          <p>Yes on both. On iPhone and iPad you tap Enable Sensors and allow motion access; on Android the reading usually starts as soon as the page loads. No app download and no account is needed either way.</p>
+        </details>
         </details>
       </section>
     </main>

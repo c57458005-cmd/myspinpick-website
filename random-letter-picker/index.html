@@ -51,6 +51,41 @@
         "@type": "Question",
         "name": "How do I pick a random letter?",
         "acceptedAnswer": { "@type": "Answer", "text": "Click Pick a Letter and the tool returns a random letter from A to Z. You can also type your own set (characters separated by commas) to pick from that instead." }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I pick a random letter from A to Z?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Press Pick a Letter. One click returns one letter from the 26-letter alphabet, drawn independently each time, with no weighting and no repeats removed." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I pick a random vowel?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Put A, E, I, O, U in the set box and press Pick a Letter — the tool then draws only from those five. Clear the box to go back to the full alphabet." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use my own set of characters?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Type them into the set box separated by commas, for example H,T for heads and tails, or 0,1,2,3,4,5,6,7,8,9 for a random digit. The set stays in the box while you keep clicking." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I pick more than one letter at a time?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The tool returns one letter per click, which keeps the draw easy to follow on a projector. For a whole row of characters in one go, use the Password Generator, or set the Random Number Generator to a larger count." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this the same as a random letter generator for word games?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes — an alphabet picker and a random letter generator are the same tool. It is used for hangman, alphabet bingo, vocabulary warm-ups and any game that starts with a letter." }
+      },
+      {
+        "@type": "Question",
+        "name": "Why did I get the same letter twice?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Because the draws are independent. Each click is a fresh 1-in-26 chance, so an exact repeat turns up about 4% of the time, and a letter that has not appeared for a while is no more likely than any other." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to sign up or install anything?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. The picker is free, runs entirely in your browser, and needs no account, no download and no data connection once the page has loaded." }
       }
     ]
   }
@@ -135,6 +170,49 @@
         </div>
       </div>
 
+      <section id="about">
+        <h2>How the Random Letter Picker Works</h2>
+        <p>Press <strong>Pick a Letter</strong> and the display shuffles through letters for a moment before settling on one drawn at random from A to Z. Every letter of the alphabet has the same chance, and every click is a fresh draw — the letter you got a moment ago has no effect on the next one.</p>
+        <p>Nothing needs configuring. The page loads with the full alphabet in the set box and is ready for the first click, and repeats are normal and expected, because that is what independent random draws look like.</p>
+        <p>If you need a run of draws where the same item cannot come up twice, keep the used letters out of the set as you go, or switch to the <a href="../name-picker/">Random Name Picker</a>, which has a "Remove winner after pick" option that handles no-repeat draws in one click.</p>
+      </section>
+
+      <section id="custom-sets">
+        <h2>Custom Sets: Vowels, Consonants, Digits and Symbols</h2>
+        <p>The optional set box is where this stops being an alphabet picker and becomes a general character picker. Type characters or words separated by commas or line breaks, and the tool draws only from what you typed. Leave the box empty and the full alphabet comes back.</p>
+        <ul>
+          <li><strong>Vowels only</strong> — A, E, I, O, U for phonics and reading games.</li>
+          <li><strong>Consonants only</strong> — the remaining 21 letters, for spelling drills.</li>
+          <li><strong>Digits</strong> — 0 to 9 for a random digit drawn one at a time.</li>
+          <li><strong>Hexadecimal</strong> — 0 to 9 plus A to F, for code and cryptography exercises.</li>
+          <li><strong>Musical notes</strong> — C, D, E, F, G, A, B for sight-reading practice.</li>
+          <li><strong>Coins and counters</strong> — H, T for heads and tails, or X, O for a quick noughts-and-crosses opening.</li>
+        </ul>
+        <p>The set stays in the box between clicks, so you can run a whole lesson or a whole tournament without retyping it.</p>
+      </section>
+
+      <section id="letter-games">
+        <h2>Letter Games, Classroom Ideas and Writing Prompts</h2>
+        <p>A single random letter is a surprisingly productive constraint, because it removes the blank page without removing the choice:</p>
+        <ul>
+          <li><strong>Hangman and word games</strong> — draw the mystery letter, or draw a starter letter that every team has to build a word from.</li>
+          <li><strong>Alphabet bingo</strong> — draw letters one at a time and cross them off the grid.</li>
+          <li><strong>Letter of the day</strong> — hand the class a letter and ask for three words that begin with it.</li>
+          <li><strong>Creative writing warm-ups</strong> — every sentence or paragraph has to open with the letter drawn.</li>
+          <li><strong>Turn order and seating</strong> — give each student a letter, then draw to see who goes first.</li>
+          <li><strong>Phonics and spelling practice</strong> — draw a letter, then ask for its sound or for a word that ends with it.</li>
+          <li><strong>Games night</strong> — settle who chooses the film, the board game or the next round.</li>
+        </ul>
+        <p>Every pick is instant and needs no setup, so the tool works as a projector warm-up, a two-minute filler at the end of a lesson, or a tie-breaker when two names come up together.</p>
+      </section>
+
+      <section id="fairness">
+        <h2>Is Every Letter Equally Likely?</h2>
+        <p>With the alphabet set, yes. Each click draws one letter from 26 equally likely options, so every letter carries the same 1-in-26 chance, with no weighting and no memory carried over from earlier clicks.</p>
+        <p>Two things surprise people. The first is repeats: drawing the same letter twice in a row feels almost impossible, yet it happens in roughly one pair out of 26. The second is the gambler's fallacy — a letter that has not appeared for twenty clicks is not "due". The next draw is still a clean 1-in-26.</p>
+        <p>The draw happens in your browser, so the picker keeps working after the page has loaded even without a connection, and whatever you type into the set box stays on your device.</p>
+      </section>
+
       <section id="related">
         <h2>Related Tools</h2>
         <div class="related">
@@ -153,6 +231,35 @@
         <details>
           <summary>How do I pick a random letter?</summary>
           <p>Click Pick a Letter and the tool returns a random letter from A to Z. You can also type your own set (characters separated by commas) to pick from that instead.</p>
+        </details>
+        <details>
+          <summary>How do I pick a random letter from A to Z?</summary>
+          <p>Press Pick a Letter. One click returns one letter from the 26-letter alphabet, drawn independently each time, with no weighting and no repeats removed.</p>
+        </details>
+        <details>
+          <summary>Can I pick a random vowel?</summary>
+          <p>Yes. Put A, E, I, O, U in the set box and press Pick a Letter — the tool then draws only from those five. Clear the box to go back to the full alphabet.</p>
+        </details>
+        <details>
+          <summary>Can I use my own set of characters?</summary>
+          <p>Yes. Type them into the set box separated by commas, for example H,T for heads and tails, or 0,1,2,3,4,5,6,7,8,9 for a random digit. The set stays in the box while you keep clicking.</p>
+        </details>
+        <details>
+          <summary>Can I pick more than one letter at a time?</summary>
+          <p>The tool returns one letter per click, which keeps the draw easy to follow on a projector. For a whole row of characters in one go, use the Password Generator, or set the Random Number Generator to a larger count.</p>
+        </details>
+        <details>
+          <summary>Is this the same as a random letter generator for word games?</summary>
+          <p>Yes — an alphabet picker and a random letter generator are the same tool. It is used for hangman, alphabet bingo, vocabulary warm-ups and any game that starts with a letter.</p>
+        </details>
+        <details>
+          <summary>Why did I get the same letter twice?</summary>
+          <p>Because the draws are independent. Each click is a fresh 1-in-26 chance, so an exact repeat turns up about 4% of the time, and a letter that has not appeared for a while is no more likely than any other.</p>
+        </details>
+        <details>
+          <summary>Do I need to sign up or install anything?</summary>
+          <p>No. The picker is free, runs entirely in your browser, and needs no account, no download and no data connection once the page has loaded.</p>
+        </details>
         </details>
       </section>
     </main>

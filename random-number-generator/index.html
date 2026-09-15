@@ -56,7 +56,7 @@
       "name": "How do I generate a random number?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Enter a minimum and maximum value, choose how many numbers you want, then click Generate. The tool returns random numbers within that range instantly."
+        "text": "Enter a minimum and maximum value, choose how many numbers you want, then click \"Generate\". The tool returns random numbers within that range instantly."
       }
     },
     {
@@ -64,7 +64,7 @@
       "name": "Can I generate random numbers without repeats?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Turn on the No-repeat mode to get unique random numbers with no duplicates. Note the count must not exceed the size of your range."
+        "text": "Yes. Turn on the \"No-repeat\" mode to get unique random numbers with no duplicates. Note the count must not exceed the size of your range."
       }
     },
     {
@@ -112,7 +112,47 @@
       "name": "How do I pick a random number between 1 and 9 or 1 and 25?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use the preset buttons: 1-9 and 1-25 set the range in one click. You can also type any custom minimum and maximum — for example 1-10, 2-20 or 1-100 — then press Generate."
+        "text": "Use the preset buttons: 1–9 and 1–25 set the range in one click. You can also type any custom minimum and maximum — for example 1-10, 2-20 or 1-100 — then press Generate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I generate a random number 1-32?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Tap the 1–32 preset button and click Generate — it is one click from the default range. It is a popular range for league draws, deck-style picks and classroom lists where you need more than 25 but fewer than 40 options."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I generate a random number 1-40?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Use the 1–40 preset, or type 1 into Minimum and 40 into Maximum. Raise the How many field if you want a pair of numbers, and tick No-repeat so the same value cannot come up twice in the same draw."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this the same as a Google random number generator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It does the same job: you give it a range, it returns an unbiased number inside that range. The difference is that this one is a stand-alone page — no sign-in, no download, and the draw happens in your own browser rather than on a search engine's servers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I draw six unique numbers for a lottery-style pick?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Set your range, set How many to 6, and tick No-repeat. The generator returns six different numbers in one click. Keep the count at or below the size of the range, or a unique draw is mathematically impossible."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I generate more than one number at a time?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — the How many field takes any count from 1 to 1000, so you can pull a single winner or a whole block of random IDs. Multi-number draws come back as a list you can read off the screen or copy with the Copy Result button."
       }
     }
   ]
@@ -215,6 +255,8 @@
           <button type="button" onclick="setRange(1,7)">1–7</button>
           <button type="button" onclick="setRange(1,9)">1–9</button>
           <button type="button" onclick="setRange(1,25)">1–25</button>
+          <button type="button" onclick="setRange(1,32)">1–32</button>
+          <button type="button" onclick="setRange(1,40)">1–40</button>
           <button type="button" onclick="setRange(1,50)">1–50</button>
           <button type="button" onclick="setRange(1,100)">1–100</button>
         </div>
@@ -234,6 +276,25 @@
           <li><strong>Sampling</strong> — pick random rows or IDs without bias.</li>
           <li><strong>Lotteries &amp; decisions</strong> — pick a number for any choice.</li>
         </ul>
+      </section>
+
+      <section id="quick-ranges">
+        <h2>Quick Range Buttons: 1-10, 1-25, 1-32 and 1-40</h2>
+        <p>The preset row under the Generate button fills both number fields for you, so you never have to type the same range twice. Tap <strong>2–20</strong> for a dice-style roll, <strong>1–7</strong> for the days of a week, <strong>1–9</strong> for a single digit, <strong>1–25</strong> for a bingo-style draw, <strong>1–50</strong> for a half-century, or <strong>1–100</strong> for a percentage-style pick. Two extra buttons, <strong>1–32</strong> and <strong>1–40</strong>, cover the ranges people ask for most often in league draws, deck-style picks and classroom lists.</p>
+        <p>Every preset is a shortcut and nothing more: the minimum and maximum boxes stay editable, so you can type any custom range at all — 1-10, 1-32, 1-40, 5-15 or 1000-9999. Set the range, choose how many numbers you need, then press Generate.</p>
+      </section>
+
+      <section id="no-repeat-mode">
+        <h2>What No-Repeat Mode Actually Does</h2>
+        <p>For some draws you want a single number; for others you want a set with no duplicates at all — six unique lottery-style numbers, five different seat numbers, or ten distinct student IDs. Tick the <strong>No-repeat</strong> box and the generator switches from drawing with replacement to drawing without replacement: once a number comes up it leaves the pool and cannot appear again in the same run.</p>
+        <p>That rule comes with one condition. The count can never be larger than the size of your range, because you cannot draw ten different numbers from a range of nine. Keep the count at or below (maximum − minimum + 1). With No-repeat switched off the same value may appear more than once, which is exactly what you want for dice-like rolls where duplicates are perfectly normal.</p>
+      </section>
+
+      <section id="fair-and-private">
+        <h2>Fair, Private and Instant: What Happens Behind the Button</h2>
+        <p>There is no server in the loop. The generator uses your browser's built-in random number source, draws the values on your own device and prints them straight onto the page, so the range you type is never uploaded, logged or tied to an account. That is also why the result appears the moment you click: nothing is waiting on a network round trip.</p>
+        <p>Every draw is independent of the one before it. A number that came up a moment ago is exactly as likely as any other on the next click, so long runs and repeats are normal rather than suspicious. That makes the tool a fair way to pick a winner, deal a seat, sample a row or settle an argument.</p>
+        <p>One caveat worth stating plainly: this is a general-purpose number generator for everyday draws, games and sampling. For passwords, encryption keys or anything security-critical, use a tool built specifically for that job rather than a general number generator.</p>
       </section>
 
       <section id="related">
@@ -281,6 +342,27 @@
         <details>
           <summary>How do I pick a random number between 1 and 9 or 1 and 25?</summary>
           <p>Use the preset buttons: <strong>1–9</strong> and <strong>1–25</strong> set the range in one click. You can also type any custom minimum and maximum — for example 1-10, 2-20 or 1-100 — then press Generate.</p>
+        </details>
+        <details>
+          <summary>How do I generate a random number 1-32?</summary>
+          <p>Tap the 1–32 preset button and click Generate — it is one click from the default range. It is a popular range for league draws, deck-style picks and classroom lists where you need more than 25 but fewer than 40 options.</p>
+        </details>
+        <details>
+          <summary>Can I generate a random number 1-40?</summary>
+          <p>Yes. Use the 1–40 preset, or type 1 into Minimum and 40 into Maximum. Raise the How many field if you want a pair of numbers, and tick No-repeat so the same value cannot come up twice in the same draw.</p>
+        </details>
+        <details>
+          <summary>Is this the same as a Google random number generator?</summary>
+          <p>It does the same job: you give it a range, it returns an unbiased number inside that range. The difference is that this one is a stand-alone page — no sign-in, no download, and the draw happens in your own browser rather than on a search engine's servers.</p>
+        </details>
+        <details>
+          <summary>Can I draw six unique numbers for a lottery-style pick?</summary>
+          <p>Yes. Set your range, set How many to 6, and tick No-repeat. The generator returns six different numbers in one click. Keep the count at or below the size of the range, or a unique draw is mathematically impossible.</p>
+        </details>
+        <details>
+          <summary>Can I generate more than one number at a time?</summary>
+          <p>Yes — the How many field takes any count from 1 to 1000, so you can pull a single winner or a whole block of random IDs. Multi-number draws come back as a list you can read off the screen or copy with the Copy Result button.</p>
+        </details>
         </details>
       </section>
     </main>

@@ -51,6 +51,31 @@
         "@type": "Question",
         "name": "What values does the color picker give?",
         "acceptedAnswer": { "@type": "Answer", "text": "It shows the HEX, RGB and HSL values of the color you pick, each with a one-click copy button." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between HEX and RGB?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Nothing but notation. HEX writes the red, green and blue channels in base 16, so #2563EB and rgb(37, 99, 235) are the same color. Use HEX for CSS and HTML, and RGB when you want to read or adjust the channels as plain numbers." }
+      },
+      {
+        "@type": "Question",
+        "name": "What does HSL stand for?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Hue, saturation and lightness. Hue is an angle on the color wheel from 0 to 360 degrees, saturation is how vivid the color is, and lightness runs from black to white. It is the easiest format for making a lighter tint or a darker shade of one color." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I pick a color from an image or a website?",
+        "acceptedAnswer": { "@type": "Answer", "text": "This picker uses your browser's built-in color chooser, so the color comes from the chooser rather than from a photo. If you can see the color you need on screen, note its HEX value and paste that straight into the chooser's hex field." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I copy the value straight into CSS?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Each row has its own Copy button, so #2563EB or rgb(37, 99, 235) can be pasted straight into a stylesheet with no extra formatting to strip out. The HSL row copies in the same CSS-ready form." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the color picker work on a phone?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. It is a plain web page with no download and no account, and the native color chooser on Android and iOS works the same way. The HEX, RGB and HSL rows update as soon as you pick." }
       }
     ]
   }
@@ -145,6 +170,41 @@
         <p>Useful for design, CSS, and anywhere you need an exact color value fast.</p>
       </section>
 
+      <section id="color-formats">
+        <h2>HEX, RGB and HSL: What the Numbers Mean</h2>
+        <p>One color can be written three ways, and the picker shows all three at once:</p>
+        <ul>
+          <li><strong>HEX</strong> — a six-digit code starting with a hash, such as #2563EB. The first pair of digits is red, the second green and the third blue, each counted in base 16 from 00 to FF.</li>
+          <li><strong>RGB</strong> — the same three channels written as ordinary decimal numbers from 0 to 255, such as rgb(37, 99, 235). It describes exactly the same color, spelled differently.</li>
+          <li><strong>HSL</strong> — hue, saturation and lightness. Hue is a position on the color wheel in degrees, saturation is how vivid the color is, and lightness runs from black at 0% to white at 100%.</li>
+        </ul>
+        <p>Design tools usually work in HSL because it is the easiest format to adjust: keep hue and saturation and move only the lightness to get a lighter tint or a darker shade of the same color. Code usually wants HEX or RGB.</p>
+      </section>
+
+      <section id="which-format">
+        <h2>Which Color Format Should You Copy?</h2>
+        <ul>
+          <li><strong>CSS and HTML</strong> — HEX is the shortest and by far the most common. RGB is equally valid and easier to read when you later need transparency alongside it.</li>
+          <li><strong>Design tools</strong> — most editors accept a pasted HEX straight into the color field. HSL is handier when you want to nudge a color rather than replace it.</li>
+          <li><strong>Documents and slides</strong> — most accept HEX; if a field refuses it, paste the RGB numbers into the three channels by hand.</li>
+          <li><strong>Print</strong> — HEX and RGB describe light, not ink. Print work needs CMYK, so carry the value into a print-aware tool rather than pasting the code into an artwork file.</li>
+          <li><strong>Sending a color to someone</strong> — HEX is the safest thing to share: one short string, no ambiguity, and it pastes into almost every application.</li>
+        </ul>
+      </section>
+
+      <section id="design-colors">
+        <h2>Picking Colors for Websites, Slides and Charts</h2>
+        <p>Workflow matters more than the picker itself. A few habits save a lot of time:</p>
+        <ol>
+          <li><strong>Pick one accent and repeat it.</strong> A single strong color used for links, buttons and headings reads as deliberate; five accents read as noise.</li>
+          <li><strong>Vary lightness, not hue, for tints.</strong> Take your accent's HSL value and raise the lightness for backgrounds or lower it for borders.</li>
+          <li><strong>Check contrast before you ship.</strong> Light text on a light background is the most common accessibility mistake, and sampling both colors here makes the difference obvious straight away.</li>
+          <li><strong>Keep a note of the codes.</strong> Paste the HEX values you settled on somewhere you will find them, because re-picking the same color by eye never matches.</li>
+          <li><strong>Check it on a second screen.</strong> A color that looks calm on your monitor can look far brighter on a phone, so look at the page on a second device before you commit.</li>
+        </ol>
+        <p>If you want a color chosen for you rather than one you picked, the <a href="../wheel-of-colors/">Wheel of Colors</a> spins a random color, and the <a href="../wheel-spinner/">Wheel Spinner</a> does the same for names and decisions.</p>
+      </section>
+
       <section id="related">
         <h2>Related Tools</h2>
         <div class="related">
@@ -153,6 +213,7 @@
           <a href="../coin-flip/">Coin Flip <span>50/50 call</span></a>
           <a href="../dice-roller/">Dice Roller <span>Roll dice</span></a>
           <a href="../wheel-of-colors/">Wheel of Colors <span>Spin a random color</span></a>
+          <a href="../bubble-level/">Bubble Level <span>Spirit level</span></a>
         </div>
       </section>
 
@@ -161,6 +222,27 @@
         <details>
           <summary>What values does the color picker give?</summary>
           <p>It shows the HEX, RGB and HSL values of the color you pick, each with a one-click copy button.</p>
+        </details>
+        <details>
+          <summary>What is the difference between HEX and RGB?</summary>
+          <p>Nothing but notation. HEX writes the red, green and blue channels in base 16, so #2563EB and rgb(37, 99, 235) are the same color. Use HEX for CSS and HTML, and RGB when you want to read or adjust the channels as plain numbers.</p>
+        </details>
+        <details>
+          <summary>What does HSL stand for?</summary>
+          <p>Hue, saturation and lightness. Hue is an angle on the color wheel from 0 to 360 degrees, saturation is how vivid the color is, and lightness runs from black to white. It is the easiest format for making a lighter tint or a darker shade of one color.</p>
+        </details>
+        <details>
+          <summary>Can I pick a color from an image or a website?</summary>
+          <p>This picker uses your browser's built-in color chooser, so the color comes from the chooser rather than from a photo. If you can see the color you need on screen, note its HEX value and paste that straight into the chooser's hex field.</p>
+        </details>
+        <details>
+          <summary>Can I copy the value straight into CSS?</summary>
+          <p>Yes. Each row has its own Copy button, so #2563EB or rgb(37, 99, 235) can be pasted straight into a stylesheet with no extra formatting to strip out. The HSL row copies in the same CSS-ready form.</p>
+        </details>
+        <details>
+          <summary>Does the color picker work on a phone?</summary>
+          <p>Yes. It is a plain web page with no download and no account, and the native color chooser on Android and iOS works the same way. The HEX, RGB and HSL rows update as soon as you pick.</p>
+        </details>
         </details>
       </section>
     </main>
