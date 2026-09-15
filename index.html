@@ -240,6 +240,32 @@
       .card p { font-size: 11.5px; }
       footer .slogan { font-size: 10.5px; }
     }
+  
+    /* ===== v13 ===== */
+    /* 首页 H1 内原来只有一张 logo 图、零文本节点；补一段视觉隐藏文本，
+       文案与 img alt 完全一致（不额外堆词），屏幕阅读器与搜索引擎可读，视觉零变化。 */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+    h1.brand-name { position: relative; }
+
+    /* 工具卡：图标与名称同一行，描述跨两列通栏（原为图标单独占一行） */
+    .card {
+      display: grid; grid-template-columns: 24px 1fr;
+      column-gap: 8px; row-gap: 5px; align-items: center;
+    }
+    .card .icon {
+      display: block; font-size: 22px; line-height: 1; margin: 0;
+      grid-column: 1; grid-row: 1; text-align: center;
+    }
+    .card h3 { margin: 0; grid-column: 2; grid-row: 1; }
+    .card p { grid-column: 1 / -1; grid-row: 2; }
+
+    @media (max-width: 640px) {
+      .card { grid-template-columns: 22px 1fr; column-gap: 7px; row-gap: 3px; }
+      .card .icon { font-size: 19px; }
+    }
   </style>
 </head>
 <body>
@@ -250,6 +276,7 @@
           <img class="brand-logo" src="/brand-logo.png" width="300" height="54"
                alt="MySpinPick — Free Wheel Spinner &amp; Random Name Picker" />
         </a>
+        <span class="sr-only">MySpinPick — Free Wheel Spinner &amp; Random Name Picker</span>
       </h1>
       <p class="sub">Free wheel spinner, name picker and random decision tools — built for you, saved on your device.</p>
     </header>
@@ -407,7 +434,7 @@
         <h2>About MySpinPick</h2>
         <p>MySpinPick is a home for spin-the-wheel and random-pick tools built for real decisions. Spin a wheel of names to choose a student or winner, split a class into fair random groups, decide with a yes/no wheel, draw lottery numbers for a raffle, or flip a coin when you're stuck.</p>
         <p>Every tool is free, requires no account, and runs 100% in your browser — your names and results never leave your device.</p>
-        <p><strong>It is your tool, not ours.</strong> Save the wheels and lists you use most and they stay on your device — nothing you type is uploaded. MySpinPick (myspinpick.com) is an independent site and is not affiliated with, endorsed by, or connected to any other picker, spinner or spin-pick-style website.</p>
+        <p><strong>It is your tool.</strong> Save the wheels and lists you use most and they stay on your device — nothing you type is uploaded. MySpinPick (myspinpick.com) is an independent site and is not affiliated with, endorsed by, or connected to any other picker, spinner or spin-pick-style website.</p>
       </section>
 
       <section class="plain" id="faq">
