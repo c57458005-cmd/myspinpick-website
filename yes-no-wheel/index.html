@@ -150,6 +150,12 @@
     @media (max-width: 640px) { h1 { font-size: 21px; } .brand-mini span { display: none; } }
     @media (max-width: 480px) { h1 { font-size: 20px; } button { min-height: 44px; } }
 
+    /* /embed/ 嵌入板块 */
+    #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #embed .embed-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 10px 0 0; }
+    #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
+    #embed .embed-preview:hover { text-decoration: underline; }
+    #embed .embed-hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 </style>
 </head>
 <body>
@@ -213,6 +219,38 @@
         <h2>One Tap, One Answer</h2>
         <p>There is no setup to work through before the first spin. The wheel opens ready to answer with the two options already loaded, so a decision takes one press — no list to type, no setting to confirm, no account to create.</p>
         <p>If you want different answers, edit the box once and the wheel keeps that change for the rest of the session.</p>
+      </section>
+
+      <section id="embed">
+        <h2>Embed This Yes No Wheel on Your Site</h2>
+        <p>Streamers, teachers and quiz pages can put the same decision wheel on their own site. Copy the snippet into any HTML block — it loads the free spinner from myspinpick.com, adapts to the width of your container, and needs no sign-up.</p>
+        <p>The embed is free to use. A small "Yes No Wheel by MySpinPick" credit link sits under the wheel; please keep it so viewers can find the tool again.</p>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Yes No Wheel">&lt;iframe src="https://myspinpick.com/embed/yes-no-wheel/" width="100%" height="827" style="border:0;max-width:100%" title="Yes No Wheel by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <p class="embed-actions">
+          <button type="button" id="embed-copy">Copy embed code</button>
+          <a class="embed-preview" href="https://myspinpick.com/embed/yes-no-wheel/" target="_blank" rel="noopener">Preview the widget</a>
+        </p>
+        <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>height</b> value in the snippet.</p>
+      <script>
+        (function () {
+          var btn = document.getElementById('embed-copy');
+          var box = document.getElementById('embed-code');
+          if (!btn || !box) return;
+          btn.addEventListener('click', function () {
+            var done = function () {
+              if (btn.dataset.busy) return;
+              btn.dataset.busy = '1';
+              var t = btn.textContent;
+              btn.textContent = 'Copied!';
+              setTimeout(function () { btn.textContent = t; delete btn.dataset.busy; }, 1800);
+            };
+            var fallback = function () { var r = document.createRange(); r.selectNodeContents(box); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); } catch (e) {} done(); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(box.textContent).then(done, fallback);
+            } else { fallback(); }
+          });
+        })();
+      </script>
       </section>
 
       <section id="related">

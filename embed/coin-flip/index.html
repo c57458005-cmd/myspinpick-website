@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coin Flip — Embeddable Widget | MySpinPick</title>
+<meta name="description" content="Embed this free coin flip on your site. Get heads or tails in one click. No ads, no sign-up." />
+<meta name="robots" content="noindex, follow" />
+<link rel="canonical" href="https://myspinpick.com/coin-flip/" />
+<meta name="theme-color" content="#db2777" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VYS6D8Q5NS"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VYS6D8Q5NS');
+    function track(name, params) { if (typeof gtag === 'function') { gtag('event', name, params); } }
+  </script>
+<style>
+    :root {
+      --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
+      --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+    header { padding: 18px 0 6px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: nowrap; }
+.topbar h1 { flex: 1 1 auto; min-width: 0; }
+    .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .brand-mini { display: inline-flex; align-items: center; gap: 0; font-weight: 700; font-size: 14px; color: var(--accent); text-decoration: none; }
+    .brand-mini > svg { margin-right: 5px; }
+    h1 { font-size: 24px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
+    
+
+    input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+    .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+    .wheel-wrap { text-align: center; margin-bottom: 16px; }
+    canvas { max-width: 100%; }
+    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: #bfdbfe; border-color: #60a5fa; }
+    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
+    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
+    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history:empty { display: none; }
+    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    section { margin-top: 26px; }
+    h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
+    section p, section li { color: #334155; font-size: 15px; }
+    ul, ol { padding-left: 20px; }
+    .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
+    .related a:hover { border-color: var(--accent); color: var(--accent); }
+    .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+    details p { margin-top: 8px; color: #475569; }
+    footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px) { h1 { font-size: 21px; } .brand-mini span { display: none; } }
+    @media (max-width: 480px) { h1 { font-size: 20px; } button { min-height: 44px; } }
+  
+    /* ---- tool-specific ---- */
+    .coin { width:140px; height:140px; margin:10px auto; border-radius:50%; background:linear-gradient(145deg,#fde68a,#f59e0b); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; color:#7c2d12; box-shadow:inset 0 4px 10px rgba(0,0,0,.15), 0 6px 16px rgba(15,23,42,.15); transition:transform .6s ease; }
+    .modes { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:4px 0 2px; }
+    .modes button { padding:7px 14px; font-size:13px; }
+    .modes button.active { background:#93c5fd; border-color:#60a5fa; color:#1e3a8a; }
+    .score { display:none; justify-content:center; gap:18px; margin:10px auto 2px; font-size:14px; font-weight:600; color:#334155; }
+    .score.on { display:flex; }
+    .score b { font-size:18px; color:#1e40af; }
+    .score .winners { color:#15803d; }
+
+
+
+    /* ===================== /embed/ shell overrides ===================== */
+    html, body { margin: 0; padding: 0; }
+    body.embed { background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; }
+    .embed-main { flex: 1 1 auto; padding: 12px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+               overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .embed-foot { flex: 0 0 auto; padding: 8px 12px 12px; text-align: center;
+                  font-size: 12px; line-height: 1.4; color: var(--muted);
+                  border-top: 1px solid var(--border); background: var(--card); }
+    .embed-foot a { color: var(--accent); font-weight: 600; text-decoration: none; }
+    .embed-foot a:hover { text-decoration: underline; }
+    .embed-foot .by { margin: 0 5px; }
+</style>
+</head>
+<body class="embed">
+<main class="embed-main">
+<h1 class="sr-only">Coin Flip — free embeddable heads or tails</h1>
+<div class="tool">
+        <div class="coin" id="coin">HEADS</div>
+        <div class="result" id="result">Tap flip to decide</div>
+        <div class="modes" id="modes">
+          <button type="button" class="active" data-best="1" onclick="setMode(1)">Single Flip</button>
+          <button type="button" data-best="3" onclick="setMode(3)">Best of 3</button>
+          <button type="button" data-best="5" onclick="setMode(5)">Best of 5</button>
+        </div>
+        <div class="score" id="score">
+          <span>Heads <b id="sH">0</b></span>
+          <span>Tails <b id="sT">0</b></span>
+          <span class="winners" id="sW"></span>
+        </div>
+        <div class="btns">
+          <button type="button" class="primary" onclick="flip()" id="flipBtn">Flip Coin</button>
+          <button type="button" onclick="resetMatch()" id="resetBtn" style="display:none;">Reset Match</button>
+        </div>
+      </div>
+</main>
+<footer class="embed-foot">
+  <a href="https://myspinpick.com/coin-flip/" target="_blank" rel="noopener">Coin Flip</a>
+  <span class="by">by</span>
+  <a href="https://myspinpick.com/" target="_blank" rel="noopener">MySpinPick</a>
+</footer>
+
+    <!-- /embed/ 专用埋点：把「父页面域名」记下来，才能知道谁真的嵌了我们 -->
+    <script>
+      (function () {
+        var host = 'direct';
+        try { host = document.referrer ? new URL(document.referrer).hostname : 'direct'; } catch (e) { host = 'direct'; }
+        /* 自己域（直接打开嵌入页）与本地预览不算「被第三方嵌入」，否则会污染这份名单 */
+        if (!host || host === 'myspinpick.com' || host === 'www.myspinpick.com' ||
+            /^(localhost|127\..*|0\.0\.0\.0$|10\..*|192\.168\..*)/.test(host)) {
+          host = 'direct';
+        }
+        if (typeof gtag === 'function') {
+          gtag('event', 'embed_view', { embed_tool: 'coin-flip', parent_host: host });
+        }
+      })();
+    </script>
+<script>var rot = 0;
+    var bestOf = 1;
+    var scoreH = 0, scoreT = 0, matchOver = false;
+
+    function setMode(n) {
+      bestOf = n; scoreH = 0; scoreT = 0; matchOver = false;
+      document.querySelectorAll('#modes button').forEach(function(b){
+        b.classList.toggle('active', parseInt(b.getAttribute('data-best'), 10) === n);
+      });
+      var on = n > 1;
+      document.getElementById('score').classList.toggle('on', on);
+      document.getElementById('resetBtn').style.display = on ? '' : 'none';
+      document.getElementById('flipBtn').textContent = on ? ('Flip — Best of ' + n) : 'Flip Coin';
+      updateScore();
+      document.getElementById('result').textContent = on ? ('Best of ' + n + ' — flip to start') : 'Tap flip to decide';
+    }
+
+    function updateScore() {
+      if (bestOf < 2) return;
+      document.getElementById('sH').textContent = scoreH;
+      document.getElementById('sT').textContent = scoreT;
+      var need = Math.ceil(bestOf / 2);
+      if (scoreH >= need) { document.getElementById('sW').textContent = 'Heads wins!'; matchOver = true; }
+      else if (scoreT >= need) { document.getElementById('sW').textContent = 'Tails wins!'; matchOver = true; }
+      else document.getElementById('sW').textContent = '';
+    }
+
+    function resetMatch() { setMode(bestOf); }
+
+    function flip() {
+      if (matchOver) return;
+      var coin = document.getElementById('coin');
+      var btns = document.querySelectorAll('.btns button, #modes button');
+      btns.forEach(function(b){ b.disabled = true; });
+      var heads = Math.random() < 0.5;
+      rot += 360 * (1 + Math.floor(Math.random() * 2)); /* 每次累加1~2整圈，动画必然重放 */
+      coin.style.transform = 'rotateY(' + rot + 'deg)';
+      setTimeout(function(){
+        coin.textContent = heads ? 'HEADS' : 'TAILS';
+        if (bestOf > 1) {
+          if (heads) scoreH++; else scoreT++;
+          updateScore();
+          var need = Math.ceil(bestOf / 2);
+          var done = matchOver;
+          document.getElementById('result').textContent = done
+            ? (scoreH >= need ? 'Heads wins the match ' : 'Tails wins the match ') + scoreH + '–' + scoreT
+            : (heads ? 'Heads' : 'Tails') + ' — ' + scoreH + ' / ' + scoreT;
+          track('flip', { tool: 'coin-flip', best_of: bestOf, match_over: done });
+        } else {
+          document.getElementById('result').textContent = heads ? 'Heads' : 'Tails';
+          track('flip', { tool: 'coin-flip' });
+        }
+        btns.forEach(function(b){ b.disabled = false; });
+        // 若 match 结束，Reset 按钮仍需可点（上面统一恢复，无碍）
+      }, 600);
+    }</script>
+</body>
+</html>

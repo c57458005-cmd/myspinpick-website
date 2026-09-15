@@ -138,6 +138,12 @@
     .beat { width:24px; height:24px; border-radius:50%; background:#cbd5e1; margin:12px auto; transition:background .08s ease, transform .08s ease; }
     .beat.on { background:var(--accent); transform:scale(1.35); }
 
+    /* /embed/ 嵌入板块 */
+    #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #embed .embed-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 10px 0 0; }
+    #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
+    #embed .embed-preview:hover { text-decoration: underline; }
+    #embed .embed-hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 </style>
 </head>
 <body>
@@ -213,6 +219,38 @@
         <p>A metronome removes the one thing you cannot hear while you are playing: your own drift. Players tend to speed up in easy passages and slow down in hard ones, and because the whole performance drifts together it sounds fine from the inside. A steady click exposes it immediately.</p>
         <p>The second reason is ensemble work. If you rehearse alone at the tempo your group will use, you arrive already knowing the tempo instead of guessing it from the first bar. The third is measurable progress: when a passage that was clean at 80 BPM is now clean at 100 BPM, you have evidence that the practice worked.</p>
         <p>A browser metronome is also more convenient than a hardware one. There are no batteries to replace and no box to lose, and it opens on the phone that is already sitting on your music stand.</p>
+      </section>
+
+      <section id="embed">
+        <h2>Embed This Metronome on Your Site</h2>
+        <p>Music teachers and practice blogs can host the same metronome. Paste the snippet into any HTML block — it loads the free tool from myspinpick.com, fits the width of your layout, and keeps time without an account or download.</p>
+        <p>The embed is free. A small "Metronome by MySpinPick" credit link sits under the controls; please leave it in place.</p>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Metronome">&lt;iframe src="https://myspinpick.com/embed/metronome/" width="100%" height="400" style="border:0;max-width:100%" title="Metronome by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <p class="embed-actions">
+          <button type="button" id="embed-copy">Copy embed code</button>
+          <a class="embed-preview" href="https://myspinpick.com/embed/metronome/" target="_blank" rel="noopener">Preview the widget</a>
+        </p>
+        <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>height</b> value in the snippet.</p>
+      <script>
+        (function () {
+          var btn = document.getElementById('embed-copy');
+          var box = document.getElementById('embed-code');
+          if (!btn || !box) return;
+          btn.addEventListener('click', function () {
+            var done = function () {
+              if (btn.dataset.busy) return;
+              btn.dataset.busy = '1';
+              var t = btn.textContent;
+              btn.textContent = 'Copied!';
+              setTimeout(function () { btn.textContent = t; delete btn.dataset.busy; }, 1800);
+            };
+            var fallback = function () { var r = document.createRange(); r.selectNodeContents(box); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); } catch (e) {} done(); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(box.textContent).then(done, fallback);
+            } else { fallback(); }
+          });
+        })();
+      </script>
       </section>
 
       <section id="related">

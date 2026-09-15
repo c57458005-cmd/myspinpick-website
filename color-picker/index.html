@@ -138,6 +138,12 @@
     .valrow { display:flex; align-items:center; gap:10px; }
     .valrow code { flex:1; background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:14px; }
 
+    /* /embed/ 嵌入板块 */
+    #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #embed .embed-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 10px 0 0; }
+    #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
+    #embed .embed-preview:hover { text-decoration: underline; }
+    #embed .embed-hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 </style>
 </head>
 <body>
@@ -203,6 +209,38 @@
           <li><strong>Check it on a second screen.</strong> A color that looks calm on your monitor can look far brighter on a phone, so look at the page on a second device before you commit.</li>
         </ol>
         <p>If you want a color chosen for you rather than one you picked, the <a href="../wheel-of-colors/">Wheel of Colors</a> spins a random color, and the <a href="../wheel-spinner/">Wheel Spinner</a> does the same for names and decisions.</p>
+      </section>
+
+      <section id="embed">
+        <h2>Embed This Color Picker on Your Site</h2>
+        <p>Design blogs, classroom pages and art projects can host the same random color tool. Paste the snippet into any HTML block — it loads the free picker from myspinpick.com, fills the width of your container, and needs no account or download.</p>
+        <p>The embed is free. A small "Color Picker by MySpinPick" credit link sits under the swatch; please leave it in place.</p>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Color Picker">&lt;iframe src="https://myspinpick.com/embed/color-picker/" width="100%" height="464" style="border:0;max-width:100%" title="Color Picker by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <p class="embed-actions">
+          <button type="button" id="embed-copy">Copy embed code</button>
+          <a class="embed-preview" href="https://myspinpick.com/embed/color-picker/" target="_blank" rel="noopener">Preview the widget</a>
+        </p>
+        <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>height</b> value in the snippet.</p>
+      <script>
+        (function () {
+          var btn = document.getElementById('embed-copy');
+          var box = document.getElementById('embed-code');
+          if (!btn || !box) return;
+          btn.addEventListener('click', function () {
+            var done = function () {
+              if (btn.dataset.busy) return;
+              btn.dataset.busy = '1';
+              var t = btn.textContent;
+              btn.textContent = 'Copied!';
+              setTimeout(function () { btn.textContent = t; delete btn.dataset.busy; }, 1800);
+            };
+            var fallback = function () { var r = document.createRange(); r.selectNodeContents(box); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); } catch (e) {} done(); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(box.textContent).then(done, fallback);
+            } else { fallback(); }
+          });
+        })();
+      </script>
       </section>
 
       <section id="related">

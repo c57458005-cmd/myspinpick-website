@@ -156,6 +156,12 @@
     .score b { font-size:18px; color:#1e40af; }
     .score .winners { color:#15803d; }
 
+    /* /embed/ 嵌入板块 */
+    #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #embed .embed-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 10px 0 0; }
+    #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
+    #embed .embed-preview:hover { text-decoration: underline; }
+    #embed .embed-hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 </style>
 </head>
 <body>
@@ -222,6 +228,38 @@
         <p>The same fifty-fifty decision goes by several names. People say coin toss, coin flipping, flipping a coin or simply a toss-up, and a heads or tails call means the same thing in every version. If you searched for any of those phrases, you have landed on the right page.</p>
         <p>Sports commentators borrow the language too. A coin toss decides which end each team defends, the toss winner chooses to bat or to bowl, and the losing captain takes the other end without complaint because nobody controlled the call.</p>
         <p>A toss-up has also become the everyday phrase for any contest too close to predict, which is exactly the kind of question this page settles in one press.</p>
+      </section>
+
+      <section id="embed">
+        <h2>Embed This Coin Flip on Your Site</h2>
+        <p>Settle a decision on your own page with the same virtual coin. Drop the snippet into any HTML block — it pulls the free flipper from myspinpick.com, fills the width of its container, and needs no account or download.</p>
+        <p>The embed is free. A small "Coin Flip by MySpinPick" credit link sits under the coin; please leave it in place so visitors can find the tool again.</p>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Coin Flip">&lt;iframe src="https://myspinpick.com/embed/coin-flip/" width="100%" height="464" style="border:0;max-width:100%" title="Coin Flip by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <p class="embed-actions">
+          <button type="button" id="embed-copy">Copy embed code</button>
+          <a class="embed-preview" href="https://myspinpick.com/embed/coin-flip/" target="_blank" rel="noopener">Preview the widget</a>
+        </p>
+        <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>height</b> value in the snippet.</p>
+      <script>
+        (function () {
+          var btn = document.getElementById('embed-copy');
+          var box = document.getElementById('embed-code');
+          if (!btn || !box) return;
+          btn.addEventListener('click', function () {
+            var done = function () {
+              if (btn.dataset.busy) return;
+              btn.dataset.busy = '1';
+              var t = btn.textContent;
+              btn.textContent = 'Copied!';
+              setTimeout(function () { btn.textContent = t; delete btn.dataset.busy; }, 1800);
+            };
+            var fallback = function () { var r = document.createRange(); r.selectNodeContents(box); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); } catch (e) {} done(); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(box.textContent).then(done, fallback);
+            } else { fallback(); }
+          });
+        })();
+      </script>
       </section>
 
       <section id="related">
