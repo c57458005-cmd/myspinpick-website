@@ -39,6 +39,27 @@
     footer { border-top: 1px solid var(--line); padding: 20px 24px; text-align: center; color: #9aa0b0; font-size: 14px; background: #fff; }
     footer a { color: var(--brand); text-decoration: none; }
   </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://myspinpick.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Privacy Policy",
+        "item": "https://myspinpick.com/privacy-policy/"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <header><a href="/"><picture style="display:block"><source media="(max-width: 640px)" srcset="/logo-512.png" /><img class="brand-mini-logo" src="/brand-logo.png" alt="MySpinPick" style="height:22px;width:auto;display:block" /></picture></a></header>
