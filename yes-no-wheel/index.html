@@ -214,6 +214,7 @@
           <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button><button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
           <button type="button" onclick="removeWinner()">Remove Winner</button>
           <button type="button" onclick="resetAll()">Reset</button>
+          <button type="button" onclick="copyResult()">Copy Result</button>
         </div>
         <div class="result" id="result" aria-live="polite">Spin to answer yes or no</div>
         <div class="history" id="history" aria-live="polite"></div>
@@ -536,6 +537,23 @@
     if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
     drawWheel(0);
   initSound();
+
+    function copyResult() {
+      var box = document.getElementById('result');
+      var text = box ? box.textContent.trim() : '';
+      if (!text || text === RESULT_INIT || text === 'Spinning…') { document.getElementById('meta').textContent = 'Nothing to copy — spin the wheel first.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy', { tool: 'yes-no-wheel' }); }).catch(function(){ fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
+    }
 </script>
 <footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">
       <p class="slogan" style="margin:0 0 8px;">MySpinPick — free wheel spinner &amp; random decision tools.</p>

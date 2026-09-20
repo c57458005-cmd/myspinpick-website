@@ -210,8 +210,10 @@
         </div>
         <div class="btns">
           <button type="button" class="primary" onclick="flip()" id="flipBtn">Flip Coin</button>
+          <button type="button" onclick="copyResult()">Copy Result</button>
           <button type="button" onclick="resetMatch()" id="resetBtn" style="display:none;">Reset Match</button>
         </div>
+        <div class="meta" id="meta" aria-live="polite"></div>
       </div>
 
       <section id="about">
@@ -393,6 +395,24 @@
         btns.forEach(function(b){ b.disabled = false; });
         // 若 match 结束，Reset 按钮仍需可点（上面统一恢复，无碍）
       }, 600);
+    }
+
+    function copyResult() {
+      if (document.getElementById('flipBtn').disabled) { document.getElementById('meta').textContent = 'Wait for the flip to finish.'; return; }
+      var box = document.getElementById('result');
+      var text = box ? box.textContent.trim() : '';
+      if (!text || text === 'Tap flip to decide' || /^Best of \d+ — flip to start$/.test(text)) { document.getElementById('meta').textContent = 'Nothing to copy — flip the coin first.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy', { tool: 'coin-flip' }); }).catch(function(){ fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
     }
   </script>
 <footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">

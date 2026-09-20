@@ -221,7 +221,9 @@
         <div class="btns">
           <button type="button" id="genBtn" class="primary" onclick="generate()">Generate Order</button>
           <button type="button" onclick="resetAll()">Reset</button>
+          <button type="button" onclick="copyResult()">Copy Result</button>
         </div>
+        <div class="meta" id="meta" aria-live="polite"></div>
         <div class="result" id="result" aria-live="polite"></div>
       </div>
 
@@ -352,6 +354,24 @@
       genBtn.disabled = false;
       document.getElementById('names').value = DEFAULT_DRAFT.join(',');
       document.getElementById('result').textContent = '';
+    }
+
+    function copyResult() {
+      if (drawTimer) { document.getElementById('meta').textContent = 'Wait for the reveal to finish.'; return; }
+      var box = document.getElementById('result');
+      var text = box ? box.textContent.trim() : '';
+      if (!text) { document.getElementById('meta').textContent = 'Nothing to copy — generate an order first.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy', { tool: 'random-draft-order-generator' }); }).catch(function(){ fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
     }
   </script>
 <footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">

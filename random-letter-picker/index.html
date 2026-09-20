@@ -184,7 +184,9 @@
         <div class="letter" id="letter" aria-live="polite">A</div>
         <div class="btns">
           <button type="button" id="pickBtn" class="primary" onclick="pick()">Pick a Letter</button>
+          <button type="button" onclick="copyResult()">Copy Result</button>
         </div>
+        <div class="meta" id="meta" aria-live="polite"></div>
         <div class="field">
           <label for="set">Your own set (optional, characters separated by commas)</label>
           <input type="text" id="set" aria-label="Letter set" value="A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z">
@@ -318,6 +320,24 @@
       }, 70);
     }
     document.getElementById('letter').textContent = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+
+    function copyResult() {
+      if (spinTimer) { document.getElementById('meta').textContent = 'Wait for the pick to finish.'; return; }
+      var box = document.getElementById('letter');
+      var text = box ? box.textContent.trim() : '';
+      if (!text) { document.getElementById('meta').textContent = 'Nothing to copy — pick a letter first.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy', { tool: 'random-letter-picker' }); }).catch(function(){ fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
+    }
   </script>
 <footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">
       <p class="slogan" style="margin:0 0 8px;">MySpinPick — free wheel spinner &amp; random decision tools.</p>

@@ -338,6 +338,7 @@
         <button class="primary" id="pick">🕹️ Pick One</button>
         <button id="shuffle">🔀 Shuffle Order</button>
         <button id="reset">Reset</button>
+        <button type="button" onclick="copyResult()">Copy Result</button>
         <button class="sound-btn" id="soundBtn" aria-pressed="true">🔊 Sound</button>
       </div>
 
@@ -911,6 +912,23 @@ Ethan</textarea>
       randomizeFaces();
       paintToys(parseNames().slice(0, 8));
     })();
+
+    function copyResult() {
+      var box = document.getElementById('result');
+      var text = box ? box.textContent.trim() : '';
+      if (!text) { document.getElementById('meta').textContent = 'Nothing to copy — pick a name first.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy', { tool: 'name-picker' }); }).catch(function(){ fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
+    }
   </script>
 
 <style>
