@@ -97,6 +97,16 @@
         "@type": "Question",
         "name": "Does the color picker work on a phone?",
         "acceptedAnswer": { "@type": "Answer", "text": "Yes. It is a plain web page with no download and no account, and the native color chooser on Android and iOS works the same way. The HEX, RGB and HSL rows update as soon as you pick." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this a color wheel picker?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes — it does the same job without a wheel to drag. Click the color box to open your device's own color chooser, pick the shade you want, and the preview plus the HEX, RGB and HSL rows update straight away, each value with its own Copy button. If you already know the color, paste its HEX value into the chooser's hex field instead of hunting around a wheel." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is a google color picker the same as this tool?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. A google color picker and a google colour picker are the same request spelled two ways, and the job is the one this page does: pick a color, read its HEX, RGB and HSL values, then copy the format your stylesheet or design file expects." }
       }
     ]
   }
@@ -185,6 +195,7 @@
           <div class="valrow"><code id="rgb">rgb(37, 99, 235)</code><button onclick="copy('rgb')">Copy</button></div>
           <div class="valrow"><code id="hsl">hsl(221, 83%, 53%)</code><button onclick="copy('hsl')">Copy</button></div>
         </div>
+        <div class="meta" id="meta" aria-live="polite"></div>
       </div>
 
       <section id="about">
@@ -303,6 +314,15 @@
           <p>Yes. It is a plain web page with no download and no account, and the native color chooser on Android and iOS works the same way. The HEX, RGB and HSL rows update as soon as you pick.</p>
         </details>
         </details>
+        <details>
+          <summary>Is this a color wheel picker?</summary>
+          <p>Yes — it does the same job without a wheel to drag. Click the color box to open your device's own color chooser, pick the shade you want, and the preview plus the HEX, RGB and HSL rows update straight away, each value with its own Copy button. If you already know the color, paste its HEX value into the chooser's hex field instead of hunting around a wheel.</p>
+        </details>
+
+        <details>
+          <summary>Is a google color picker the same as this tool?</summary>
+          <p>Yes. A google color picker and a google colour picker are the same request spelled two ways, and the job is the one this page does: pick a color, read its HEX, RGB and HSL values, then copy the format your stylesheet or design file expects.</p>
+        </details>
       </section>
     </main>
 
@@ -340,9 +360,35 @@
       document.getElementById('hsl').textContent = 'hsl(' + hsl[0] + ', ' + hsl[1] + '%, ' + hsl[2] + '%)';
     }
     function copy(which) {
-      var txt = document.getElementById(which).textContent;
-      if (navigator.clipboard) navigator.clipboard.writeText(txt);
-      track('copy', { tool: 'color-picker', which: which });
+      var el = document.getElementById(which);
+      var text = el ? el.textContent.trim() : '';
+      var meta = document.getElementById('meta');
+      if (!text) { if (meta) meta.textContent = 'Nothing to copy yet.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          if (meta) meta.textContent = 'Copied!';
+          track('copy', { tool: 'color-picker', which: which });
+        }).catch(function () { fallbackCopy(text, which); });
+      } else {
+        fallbackCopy(text, which);
+      }
+    }
+
+    function fallbackCopy(text, which) {
+      var meta = document.getElementById('meta');
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        if (meta) meta.textContent = 'Copied!';
+        track('copy', { tool: 'color-picker', which: which });
+      } catch (e) {
+        if (meta) meta.textContent = 'Copy failed. Select the value and copy it manually.';
+      }
+      document.body.removeChild(ta);
     }
     document.getElementById('picker').addEventListener('input', update);
     update();
