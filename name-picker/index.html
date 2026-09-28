@@ -153,7 +153,7 @@
       "name": "Is my list of names stored anywhere?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. The picker runs entirely in your browser and nothing you paste is uploaded. The only thing this page remembers is whether you muted the sound; names and results are never saved, so if you want to reuse a class roster or an entrant list later, keep your own copy."
+        "text": "No servers involved. The picker runs entirely in your browser and nothing you paste is uploaded. Your list and recent results are saved only in your own browser's local storage, so your roster is still here the next time you visit. Clearing your browser data \u2014 or pressing Reset \u2014 removes them."
       }
     },
     {
@@ -263,8 +263,10 @@
     .confetti { position: absolute; width: 8px; height: 8px; border-radius: 2px; pointer-events: none; z-index: 9; animation: fall 1.15s ease-in forwards; }
     @keyframes fall { 0% { transform: translateY(-12px) rotate(0); opacity: 1 } 100% { transform: translateY(230px) rotate(560deg); opacity: 0 } }
     .machine-foot { margin-top: 9px; height: 10px; border-radius: 5px; background: linear-gradient(90deg,var(--accent),#f472b6,var(--accent)); opacity: .5; }
-    .sound-btn { background: #fff; border: 1px solid var(--border); color: var(--muted); padding: 9px 14px; }
-    .sound-btn:hover { background: #f8fafc; border-color: var(--accent); color: var(--accent); }
+    .btns.nowrap { flex-wrap: nowrap; }
+    @media (max-width: 640px) { .btns.nowrap { flex-wrap: wrap; } }
+    @media (max-width: 480px) { .btns.nowrap { gap: 6px; } .btns.nowrap button { padding: 9px 10px; font-size: 13px; } }
+    .icon-btn { width: 46px; padding-left: 0; padding-right: 0; font-size: 16px; }
 
     .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
     .order-list { max-width: 420px; margin: 10px auto 0; text-align: left; font-size: 15px; color: #334155; }
@@ -334,12 +336,12 @@
         <div class="machine-foot"></div>
       </div>
 
-      <div class="btns">
-        <button class="primary" id="pick">🕹️ Pick One</button>
-        <button id="shuffle">🔀 Shuffle Order</button>
-        <button id="reset">Reset</button>
-        <button type="button" onclick="copyResult()">Copy Result</button>
-        <button class="sound-btn" id="soundBtn" aria-pressed="true">🔊 Sound</button>
+      <div class="btns nowrap">
+        <button type="button" class="icon-btn" id="soundBtn" aria-label="Toggle sound" title="Sound on/off">🔊</button>
+        <button type="button" class="primary" id="pick">🕹️ Pick One</button>
+        <button type="button" id="shuffle">🔀 Shuffle Order</button>
+        <button type="button" id="reset">Reset</button>
+        <button type="button" id="copyBtn">Copy Result</button>
       </div>
 
       <p class="meta" id="meta">0 names in the pool.</p>
@@ -452,7 +454,7 @@ Ethan</textarea>
       </details>
       <details>
         <summary>Is my list of names stored anywhere?</summary>
-        <p>No. The picker runs entirely in your browser and nothing you paste is uploaded. The only thing this page remembers is whether you muted the sound; names and results are never saved, so if you want to reuse a class roster or an entrant list later, keep your own copy.</p>
+        <p>No servers involved. The picker runs entirely in your browser and nothing you paste is uploaded. Your list and recent results are saved only in your own browser's local storage, so your roster is still here the next time you visit. Clearing your browser data — or pressing Reset — removes them.</p>
       </details>
       <details>
         <summary>How many names can I paste at once?</summary>
@@ -532,8 +534,92 @@ Ethan</textarea>
       var prizeEl = document.getElementById('prizeSlot');
       var pickBtn = document.getElementById('pick');
       var shuffleBtn = document.getElementById('shuffle');
+      var resetBtn = document.getElementById('reset');
+      var copyBtn = document.getElementById('copyBtn');
       var removeChk = document.getElementById('removeWinner');
       var rolling = false;
+
+      /* ---------- saved lists (wheel-spinner engine pattern) ---------- */
+      var SAVED_KEY = 'myspinpick.namePicker.savedLists';
+      var SAVED_MAX = 20;
+      var LAST_KEY = 'myspinpick.namePicker.last';
+      var savedLists = [];
+      var selectedSaved = -1;
+
+      function itemsOf(text) {
+        return String(text).split(/[\n,]+/).map(function(s){ return s.trim(); }).filter(Boolean);
+      }
+      function keyOf(text) {
+        return itemsOf(text).map(function(s){ return s.toLowerCase(); }).sort().join('|');
+      }
+      function loadSaved() {
+        try {
+          var s = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
+          if (Array.isArray(s)) {
+            savedLists = s.filter(function(x){ return x && typeof x.text === 'string'; }).slice(0, SAVED_MAX);
+            for (var i = 0; i < savedLists.length; i++) {
+              if (!Array.isArray(savedLists[i].res)) savedLists[i].res = [];
+            }
+          }
+        } catch (e) { savedLists = []; }
+        var last = null;
+        try { last = JSON.parse(localStorage.getItem(LAST_KEY) || 'null'); } catch (e) {}
+        if (last && typeof last.text === 'string') {
+          namesEl.value = last.text;
+          if (typeof last.sel === 'number' && last.sel >= 0 && last.sel < savedLists.length) selectedSaved = last.sel;
+          if (typeof last.chk === 'boolean') removeChk.checked = last.chk;
+        }
+        renderHistoryFor(selectedSaved);
+      }
+      function persistLast() {
+        try { localStorage.setItem(LAST_KEY, JSON.stringify({ text: namesEl.value, sel: selectedSaved, chk: removeChk.checked })); } catch (e) {}
+      }
+      function persistSaved() {
+        try { localStorage.setItem(SAVED_KEY, JSON.stringify(savedLists)); } catch (e) {}
+        persistLast();
+      }
+      function saveList(silent, autoSelect) {
+        var items = itemsOf(namesEl.value);
+        if (!items.length) return;
+        if (selectedSaved >= 0 && selectedSaved < savedLists.length) {
+          savedLists[selectedSaved] = { text: items.join(','), n: items.length, res: savedLists[selectedSaved].res || [] };
+          persistSaved();
+          return;
+        }
+        var k = keyOf(namesEl.value);
+        for (var i = 0; i < savedLists.length; i++) {
+          if (keyOf(savedLists[i].text) === k) {
+            if (!silent || autoSelect) { selectedSaved = i; persistLast(); }
+            return;
+          }
+        }
+        savedLists.unshift({ text: items.join(','), n: items.length, res: [] });
+        if (savedLists.length > SAVED_MAX) savedLists.pop();
+        if (!silent || autoSelect) selectedSaved = 0;
+        persistSaved();
+      }
+      function recordResult(name) {
+        if (selectedSaved >= 0 && selectedSaved < savedLists.length) {
+          if (!savedLists[selectedSaved].res) savedLists[selectedSaved].res = [];
+          savedLists[selectedSaved].res.push({ n: name });
+          if (savedLists[selectedSaved].res.length > 24) savedLists[selectedSaved].res.shift();
+          persistSaved();
+        }
+        renderHistoryFor(selectedSaved);
+      }
+      function renderHistoryFor(idx) {
+        historyEl.innerHTML = '';
+        if (!removeChk.checked) return;
+        var res = (idx >= 0 && idx < savedLists.length && savedLists[idx].res) ? savedLists[idx].res : [];
+        for (var j = 0; j < res.length; j++) {
+          var chip = document.createElement('div');
+          chip.className = 'chip';
+          chip.style.background = chipColor(j);
+          chip.title = res[j].n;
+          chip.textContent = res[j].n;
+          historyEl.appendChild(chip);
+        }
+      }
 
       /* ---------- claw machine parts ---------- */
       var machineEl = document.getElementById('machine');
@@ -555,15 +641,18 @@ Ethan</textarea>
       /* ---------- sound ---------- */
       var actx = null;
       var muted = false;
-      try { muted = localStorage.getItem('sp_mute') === '1'; } catch (e) {}
+      var SOUND_KEY = 'myspinpick.namePicker.sound';
+      try {
+        var sv = localStorage.getItem(SOUND_KEY);
+        muted = sv ? sv === 'off' : localStorage.getItem('sp_mute') === '1';
+      } catch (e) {}
       function syncSoundBtn() {
-        soundBtn.textContent = muted ? '\uD83D\uDD07 Muted' : '\uD83D\uDD0A Sound';
-        soundBtn.setAttribute('aria-pressed', muted ? 'false' : 'true');
+        soundBtn.textContent = muted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
       }
       syncSoundBtn();
       soundBtn.addEventListener('click', function() {
         muted = !muted;
-        try { localStorage.setItem('sp_mute', muted ? '1' : '0'); } catch (e) {}
+        try { localStorage.setItem(SOUND_KEY, muted ? 'off' : 'on'); } catch (e) {}
         syncSoundBtn();
         if (!muted) tone(880, .07, 'square', .04);
       });
@@ -641,7 +730,6 @@ Ethan</textarea>
         var shown;
         if (pool.length <= 8) { shown = pool.slice(); }
         else { shown = rest.slice(0, 7); shown.push(winner); }
-        window.__capFace = FACES[Math.floor(Math.random() * FACES.length)];
         return shuffleArr(shown);
       }
 
@@ -658,17 +746,12 @@ Ethan</textarea>
         metaEl.textContent = total ? (left + ' of ' + total + ' names in the pool.') : 'Enter names below to start.';
         pickBtn.disabled = rolling;
         shuffleBtn.disabled = rolling;
+        resetBtn.disabled = rolling;
+        copyBtn.disabled = rolling;
       }
       function chipColor(i) {
         var colors = ['#db2777','#0ea5e9','#22c55e','#f59e0b','#8b5cf6','#ef4444','#14b8a6','#eab308'];
         return colors[i % colors.length];
-      }
-      function addToHistory(name) {
-        var chip = document.createElement('div');
-        chip.className = 'chip';
-        chip.textContent = name;
-        chip.style.background = chipColor(historyEl.children.length);
-        historyEl.appendChild(chip);
       }
 
       function setClawX(px) { clawEl.style.transform = 'translateX(' + px + 'px)'; }
@@ -697,6 +780,7 @@ Ethan</textarea>
         }
         rolling = true;
         updateMeta();
+        saveList(true, true);
         resultEl.textContent = '';
         orderListEl.style.display = 'none';
         resetMachine();
@@ -704,7 +788,6 @@ Ethan</textarea>
         cabinetEl.classList.add('shaking');
         tone(150, .5, 'sawtooth', .028);
         randomizeFaces();
-        gripEl.innerHTML = '<div class="toy fake"><span class="face">' + FACES[Math.floor(Math.random() * FACES.length)] + '</span></div>';
 
         var flick = p.slice();
         var step = 0;
@@ -712,8 +795,6 @@ Ethan</textarea>
           (function tick() {
             shuffleArr(flick);
             paintToys(flick.slice(0, Math.min(8, flick.length)));
-            var face = gripEl.querySelector('.face');
-            if (face) face.textContent = FACES[Math.floor(Math.random() * FACES.length)];
             tone(500 + Math.random() * 280, .035, 'square', .02);
             step++;
             if (step < 12) { setTimeout(tick, 70); } else { resolve(); }
@@ -723,9 +804,6 @@ Ethan</textarea>
           var winner = p[Math.floor(Math.random() * p.length)];
           var shown = buildDisplay(p, winner);
           paintToys(shown);
-          window.__capFace = FACES[Math.floor(Math.random() * FACES.length)];
-          var face = gripEl.querySelector('.face');
-          if (face) face.textContent = window.__capFace;
           var idx = Math.max(0, shown.indexOf(winner));
           var toy = toyEls[idx];
           var targetX = toy.offsetLeft + toy.offsetWidth / 2;
@@ -736,13 +814,15 @@ Ethan</textarea>
             return wait(480);
           }).then(function() {
             tone(320, .45, 'sine', .035);
-            setCable(Math.max(26, toy.offsetTop - 40));
+            setCable(Math.max(26, toy.offsetTop - 13));
             return wait(560);
           }).then(function() {
             clawHeadEl.classList.add('closed');
             tone(920, .07, 'square', .05);
             return wait(320);
           }).then(function() {
+            var wface = toy.querySelector('.face');
+            gripEl.innerHTML = '<div class="toy fake"><span class="face">' + (wface ? wface.textContent : '\uD83E\uDDD8') + '</span></div>';
             if (toy) toy.style.display = 'none';
             return wait(140);
           }).then(function() {
@@ -767,7 +847,7 @@ Ethan</textarea>
             resultEl.textContent = '🏆 Winner: ' + winner;
             confetti();
             fanfare();
-            if (removeChk.checked) addToHistory(winner);
+            recordResult(winner);
             track('pick_name', { method: 'claw_machine' });
             autoStartTimer();
             setTimeout(function() { gripEl.innerHTML = ''; }, 900);
@@ -873,8 +953,14 @@ Ethan</textarea>
         track('shuffle_names', { count: all.length });
       });
 
-      document.getElementById('reset').addEventListener('click', function() {
-        historyEl.innerHTML = '';
+      function resetAll() {
+        if (rolling) return;
+        prizeEl.classList.remove('win');
+        if (selectedSaved >= 0 && selectedSaved < savedLists.length) {
+          savedLists[selectedSaved].res = [];
+          persistSaved();
+        }
+        renderHistoryFor(selectedSaved);
         resultEl.textContent = '';
         orderListEl.style.display = 'none';
         prizeEl.textContent = 'Your winner appears here 🧸';
@@ -882,54 +968,72 @@ Ethan</textarea>
         randomizeFaces();
         paintToys(parseNames().slice(0, 8));
         updateMeta();
-      });
+      }
+      resetBtn.addEventListener('click', resetAll);
 
+      function applyPreset(text) {
+        namesEl.value = text;
+        selectedSaved = -1;
+        resetAll();
+        persistLast();
+      }
       document.getElementById('presetClassroom').addEventListener('click', function() {
-        namesEl.value = ['Alice','Bob','Charlie','Diana','Ethan','Fiona','George','Hannah'].join('\n');
         timerSel.value = '30';
         setTimerTotal(30);
-        document.getElementById('reset').click();
+        applyPreset(['Alice','Bob','Charlie','Diana','Ethan','Fiona','George','Hannah'].join('\n'));
       });
       document.getElementById('presetGiveaway').addEventListener('click', function() {
-        namesEl.value = ['@sunny_dreams','@moonlight_99','@pixel_pete','@luckycharm','@nightowl','@starcatcher'].join('\n');
-        document.getElementById('reset').click();
+        applyPreset(['@sunny_dreams','@moonlight_99','@pixel_pete','@luckycharm','@nightowl','@starcatcher'].join('\n'));
       });
       document.getElementById('presetClaw').addEventListener('click', function() {
-        namesEl.value = ['🧸 Teddy','🚗 Racer','🦄 Unicorn','🐸 Froggy','🤖 Robot','🐰 Bunny','🐲 Dragon','🐙 Octo'].join('\n');
-        document.getElementById('reset').click();
+        applyPreset(['🧸 Teddy','🚗 Racer','🦄 Unicorn','🐸 Froggy','🤖 Robot','🐰 Bunny','🐲 Dragon','🐙 Octo'].join('\n'));
       });
 
       namesEl.addEventListener('input', function() {
         updateMeta();
         paintToys(parseNames().slice(0, 8));
+        persistLast();
       });
-      removeChk.addEventListener('change', updateMeta);
+      removeChk.addEventListener('change', function() {
+        updateMeta();
+        renderHistoryFor(selectedSaved);
+        persistLast();
+      });
       window.addEventListener('resize', function() {
         if (!rolling) setClawX(cabinetEl.clientWidth / 2);
       });
+      loadSaved();
       updateMeta();
       resetMachine();
       randomizeFaces();
       paintToys(parseNames().slice(0, 8));
+
+      copyBtn.addEventListener('click', copyResult);
+
+      function copyResult() {
+        var items = [];
+        if (selectedSaved >= 0 && selectedSaved < savedLists.length && Array.isArray(savedLists[selectedSaved].res)) {
+          for (var i = 0; i < savedLists[selectedSaved].res.length; i++) items.push(savedLists[selectedSaved].res[i].n);
+        }
+        if (!items.length) {
+          var chips = historyEl.querySelectorAll('.chip');
+          for (var j = 0; j < chips.length; j++) items.push(chips[j].textContent);
+        }
+        if (!items.length) { metaEl.textContent = 'Nothing to copy — pick a name first.'; return; }
+        var text = items.join('\n');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function(){ metaEl.textContent = 'Copied!'; track('copy', { tool: 'name-picker' }); }).catch(function(){ fallbackCopy(text); });
+        } else { fallbackCopy(text); }
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); metaEl.textContent = 'Copied!'; track('copy'); }
+        catch (e) { metaEl.textContent = 'Copy failed'; }
+        document.body.removeChild(ta);
+      }
     })();
-
-    function copyResult() {
-      var box = document.getElementById('result');
-      var text = box ? box.textContent.trim() : '';
-      if (!text) { document.getElementById('meta').textContent = 'Nothing to copy — pick a name first.'; return; }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy', { tool: 'name-picker' }); }).catch(function(){ fallbackCopy(text); });
-      } else { fallbackCopy(text); }
-    }
-
-    function fallbackCopy(text) {
-      var ta = document.createElement('textarea');
-      ta.value = text; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
-      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
-      document.body.removeChild(ta);
-    }
-  </script>
+</script>
 
 <style>
   footer .slogan { white-space: nowrap; font-size: 14px; }
