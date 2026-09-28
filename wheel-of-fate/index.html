@@ -354,6 +354,7 @@
     var audioCtx = null;
     var SAVED_KEY = 'myspinpick.wheelOfFate.savedLists';
     var SAVED_MAX = 20;
+    var LAST_KEY = 'myspinpick.wheelOfFate.last';
     var savedLists = [];
     var selectedSaved = -1;
 
@@ -496,10 +497,25 @@
           }
         }
       } catch (e) { savedLists = []; }
-      if (savedLists.length) { applySavedRow(0); } else { renderSaved(); }
+      var last = null;
+      try { last = JSON.parse(localStorage.getItem(LAST_KEY) || 'null'); } catch (e) {}
+      if (last && typeof last.text === 'string') {
+        optionsEl.value = last.text;
+        options = getOptions();
+        if (typeof last.sel === 'number' && last.sel >= 0 && last.sel < savedLists.length) selectedSaved = last.sel;
+        if (options.length) document.getElementById('meta').textContent = options.length + ' options on the wheel.';
+      }
+      renderSaved();
+      renderHistoryFor(selectedSaved);
+      drawWheel(currentAngle);
+      autoGrow();
+    }
+    function persistLast() {
+      try { localStorage.setItem(LAST_KEY, JSON.stringify({ text: optionsEl.value, sel: selectedSaved })); } catch (e) {}
     }
     function persistSaved() {
       try { localStorage.setItem(SAVED_KEY, JSON.stringify(savedLists)); } catch (e) {}
+      persistLast();
     }
     function saveList(silent, autoSelect) {
       var items = itemsOf(optionsEl.value);
@@ -515,7 +531,7 @@
       var k = keyOf(optionsEl.value);
       for (var i = 0; i < savedLists.length; i++) {
         if (keyOf(savedLists[i].text) === k) {
-          if (!silent || autoSelect) { selectedSaved = i; renderSaved(); }
+          if (!silent || autoSelect) { selectedSaved = i; renderSaved(); persistLast(); }
           return;
         }
       }
@@ -574,6 +590,7 @@
       renderHistoryFor(idx);
       document.getElementById('meta').textContent = options.length + ' options on the wheel.';
       renderSaved();
+      persistLast();
     }
     function selectSaved(idx) {
       if (spinning) { renderSaved(); return; }
@@ -659,6 +676,7 @@
       drawWheel(currentAngle);
       document.getElementById('meta').textContent = options.length + ' options left.';
       autoGrow();
+      persistLast();
     }
 
     function clearOptions() {
@@ -673,6 +691,7 @@
       document.getElementById('result').textContent = RESULT_INIT;
       document.getElementById('meta').textContent = 'Options cleared.';
       autoGrow();
+      persistLast();
     }
 
     function resetAll() {
@@ -694,6 +713,7 @@
       winnerIdx = null;
       drawWheel(currentAngle);
       autoGrow();
+      persistLast();
     });
 
     try { muted = localStorage.getItem('myspinpick.wheelOfFate.sound') === 'off'; } catch (e) {}
