@@ -242,6 +242,7 @@
     @media (max-width: 480px) { h1 { font-size: 20px; } button { min-height: 44px; } }
 
     .btns.nowrap { flex-wrap: nowrap; }
+    @media (max-width: 480px) { .btns.nowrap { gap: 6px; } .btns.nowrap button { padding: 9px 10px; font-size: 13px; } }
     .icon-btn { width: 46px; padding-left: 0; padding-right: 0; font-size: 16px; }
     .btns.list-btns { justify-content: flex-start; margin: 8px 0 0; }
     #options { min-height: 46px; height: 46px; overflow: hidden; resize: none; }
@@ -278,7 +279,7 @@
         <div class="wheel-wrap">
           <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
         </div>
-        <div class="btns">
+        <div class="btns nowrap">
           <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button>
           <button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
           <button type="button" onclick="resetAll()">Reset</button>
@@ -601,6 +602,19 @@
       o.connect(g); g.connect(ac.destination);
       o.start(); o.stop(ac.currentTime + 0.06);
     }
+    function ding() {
+      if (muted) return;
+      var ac = ensureAudio();
+      if (!ac) return;
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(988, ac.currentTime);
+      o.frequency.exponentialRampToValueAtTime(1976, ac.currentTime + 0.09);
+      g.gain.setValueAtTime(0.28, ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.7);
+      o.connect(g); g.connect(ac.destination);
+      o.start(); o.stop(ac.currentTime + 0.75);
+    }
     function toggleMute() {
       muted = !muted;
       try { localStorage.setItem('myspinpick.wheel.sound', muted ? 'off' : 'on'); } catch (e) {}
@@ -766,6 +780,7 @@
           drawWheel(currentAngle);
           document.getElementById('result').textContent = RESULT_PREFIX + options[idx];
           recordResult(options[idx], idx);
+          ding();
           document.getElementById('meta').textContent = options.length + ' options on the wheel.';
           spinning = false;
           setBtnsDisabled(false);
@@ -852,11 +867,15 @@
     loadSaved();
 
     function copyResult() {
-      var box = document.getElementById('result');
-      var text = box ? box.textContent.trim() : '';
-      if (!text || text === RESULT_INIT || text === 'Spinning…') { document.getElementById('meta').textContent = 'Nothing to copy — spin the wheel first.'; return; }
+      var meta = document.getElementById('meta');
+      var items = [];
+      if (selectedSaved >= 0 && selectedSaved < savedLists.length && Array.isArray(savedLists[selectedSaved].res)) {
+        for (var i = 0; i < savedLists[selectedSaved].res.length; i++) items.push(savedLists[selectedSaved].res[i].n);
+      }
+      if (!items.length) { meta.textContent = 'Nothing to copy — spin the wheel first.'; return; }
+      var text = items.join('\n');
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy', { tool: 'wheel-spinner' }); }).catch(function(){ fallbackCopy(text); });
+        navigator.clipboard.writeText(text).then(function(){ meta.textContent = 'Copied!'; track('copy', { tool: 'wheel-spinner' }); }).catch(function(){ fallbackCopy(text); });
       } else { fallbackCopy(text); }
     }
 
