@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <title>Random Name Picker — Claw Machine | MySpinPick</title>
-  <meta name="description" content="Free random name picker: draw a name with a claw machine or shuffle into a random order. Great for classrooms, giveaways and raffles — no sign-up." />
+  <meta name="description" content="Free random name picker: draw a name with a claw machine from your own list. Great for classrooms, giveaways and raffles — no sign-up." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://myspinpick.com/name-picker/" />
 
@@ -22,7 +22,7 @@
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta property="og:title" content="Random Name Picker — Claw Machine | MySpinPick" />
-  <meta property="og:description" content="Free random name picker: draw a name with a claw machine or shuffle into a random order. Great for classrooms, giveaways and raffles — no sign-up." />
+  <meta property="og:description" content="Free random name picker: draw a name with a claw machine from your own list. Great for classrooms, giveaways and raffles — no sign-up." />
   <meta property="og:url" content="https://myspinpick.com/name-picker/" />
   <meta property="og:image" content="https://myspinpick.com/og-image.png" />
   <meta property="og:image:width" content="1200" />
@@ -39,7 +39,7 @@
     "applicationCategory": "UtilityApplication",
     "operatingSystem": "Any",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "description": "Free random name picker. Enter your list of names, draw one with a claw machine, or shuffle the whole list into a random order. Works as a claw machine name picker for classrooms, giveaways and raffles. No sign-up, runs in your browser."
+    "description": "Free random name picker. Enter your list of names and draw one with a claw machine. Works as a claw machine name picker for classrooms, giveaways and raffles. No sign-up, runs in your browser."
   }
   </script>
 
@@ -86,14 +86,6 @@
     },
     {
       "@type": "Question",
-      "name": "Can I shuffle names into a random order?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes — press \"Shuffle Order\" and you get your full list back in a brand-new random order, like a random name order generator."
-      }
-    },
-    {
-      "@type": "Question",
       "name": "Can I pick multiple names without repeats?",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -126,18 +118,10 @@
     },
     {
       "@type": "Question",
-      "name": "Can I add a countdown timer to this name picker?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Pick 10, 20, 30, 60 or 120 seconds in the response timer above and the countdown starts by itself the moment a name is drawn, so the student can see exactly how long they have to answer. If you were looking for an online stopwatch and a random name picker in one place, this page gives you both in a single tab — no second site, no app, no sign-up. Press the Classroom preset to load a sample list with the 30-second timer already switched on."
-      }
-    },
-    {
-      "@type": "Question",
       "name": "Is this also a random list generator?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It can be. Paste any list — names, chores, tasks, quiz questions, prizes — one item per line, then press Pick One to draw a single random item or Shuffle Order to put the whole list in a random sequence. Used one way it is a random name picker, used the other it is a random list generator, and both live on this page."
+        "text": "It can be. Paste any list — names, chores, tasks, quiz questions, prizes — comma separated, then press Pick One to draw a single random item. That makes it a simple random list generator: every pick is drawn fresh in your browser from the list you paste in."
       }
     },
     {
@@ -145,7 +129,7 @@
       "name": "How do I pick a giveaway winner fairly?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Paste your entrants — one per line or comma separated — then press Pick One. With Remove winner after pick ticked the first winner leaves the pool, so second and third prizes are drawn from the remaining entries and nobody can win twice. Share your screen while the claw drops and the draw is visible to everyone watching."
+        "text": "Paste your entrants — comma separated, a multi-line paste is converted automatically — then press Pick One. With Remove winner after pick ticked the first winner leaves the pool, so second and third prizes are drawn from the remaining entries and nobody can win twice. Share your screen while the claw drops and the draw is visible to everyone watching."
       }
     },
     {
@@ -161,7 +145,7 @@
       "name": "How many names can I paste at once?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "There is no hard limit. A full class list, a sports squad or a giveaway with several hundred entrants all work, because the shuffle happens locally in your browser rather than on a server. Longer lists simply take a moment longer to scroll through."
+        "text": "There is no hard limit. A full class list, a sports squad or a giveaway with several hundred entrants all work, because the draw happens locally in your browser rather than on a server. Longer lists simply take a moment longer to scroll through."
       }
     },
     {
@@ -169,7 +153,7 @@
       "name": "Do I have to watch the claw, or can I skip the animation?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The claw is the point of this picker: it is a random claw that carries off one name from the grid, so the draw is something a room can watch rather than a number that simply appears. If you only need the sequence, Shuffle Order lists every name in a random order instead."
+        "text": "The claw is the point of this picker: it is a random claw that carries off one name from the grid, so the draw is something a room can watch rather than a number that simply appears. If you only need a random sequence, the Random Draft Order Generator under Related Tools below lists every name in a random order instead."
       }
     },
     {
@@ -177,7 +161,7 @@
       "name": "Can I paste names straight from a spreadsheet?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Copy a column out of Excel or Google Sheets and paste it in — one name per line and comma-separated both work, because the picker splits on line breaks and commas. A sign-up sheet of several hundred names needs no tidying first."
+        "text": "Yes. Copy a column out of Excel or Google Sheets and paste it in — multi-line lists are converted to comma separated automatically, so a sign-up sheet of several hundred names needs no tidying first."
       }
     }
   ]
@@ -203,7 +187,7 @@
 
     input[type="checkbox"] { accent-color: var(--accent); }
     .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
-    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea { width: 100%; min-height: 46px; height: 46px; overflow: hidden; resize: none; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
     textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
     .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
     button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
@@ -267,10 +251,18 @@
     @media (max-width: 640px) { .btns.nowrap { flex-wrap: wrap; } }
     @media (max-width: 480px) { .btns.nowrap { gap: 6px; } .btns.nowrap button { padding: 9px 10px; font-size: 13px; } }
     .icon-btn { width: 46px; padding-left: 0; padding-right: 0; font-size: 16px; }
+    .btns.list-btns { justify-content: flex-start; margin: 8px 0 0; }
+    .saved-head { margin-top: 18px; }
+    .saved-head .label { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .saved-hint { font-size: 13px; color: var(--muted); margin: 2px 0 8px; }
+    .saved-row { display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; margin-bottom: 6px; cursor: pointer; }
+    .saved-row.selected { background: #fbeaf0; border-color: #f4c0d1; }
+    .saved-row .preview { flex: 1; min-width: 0; font-size: 13px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .saved-row .n { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+    .saved-row button { flex: 0 0 20px; width: 20px; height: 20px; min-width: 20px; min-height: 20px; aspect-ratio: 1; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+    .saved-row button:hover { background: #fee2e2; border-color: #fca5a5; }
 
     .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
-    .order-list { max-width: 420px; margin: 10px auto 0; text-align: left; font-size: 15px; color: #334155; }
-    .order-list li { margin: 3px 0 3px 20px; }
     .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
     .history:empty { display: none; }
     .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
@@ -305,7 +297,7 @@
         <h1>Random Name Picker</h1>
         <div class="topright"><a class="brand-mini" href="/"><picture style="display:block"><source media="(max-width: 640px)" srcset="/logo-512.png" /><img class="brand-mini-logo" src="/brand-logo.png" alt="MySpinPick" style="height:22px;width:auto;display:block" /></picture></a></div>
       </div>
-      <p class="sub">Paste your list of names, then draw a winner with the claw machine — or shuffle into a random order.</p>
+      <p class="sub">Paste your list of names, then draw a winner with the claw machine.</p>
     </header>
 
     <main class="tool">
@@ -339,58 +331,40 @@
       <div class="btns nowrap">
         <button type="button" class="icon-btn" id="soundBtn" aria-label="Toggle sound" title="Sound on/off">🔊</button>
         <button type="button" class="primary" id="pick">🕹️ Pick One</button>
-        <button type="button" id="shuffle">🔀 Shuffle Order</button>
         <button type="button" id="reset">Reset</button>
         <button type="button" id="copyBtn">Copy Result</button>
       </div>
 
       <p class="meta" id="meta">0 names in the pool.</p>
 
-      <textarea id="names" aria-label="Names, one per line" placeholder="Enter names, one per line (or comma separated)&#10;e.g.&#10;Alice&#10;Bob&#10;Charlie" spellcheck="false">Alice
-Bob
-Charlie
-Diana
-Ethan</textarea>
+      <textarea id="names" rows="1" aria-label="Names, comma separated" placeholder="Enter names, separated by commas&#10;e.g. Alice,Bob,Charlie" spellcheck="false">Alice,Bob,Charlie,Diana,Ethan</textarea>
 
 
+
+      <div class="btns list-btns">
+        <button type="button" id="saveBtn">💾 Save</button>
+        <button type="button" id="clearBtn">Clear</button>
+        <button type="button" id="removeBtn">Remove</button>
+      </div>
 
       <div class="opt">
         <input type="checkbox" id="removeWinner" />
         <label for="removeWinner">Remove winner after pick (no repeats)</label>
       </div>
-      <div class="opt">
-        <span>Presets:</span>
-        <button id="presetClassroom" style="padding:5px 10px;font-size:13px;">Classroom</button>
-        <button id="presetGiveaway" style="padding:5px 10px;font-size:13px;">Giveaway</button>
-        <button id="presetClaw" style="padding:5px 10px;font-size:13px;">Claw Machine</button>
-      </div>
-
-      <div class="opt timer-row">
-        <span>⏱️ Response timer:</span>
-        <select id="timerSec" aria-label="Response timer length">
-          <option value="0">Off</option>
-          <option value="10">10s</option>
-          <option value="20">20s</option>
-          <option value="30">30s</option>
-          <option value="60">60s</option>
-          <option value="120">120s</option>
-        </select>
-        <button id="timerToggle" disabled>Start</button>
-        <button id="timerReset">Reset</button>
-      </div>
-      <p class="timer-display" id="timerDisplay" aria-live="polite" style="display:none;">0:30</p>
+      <div class="saved-head"><span class="label">Saved lists</span></div>
+      <p class="saved-hint">Tip: save your frequently used lists for quick reuse — each list keeps its own results.</p>
+      <div id="savedLists"></div>
       <p class="result" id="result"></p>
-      <ol class="order-list" id="orderList" style="display:none;"></ol>
       <div class="history" id="history"></div>
     </main>
 
     <section id="about">
       <h2>How to use this random name picker</h2>
       <ol>
-        <li>Paste your names into the box — one per line, or comma separated.</li>
+        <li>Paste or type your names into the box, comma separated — a multi-line paste is converted automatically.</li>
         <li>Press <strong>Pick One</strong>: the claw machine shuffles your names, the claw drops, and one random winner is grabbed.</li>
         <li>Tick <strong>Remove winner after pick</strong> to draw without repeats — keep going until everyone has been picked once.</li>
-        <li>Press <strong>Shuffle Order</strong> to get your entire list back in a fresh random order — handy as a random name order generator for presentations or turn-taking.</li>
+        <li>Press <strong>💾 Save</strong> to keep a list in the Saved lists section — each list remembers its own results, and you can switch between lists any time.</li>
       </ol>
     </section>
 
@@ -399,7 +373,7 @@ Ethan</textarea>
       <ul>
         <li><strong>Classroom:</strong> pick a student to answer next, without repeats until everyone has had a turn.</li>
         <li><strong>Giveaways &amp; raffles:</strong> draw winners fairly from your entry list — the claw machine reveal makes it fun to share on stream.</li>
-        <li><strong>Teams &amp; turn order:</strong> use Shuffle Order to randomize who presents first, who bats first, or who goes next in a game night.</li>
+        <li><strong>Teams &amp; turn order:</strong> need a random sequence instead of a single winner? The <a href="../random-draft-order-generator/">Random Draft Order Generator</a> randomizes who presents first, who bats first, or who goes next in a game night.</li>
         <li><strong>Prefer a spinning wheel?</strong> The <a href="../wheel-spinner/">Name Wheel Picker</a> does the same draw with a spin-the-wheel animation.</li>
       </ul>
     </section>
@@ -407,7 +381,6 @@ Ethan</textarea>
     <section id="classroom">
       <h2>Classroom Tools: A Random Name Picker Teachers Can Trust</h2>
       <p>Teachers reach for a name picker for one reason: the choice has to look fair to thirty pairs of eyes. Paste your class list, press <strong>Pick One</strong> and the claw machine makes the call — the question of whose turn it is settles itself, and with <strong>Remove winner after pick</strong> switched on every student is drawn exactly once before anyone comes round again.</p>
-      <p>When a student needs thinking time, set the response timer to 10, 20, 30, 60 or 120 seconds and the countdown starts on its own the moment a name appears. Press the <strong>Classroom</strong> preset to load a sample list with a 30-second timer already applied, so you can try the whole routine in one click.</p>
     </section>
 
     <section id="faq">
@@ -419,10 +392,6 @@ Ethan</textarea>
       <details>
         <summary>What is a claw machine name picker?</summary>
         <p>It's a name picker styled like an arcade claw machine: the machine shuffles your names, the claw drops, and grabs one random winner. It makes classroom picks and giveaways more fun to watch.</p>
-      </details>
-      <details>
-        <summary>Can I shuffle names into a random order?</summary>
-        <p>Yes — press "Shuffle Order" and you get your full list back in a brand-new random order, like a random name order generator.</p>
       </details>
       <details>
         <summary>Can I pick multiple names without repeats?</summary>
@@ -441,16 +410,12 @@ Ethan</textarea>
         <p>Paste your names and press "Pick One" — the tool instantly picks a random name for you. It works as a random name generator from list data you already have, such as a class roster, giveaway entrants or team members, and with "Remove winner after pick" enabled every name gets drawn exactly once.</p>
       </details>
       <details>
-        <summary>Can I add a countdown timer to this name picker?</summary>
-        <p>Yes. Pick 10, 20, 30, 60 or 120 seconds in the response timer above and the countdown starts by itself the moment a name is drawn, so the student can see exactly how long they have to answer. If you were looking for an online stopwatch and a random name picker in one place, this page gives you both in a single tab — no second site, no app, no sign-up. Press the Classroom preset to load a sample list with the 30-second timer already switched on.</p>
-      </details>
-      <details>
         <summary>Is this also a random list generator?</summary>
-        <p>It can be. Paste any list — names, chores, tasks, quiz questions, prizes — one item per line, then press Pick One to draw a single random item or Shuffle Order to put the whole list in a random sequence. Used one way it is a random name picker, used the other it is a random list generator, and both live on this page.</p>
+        <p>It can be. Paste any list — names, chores, tasks, quiz questions, prizes — comma separated, then press Pick One to draw a single random item. That makes it a simple random list generator: every pick is drawn fresh in your browser from the list you paste in.</p>
       </details>
       <details>
         <summary>How do I pick a giveaway winner fairly?</summary>
-        <p>Paste your entrants — one per line or comma separated — then press Pick One. With Remove winner after pick ticked the first winner leaves the pool, so second and third prizes are drawn from the remaining entries and nobody can win twice. Share your screen while the claw drops and the draw is visible to everyone watching.</p>
+        <p>Paste your entrants — comma separated, a multi-line paste is converted automatically — then press Pick One. With Remove winner after pick ticked the first winner leaves the pool, so second and third prizes are drawn from the remaining entries and nobody can win twice. Share your screen while the claw drops and the draw is visible to everyone watching.</p>
       </details>
       <details>
         <summary>Is my list of names stored anywhere?</summary>
@@ -458,15 +423,15 @@ Ethan</textarea>
       </details>
       <details>
         <summary>How many names can I paste at once?</summary>
-        <p>There is no hard limit. A full class list, a sports squad or a giveaway with several hundred entrants all work, because the shuffle happens locally in your browser rather than on a server. Longer lists simply take a moment longer to scroll through.</p>
+        <p>There is no hard limit. A full class list, a sports squad or a giveaway with several hundred entrants all work, because the draw happens locally in your browser rather than on a server. Longer lists simply take a moment longer to scroll through.</p>
       </details>
       <details>
         <summary>Do I have to watch the claw, or can I skip the animation?</summary>
-        <p>The claw is the point of this picker: it is a random claw that carries off one name from the grid, so the draw is something a room can watch rather than a number that simply appears. If you only need the sequence, Shuffle Order lists every name in a random order instead.</p>
+        <p>The claw is the point of this picker: it is a random claw that carries off one name from the grid, so the draw is something a room can watch rather than a number that simply appears. If you only need a random sequence, the Random Draft Order Generator under Related Tools below lists every name in a random order instead.</p>
       </details>
       <details>
         <summary>Can I paste names straight from a spreadsheet?</summary>
-        <p>Yes. Copy a column out of Excel or Google Sheets and paste it in — one name per line and comma-separated both work, because the picker splits on line breaks and commas. A sign-up sheet of several hundred names needs no tidying first.</p>
+        <p>Yes. Copy a column out of Excel or Google Sheets and paste it in — multi-line lists are converted to comma separated automatically, so a sign-up sheet of several hundred names needs no tidying first.</p>
       </details>
 
     </section>
@@ -529,13 +494,15 @@ Ethan</textarea>
       var namesEl = document.getElementById('names');
       var metaEl = document.getElementById('meta');
       var resultEl = document.getElementById('result');
-      var orderListEl = document.getElementById('orderList');
       var historyEl = document.getElementById('history');
       var prizeEl = document.getElementById('prizeSlot');
       var pickBtn = document.getElementById('pick');
-      var shuffleBtn = document.getElementById('shuffle');
       var resetBtn = document.getElementById('reset');
       var copyBtn = document.getElementById('copyBtn');
+      var saveBtn = document.getElementById('saveBtn');
+      var clearBtn = document.getElementById('clearBtn');
+      var removeBtn = document.getElementById('removeBtn');
+      var savedBoxEl = document.getElementById('savedLists');
       var removeChk = document.getElementById('removeWinner');
       var rolling = false;
 
@@ -565,11 +532,13 @@ Ethan</textarea>
         var last = null;
         try { last = JSON.parse(localStorage.getItem(LAST_KEY) || 'null'); } catch (e) {}
         if (last && typeof last.text === 'string') {
-          namesEl.value = last.text;
+          namesEl.value = itemsOf(last.text).join(',');
           if (typeof last.sel === 'number' && last.sel >= 0 && last.sel < savedLists.length) selectedSaved = last.sel;
           if (typeof last.chk === 'boolean') removeChk.checked = last.chk;
         }
         renderHistoryFor(selectedSaved);
+        renderSaved();
+        autoGrow();
       }
       function persistLast() {
         try { localStorage.setItem(LAST_KEY, JSON.stringify({ text: namesEl.value, sel: selectedSaved, chk: removeChk.checked })); } catch (e) {}
@@ -581,22 +550,112 @@ Ethan</textarea>
       function saveList(silent, autoSelect) {
         var items = itemsOf(namesEl.value);
         if (!items.length) return;
-        if (selectedSaved >= 0 && selectedSaved < savedLists.length) {
+        var k0 = keyOf(namesEl.value);
+        if (selectedSaved >= 0 && selectedSaved < savedLists.length && keyOf(savedLists[selectedSaved].text) === k0) {
           savedLists[selectedSaved] = { text: items.join(','), n: items.length, res: savedLists[selectedSaved].res || [] };
+          renderSaved();
           persistSaved();
           return;
         }
         var k = keyOf(namesEl.value);
         for (var i = 0; i < savedLists.length; i++) {
           if (keyOf(savedLists[i].text) === k) {
-            if (!silent || autoSelect) { selectedSaved = i; persistLast(); }
+            if (!silent || autoSelect) { selectedSaved = i; renderSaved(); persistLast(); }
             return;
           }
         }
         savedLists.unshift({ text: items.join(','), n: items.length, res: [] });
         if (savedLists.length > SAVED_MAX) savedLists.pop();
         if (!silent || autoSelect) selectedSaved = 0;
+        renderSaved();
         persistSaved();
+      }
+      function renderSaved() {
+        savedBoxEl.innerHTML = '';
+        for (var i = 0; i < savedLists.length; i++) {
+          (function(idx) {
+            var row = document.createElement('div');
+            row.className = 'saved-row' + (idx === selectedSaved ? ' selected' : '');
+            row.setAttribute('role', 'button');
+            row.setAttribute('tabindex', '0');
+            row.addEventListener('click', function(e) {
+              if (e.target.closest && e.target.closest('button')) return;
+              selectSaved(idx);
+            });
+            row.addEventListener('keydown', function(e) {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectSaved(idx); }
+            });
+            var preview = document.createElement('span');
+            preview.className = 'preview';
+            preview.title = savedLists[idx].text;
+            preview.textContent = savedLists[idx].text;
+            var n = document.createElement('span');
+            n.className = 'n';
+            n.textContent = savedLists[idx].n + ' names';
+            var del = document.createElement('button');
+            del.type = 'button';
+            del.textContent = '✕';
+            del.setAttribute('aria-label', 'Delete this saved list');
+            del.title = 'Delete this saved list';
+            del.addEventListener('click', function() { deleteSaved(idx); });
+            row.appendChild(preview);
+            row.appendChild(n);
+            row.appendChild(del);
+            savedBoxEl.appendChild(row);
+          })(i);
+        }
+      }
+      function applySavedRow(idx) {
+        namesEl.value = savedLists[idx].text;
+        selectedSaved = idx;
+        resetMachine();
+        randomizeFaces();
+        paintToys(parseNames().slice(0, 8));
+        var res = savedLists[idx].res || [];
+        resultEl.textContent = res.length ? '🏆 Winner: ' + res[res.length - 1].n : '';
+        prizeEl.textContent = 'Your winner appears here 🧸';
+        prizeEl.classList.remove('win');
+        renderHistoryFor(idx);
+        updateMeta();
+        autoGrow();
+        renderSaved();
+        persistLast();
+      }
+      function selectSaved(idx) {
+        if (rolling) { renderSaved(); return; }
+        if (idx === selectedSaved) return;
+        if (namesEl.value.trim()) saveList(true);
+        applySavedRow(idx);
+      }
+      function deleteSaved(idx) {
+        savedLists.splice(idx, 1);
+        if (selectedSaved === idx) {
+          selectedSaved = -1;
+          resultEl.textContent = '';
+          renderHistoryFor(-1);
+        }
+        else if (selectedSaved > idx) selectedSaved--;
+        renderSaved();
+        persistSaved();
+      }
+      function clearOptions() {
+        if (rolling) return;
+        namesEl.value = '';
+        selectedSaved = -1;
+        persistLast();
+        resetAll();
+        autoGrow();
+      }
+      function removeLast() {
+        if (rolling) return;
+        var list = parseNames();
+        if (!list.length) return;
+        list.pop();
+        namesEl.value = list.join(',');
+        updateMeta();
+        paintToys(parseNames().slice(0, 8));
+        persistLast();
+        autoGrow();
       }
       function recordResult(name) {
         if (selectedSaved >= 0 && selectedSaved < savedLists.length) {
@@ -745,9 +804,11 @@ Ethan</textarea>
         var left = pool().length;
         metaEl.textContent = total ? (left + ' of ' + total + ' names in the pool.') : 'Enter names below to start.';
         pickBtn.disabled = rolling;
-        shuffleBtn.disabled = rolling;
         resetBtn.disabled = rolling;
         copyBtn.disabled = rolling;
+        saveBtn.disabled = rolling;
+        clearBtn.disabled = rolling;
+        removeBtn.disabled = rolling;
       }
       function chipColor(i) {
         var colors = ['#db2777','#0ea5e9','#22c55e','#f59e0b','#8b5cf6','#ef4444','#14b8a6','#eab308'];
@@ -782,7 +843,6 @@ Ethan</textarea>
         updateMeta();
         saveList(true, true);
         resultEl.textContent = '';
-        orderListEl.style.display = 'none';
         resetMachine();
         prizeEl.textContent = 'Shuffling…';
         cabinetEl.classList.add('shaking');
@@ -849,7 +909,6 @@ Ethan</textarea>
             fanfare();
             recordResult(winner);
             track('pick_name', { method: 'claw_machine' });
-            autoStartTimer();
             setTimeout(function() { gripEl.innerHTML = ''; }, 900);
             rolling = false;
             updateMeta();
@@ -857,101 +916,7 @@ Ethan</textarea>
         });
       }
 
-      /* ---------- classroom response timer ---------- */
-      var timerSel = document.getElementById('timerSec');
-      var timerDisplayEl = document.getElementById('timerDisplay');
-      var timerToggle = document.getElementById('timerToggle');
-      var timerResetBtn = document.getElementById('timerReset');
-      var timerTotal = 0, timerLeft = 0, timerId = null, timerRunning = false;
-
-      function fmtTime(s) {
-        s = Math.max(0, Math.ceil(s));
-        var m = Math.floor(s / 60), r = s % 60;
-        return m + ':' + (r < 10 ? '0' : '') + r;
-      }
-      function paintTimer() {
-        if (timerTotal <= 0) { timerToggle.disabled = true; timerToggle.textContent = 'Start'; return; }
-        timerToggle.disabled = false;
-        timerToggle.textContent = timerRunning ? 'Pause' : (timerLeft > 0 && timerLeft < timerTotal ? 'Resume' : 'Start');
-        timerDisplayEl.classList.toggle('running', timerRunning);
-        if (!timerRunning && timerLeft > 0) timerDisplayEl.textContent = fmtTime(timerLeft);
-      }
-      function stopTick() { if (timerId) { clearInterval(timerId); timerId = null; } timerRunning = false; }
-      function setTimerTotal(sec) {
-        stopTick();
-        timerTotal = sec;
-        timerLeft = sec;
-        timerDisplayEl.classList.remove('running', 'up');
-        timerDisplayEl.style.display = sec > 0 ? '' : 'none';
-        if (sec > 0) timerDisplayEl.textContent = fmtTime(sec);
-        paintTimer();
-      }
-      function startTimer() {
-        if (timerTotal <= 0 || timerRunning) return;
-        if (timerLeft <= 0) timerLeft = timerTotal;
-        timerRunning = true;
-        var endAt = Date.now() + timerLeft * 1000;
-        timerId = setInterval(function() {
-          timerLeft = (endAt - Date.now()) / 1000;
-          if (timerLeft <= 0) {
-            timerLeft = 0;
-            stopTick();
-            timerDisplayEl.classList.remove('running');
-            timerDisplayEl.classList.add('up');
-            timerDisplayEl.textContent = "\u23f0 Time's up!";
-            timerToggle.textContent = 'Start';
-            tone(880, .16, 'square', .05);
-            tone(660, .16, 'square', .05, .22);
-            tone(440, .3, 'square', .05, .44);
-            track('timer_finished', { seconds: timerTotal });
-          } else {
-            timerDisplayEl.textContent = fmtTime(timerLeft);
-          }
-        }, 100);
-        track('timer_started', { seconds: timerTotal });
-        paintTimer();
-      }
-      function pauseTimer() { if (!timerRunning) return; stopTick(); paintTimer(); }
-      function autoStartTimer() {
-        if (timerTotal <= 0) return;
-        stopTick();
-        timerLeft = timerTotal;
-        timerDisplayEl.classList.remove('up');
-        startTimer();
-      }
-      function resetTimerView() {
-        stopTick();
-        timerLeft = timerTotal;
-        timerDisplayEl.classList.remove('up');
-        if (timerTotal > 0) timerDisplayEl.textContent = fmtTime(timerTotal);
-        paintTimer();
-      }
-      timerSel.addEventListener('change', function() { setTimerTotal(parseInt(timerSel.value, 10) || 0); });
-      timerToggle.addEventListener('click', function() { if (timerRunning) { pauseTimer(); } else { startTimer(); } });
-      timerResetBtn.addEventListener('click', resetTimerView);
-      document.getElementById('reset').addEventListener('click', resetTimerView);
-
       pickBtn.addEventListener('click', function() { runClaw(); });
-
-      shuffleBtn.addEventListener('click', function() {
-        var all = parseNames();
-        if (!all.length) {
-          resultEl.textContent = '⚠️ Please enter at least one name first.';
-          orderListEl.style.display = 'none';
-          namesEl.focus();
-          return;
-        }
-        for (var i = all.length - 1; i> 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
-          var t = all[i]; all[i] = all[j]; all[j] = t;
-        }
-        resultEl.textContent = '';
-        prizeEl.classList.remove('win');
-        prizeEl.textContent = '🔀 Random order ready';
-        orderListEl.style.display = 'block';
-        orderListEl.innerHTML = all.map(function(n, idx) { return '<li>' + n + '</li>'; }).join('');
-        track('shuffle_names', { count: all.length });
-      });
 
       function resetAll() {
         if (rolling) return;
@@ -962,7 +927,6 @@ Ethan</textarea>
         }
         renderHistoryFor(selectedSaved);
         resultEl.textContent = '';
-        orderListEl.style.display = 'none';
         prizeEl.textContent = 'Your winner appears here 🧸';
         resetMachine();
         randomizeFaces();
@@ -971,28 +935,44 @@ Ethan</textarea>
       }
       resetBtn.addEventListener('click', resetAll);
 
-      function applyPreset(text) {
-        namesEl.value = text;
-        selectedSaved = -1;
-        resetAll();
-        persistLast();
-      }
-      document.getElementById('presetClassroom').addEventListener('click', function() {
-        timerSel.value = '30';
-        setTimerTotal(30);
-        applyPreset(['Alice','Bob','Charlie','Diana','Ethan','Fiona','George','Hannah'].join('\n'));
+      saveBtn.addEventListener('click', function() {
+        var items = itemsOf(namesEl.value);
+        if (!items.length) { metaEl.textContent = 'Nothing to save — the names box is empty.'; return; }
+        var before = selectedSaved;
+        saveList(false);
+        metaEl.textContent = (selectedSaved === before && before >= 0) ? 'Saved list updated.' : 'List saved.';
       });
-      document.getElementById('presetGiveaway').addEventListener('click', function() {
-        applyPreset(['@sunny_dreams','@moonlight_99','@pixel_pete','@luckycharm','@nightowl','@starcatcher'].join('\n'));
-      });
-      document.getElementById('presetClaw').addEventListener('click', function() {
-        applyPreset(['🧸 Teddy','🚗 Racer','🦄 Unicorn','🐸 Froggy','🤖 Robot','🐰 Bunny','🐲 Dragon','🐙 Octo'].join('\n'));
-      });
+      clearBtn.addEventListener('click', clearOptions);
+      removeBtn.addEventListener('click', removeLast);
 
+      namesEl.addEventListener('paste', function(e) {
+        e.preventDefault();
+        var t = (e.clipboardData || window.clipboardData).getData('text') || '';
+        t = t.split(/[\n,]+/).map(function(s){ return s.trim(); }).filter(Boolean).join(',');
+        if (!t) return;
+        var s = namesEl.selectionStart, epos = namesEl.selectionEnd;
+        namesEl.value = namesEl.value.slice(0, s) + t + namesEl.value.slice(epos);
+        namesEl.setSelectionRange(s + t.length, s + t.length);
+        namesEl.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+      namesEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          var s = namesEl.selectionStart, epos = namesEl.selectionEnd;
+          namesEl.value = namesEl.value.slice(0, s) + ',' + namesEl.value.slice(epos);
+          namesEl.setSelectionRange(s + 1, s + 1);
+          namesEl.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
+      function autoGrow() {
+        namesEl.style.height = 'auto';
+        namesEl.style.height = Math.max(46, namesEl.scrollHeight) + 'px';
+      }
       namesEl.addEventListener('input', function() {
         updateMeta();
         paintToys(parseNames().slice(0, 8));
         persistLast();
+        autoGrow();
       });
       removeChk.addEventListener('change', function() {
         updateMeta();
@@ -1038,17 +1018,6 @@ Ethan</textarea>
 <style>
   footer .slogan { white-space: nowrap; font-size: 14px; }
   @media (max-width: 640px) { footer .slogan { font-size: 10.5px; } }
-</style>
-<style>
-  .timer-row { flex-wrap: wrap; row-gap: 6px; }
-  .timer-row select { font: inherit; font-size: 13px; padding: 5px 8px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: #0f172a; }
-  .timer-row button { background: #fff; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; cursor: pointer; }
-  .timer-row button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-  .timer-row button:disabled { opacity: .45; cursor: default; }
-  .timer-display { font-size: 32px; font-weight: 700; line-height: 1.1; text-align: center; color: #0f172a;
-                   font-variant-numeric: tabular-nums; margin: 6px 0 2px; }
-  .timer-display.running { color: var(--accent); }
-  .timer-display.up { color: #dc2626; font-size: 22px; }
 </style>
 </body>
 </html>
