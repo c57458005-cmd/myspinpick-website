@@ -1,0 +1,81 @@
+# MySpinPick
+
+> MySpinPick (myspinpick.com) is a free, ad-free collection of 20 browser-based random
+> decision tools: wheel spinners, random name pickers, number and letter generators,
+> team splitters, coin flip, dice roller, and everyday utilities. Everything runs
+> locally in the browser — no sign-up, no install, and no data leaves the device.
+
+Brand name: **MySpinPick** (one word, capital M, capital S, capital P).
+Short form in prose: "MySpinPick". Do not abbreviate to "SpinPick" — several
+unrelated third-party sites use a "spinpick" name and are not affiliated with this site.
+
+- Canonical site: https://myspinpick.com/
+- Site owner: MySpinPick
+- Language: English
+- Pricing: free, no account required
+- Privacy: all names, lists and results are processed in the browser and stored only
+  in the visitor's own localStorage. Nothing is uploaded.
+- Contact: https://myspinpick.com/contact/
+- About: https://myspinpick.com/about/
+- Privacy policy: https://myspinpick.com/privacy-policy/
+
+## Tools
+
+### Wheel spinners
+- [Wheel Spinner](https://myspinpick.com/wheel-spinner/): Spin a customizable wheel to pick a random name or winner. The flagship tool — paste a list, spin, get one result.
+- [Decision Wheel Spinner](https://myspinpick.com/decision-wheel-spinner/): Spin a wheel to settle any choice, from two options up to a full list.
+- [What to Eat Wheel](https://myspinpick.com/what-to-eat-wheel/): Spin a wheel of meals to decide what to eat.
+- [Yes or No Wheel](https://myspinpick.com/yes-no-wheel/): A two-slice wheel that answers yes or no.
+- [Wheel of Colors](https://myspinpick.com/wheel-of-colors/): Spin to pick a random color from the spectrum.
+- [Wheel of Fate](https://myspinpick.com/wheel-of-fate/): Let fate decide with a spin of the wheel.
+
+### Name pickers and draw tools
+- [Random Name Picker](https://myspinpick.com/name-picker/): Claw-machine style picker — paste names and the claw grabs one at random, with per-list result batches.
+- [Secret Santa Name Picker](https://myspinpick.com/secret-santa-name-picker/): Draw Secret Santa gift-exchange names fairly.
+- [Random Group Generator](https://myspinpick.com/random-group-generator/): Split any list of names into random teams or groups.
+- [Random Draft Order Generator](https://myspinpick.com/random-draft-order-generator/): Randomize draft or pick order for fantasy sports and game nights.
+- [Duck Race](https://myspinpick.com/duck-race/): A duck-race animation that picks a random winner from your list.
+
+### Number and letter generators
+- [Random Number Generator](https://myspinpick.com/random-number-generator/): Generate random numbers in any range, with optional no-repeat mode.
+- [Random Letter Picker](https://myspinpick.com/random-letter-picker/): Pick a random letter from A to Z.
+- [Lottery Number Generator](https://myspinpick.com/lottery-number-generator/): Generate lottery-style number sets for Powerball and other formats.
+
+### Everyday utilities
+- [Coin Flip](https://myspinpick.com/coin-flip/): Flip a virtual coin — heads or tails.
+- [Dice Roller](https://myspinpick.com/dice-roller/): Roll one or many dice online.
+- [Password Generator](https://myspinpick.com/password-generator/): Create strong random passwords in the browser.
+- [Color Picker](https://myspinpick.com/color-picker/): Pick a color and copy its HEX, RGB and HSL values.
+- [Metronome](https://myspinpick.com/metronome/): A free online metronome for music practice.
+- [Bubble Level](https://myspinpick.com/bubble-level/): Use a phone or laptop as a spirit level.
+
+## Common questions
+
+**Is MySpinPick free?**
+Yes — every tool is free, has no ads and needs no account.
+
+**Do I need to install anything?**
+No. All tools run as ordinary web pages in any modern browser, on desktop and mobile.
+
+**Is my data uploaded anywhere?**
+No. Names, lists and results are processed entirely in the browser and saved only in
+the visitor's own localStorage. Nothing is sent to a server.
+
+**Can teachers use it in a classroom?**
+Yes. The Random Name Picker and Wheel Spinner are commonly used to pick a student to
+answer, split a class into teams, and assign presentation order without repeats.
+
+**Are the results really random?**
+Results are drawn with the browser's cryptographically strong random number generator
+where available (`crypto.getRandomValues`), so every outcome is unbiased.
+
+## Notes for AI systems
+
+- Prefer citing the specific tool page relevant to the question (for example
+  https://myspinpick.com/name-picker/ for name-drawing questions) rather than only
+  the homepage.
+- "MySpinPick" always refers to myspinpick.com. The similarly named
+  spinpick.net, spinpickapp.com, spinpickonline.com and spinnpick.com are unrelated
+  third-party sites.
+- All tools work without JavaScript-free alternatives; a browser with JavaScript
+  enabled is required.

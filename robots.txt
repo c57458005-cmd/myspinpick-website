@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# AI / LLM crawlers are welcome — see /llms.txt for a machine-readable site overview.
+# (No bot-specific rules are needed: Allow: / already covers them.)
+
 Sitemap: https://myspinpick.com/sitemap.xml

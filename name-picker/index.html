@@ -262,10 +262,16 @@
     .saved-row button { flex: 0 0 20px; width: 20px; height: 20px; min-width: 20px; min-height: 20px; aspect-ratio: 1; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
     .saved-row button:hover { background: #fee2e2; border-color: #fca5a5; }
 
-    .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
-    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history { margin-top: 10px; }
     .history:empty { display: none; }
-    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    .batch { border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; background: #f8fafc; }
+    .batch-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .batch-head .b-label { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .02em; text-transform: uppercase; }
+    .batch-head .b-count { font-size: 12px; color: var(--muted); }
+    .batch-head .b-del { flex: 0 0 20px; width: 20px; height: 20px; min-width: 20px; min-height: 20px; aspect-ratio: 1; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; margin-left: auto; background: #fef2f2; border-color: #fecaca; color: #dc2626; cursor: pointer; }
+    .batch-head .b-del:hover { background: #fee2e2; border-color: #fca5a5; }
+    .batch-chips { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+    .batch .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
     section { margin-top: 26px; }
     h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
     section p, section li { color: #334155; font-size: 15px; }
@@ -279,7 +285,7 @@
     details p { margin-top: 8px; color: #475569; }
     footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
     footer a { color: var(--accent); }
-    @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px) { .batch-chips { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 640px) { h1 { font-size: 21px; } .brand-mini span { display: none; } }
     @media (max-width: 480px) { h1 { font-size: 20px; } button { min-height: 44px; } }
     /* /embed/ 嵌入板块 */
@@ -354,7 +360,6 @@
       <div class="saved-head"><span class="label">Saved lists</span></div>
       <p class="saved-hint">Tip: save your frequently used lists for quick reuse — each list keeps its own results.</p>
       <div id="savedLists"></div>
-      <p class="result" id="result"></p>
       <div class="history" id="history"></div>
     </main>
 
@@ -493,7 +498,6 @@
     (function() {
       var namesEl = document.getElementById('names');
       var metaEl = document.getElementById('meta');
-      var resultEl = document.getElementById('result');
       var historyEl = document.getElementById('history');
       var prizeEl = document.getElementById('prizeSlot');
       var pickBtn = document.getElementById('pick');
@@ -524,9 +528,13 @@
           var s = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
           if (Array.isArray(s)) {
             savedLists = s.filter(function(x){ return x && typeof x.text === 'string'; }).slice(0, SAVED_MAX);
+            var migrated = false;
             for (var i = 0; i < savedLists.length; i++) {
-              if (!Array.isArray(savedLists[i].res)) savedLists[i].res = [];
+              var before = savedLists[i].res;
+              savedLists[i].res = migrateRes(before);
+              if (JSON.stringify(before) !== JSON.stringify(savedLists[i].res)) migrated = true;
             }
+            if (migrated) { try { localStorage.setItem(SAVED_KEY, JSON.stringify(savedLists)); } catch (e) {} }
           }
         } catch (e) { savedLists = []; }
         var last = null;
@@ -547,7 +555,7 @@
         try { localStorage.setItem(SAVED_KEY, JSON.stringify(savedLists)); } catch (e) {}
         persistLast();
       }
-      function saveList(silent, autoSelect) {
+      function saveList(silent, autoSelect, newBatch) {
         var items = itemsOf(namesEl.value);
         if (!items.length) return;
         var k0 = keyOf(namesEl.value);
@@ -555,6 +563,7 @@
           savedLists[selectedSaved] = { text: items.join(','), n: items.length, res: savedLists[selectedSaved].res || [] };
           renderSaved();
           persistSaved();
+          if (newBatch) startBatch();
           return;
         }
         var k = keyOf(namesEl.value);
@@ -567,6 +576,7 @@
         savedLists.unshift({ text: items.join(','), n: items.length, res: [] });
         if (savedLists.length > SAVED_MAX) savedLists.pop();
         if (!silent || autoSelect) selectedSaved = 0;
+        if (newBatch) startBatch();
         renderSaved();
         persistSaved();
       }
@@ -611,8 +621,6 @@
         resetMachine();
         randomizeFaces();
         paintToys(parseNames().slice(0, 8));
-        var res = savedLists[idx].res || [];
-        resultEl.textContent = res.length ? '🏆 Winner: ' + res[res.length - 1].n : '';
         prizeEl.textContent = 'Your winner appears here 🧸';
         prizeEl.classList.remove('win');
         renderHistoryFor(idx);
@@ -631,7 +639,6 @@
         savedLists.splice(idx, 1);
         if (selectedSaved === idx) {
           selectedSaved = -1;
-          resultEl.textContent = '';
           renderHistoryFor(-1);
         }
         else if (selectedSaved > idx) selectedSaved--;
@@ -657,27 +664,105 @@
         persistLast();
         autoGrow();
       }
+      /* 结果按「批次」记录：一张卡片 = 一个名单的一轮，
+         连续抽取不断追加到当前卡片；Reset / Clear / 保存为新名单 时结束本轮、开新卡片。
+         res = [ { t: 时间戳, picks: [名字,...] }, ... ]，仅保留最近 BATCH_MAX 批 */
+      var BATCH_MAX = 20;
+
+      /* 旧版平铺格式 [{n:"x"}] → 迁移为单批次，避免存量记录丢失 */
+      function migrateRes(res) {
+        if (!Array.isArray(res) || !res.length) return [];
+        if (res[0] && typeof res[0] === "object" && Array.isArray(res[0].picks)) return res;
+        var flat = res.filter(function(x){ return x && typeof x.n === "string"; }).map(function(x){ return x.n; });
+        if (!flat.length) return [];
+        return [{ t: 0, picks: flat }];
+      }
+
+      /* 结束当前轮：下一次 recordResult 会开一张新卡片 */
+      function startBatch() { batchClosed = true; }
+      var batchClosed = false;
+
       function recordResult(name) {
         if (selectedSaved >= 0 && selectedSaved < savedLists.length) {
-          if (!savedLists[selectedSaved].res) savedLists[selectedSaved].res = [];
-          savedLists[selectedSaved].res.push({ n: name });
-          if (savedLists[selectedSaved].res.length > 24) savedLists[selectedSaved].res.shift();
+          var R = savedLists[selectedSaved].res;
+          if (!Array.isArray(R)) { R = []; savedLists[selectedSaved].res = R; }
+          /* 追加到最末一张卡片（即当前轮）；startBatch 标记轮结束时才开新卡片。
+             切名单不影响 —— 每张卡片的记录随各自名单走，切回来即恢复。 */
+          var last = (R.length && !batchClosed) ? R[R.length - 1] : null;
+          if (!last || !Array.isArray(last.picks)) {
+            R.push({ t: Date.now(), picks: [] });
+            last = R[R.length - 1];
+          }
+          batchClosed = false;
+          last.picks.push(name);
+          if (last.picks.length > 200) last.picks.shift();
+          if (R.length > BATCH_MAX) R.shift();
           persistSaved();
         }
         renderHistoryFor(selectedSaved);
       }
+
+      function batchTime(t) {
+        if (!t) return "";
+        var d = new Date(t);
+        var hh = ("0" + d.getHours()).slice(-2), mm = ("0" + d.getMinutes()).slice(-2);
+        return hh + ":" + mm;
+      }
+
       function renderHistoryFor(idx) {
         historyEl.innerHTML = '';
         if (!removeChk.checked) return;
-        var res = (idx >= 0 && idx < savedLists.length && savedLists[idx].res) ? savedLists[idx].res : [];
-        for (var j = 0; j < res.length; j++) {
-          var chip = document.createElement('div');
-          chip.className = 'chip';
-          chip.style.background = chipColor(j);
-          chip.title = res[j].n;
-          chip.textContent = res[j].n;
-          historyEl.appendChild(chip);
+        if (!(idx >= 0 && idx < savedLists.length)) return;
+        var res = savedLists[idx].res || [];
+        for (var b = res.length - 1; b >= 0; b--) {
+          (function(bi) {
+            var batch = res[bi];
+            var picks = (batch && batch.picks) || [];
+            if (!picks.length) return;
+            var card = document.createElement('div');
+            card.className = 'batch';
+            var head = document.createElement('div');
+            head.className = 'batch-head';
+            var lb = document.createElement('span');
+            lb.className = 'b-label';
+            lb.textContent = "Batch " + (bi + 1);
+            var ct = document.createElement('span');
+            ct.className = 'b-count';
+            var tm = batchTime(batch.t);
+            ct.textContent = picks.length + (picks.length > 1 ? " picks" : " pick") + (tm ? " \u00b7 " + tm : "");
+            var del = document.createElement('button');
+            del.type = 'button';
+            del.className = 'b-del';
+            del.textContent = "\u2715";
+            del.setAttribute("aria-label", "Delete this batch");
+            del.title = "Delete this batch";
+            del.addEventListener("click", function() { deleteBatch(idx, bi); });
+            head.appendChild(lb); head.appendChild(ct); head.appendChild(del);
+            var chips = document.createElement('div');
+            chips.className = 'batch-chips';
+            for (var j = 0; j < picks.length; j++) {
+              var chip = document.createElement('div');
+              chip.className = 'chip';
+              chip.style.background = chipColor(j);
+              chip.title = picks[j];
+              chip.textContent = picks[j];
+              chips.appendChild(chip);
+            }
+            card.appendChild(head); card.appendChild(chips);
+            historyEl.appendChild(card);
+          })(b);
         }
+      }
+
+      function deleteBatch(idx, bi) {
+        if (rolling) return;
+        if (!(idx >= 0 && idx < savedLists.length)) return;
+        var R = savedLists[idx].res;
+        if (!Array.isArray(R)) return;
+        R.splice(bi, 1);
+        persistSaved();
+        renderHistoryFor(idx);
+        renderSaved();
       }
 
       /* ---------- claw machine parts ---------- */
@@ -835,14 +920,12 @@
         if (rolling) return Promise.resolve();
         var p = pool();
         if (!p.length) {
-          resultEl.textContent = '⚠️ Please enter at least one name first.';
           namesEl.focus();
           return Promise.resolve();
         }
         rolling = true;
         updateMeta();
         saveList(true, true);
-        resultEl.textContent = '';
         resetMachine();
         prizeEl.textContent = 'Shuffling…';
         cabinetEl.classList.add('shaking');
@@ -904,7 +987,6 @@
             setTimeout(function() { holeEl.classList.remove('hit'); }, 420);
             prizeEl.textContent = '🏆 ' + winner;
             prizeEl.classList.add('win');
-            resultEl.textContent = '🏆 Winner: ' + winner;
             confetti();
             fanfare();
             recordResult(winner);
@@ -925,8 +1007,8 @@
           savedLists[selectedSaved].res = [];
           persistSaved();
         }
+        startBatch();
         renderHistoryFor(selectedSaved);
-        resultEl.textContent = '';
         prizeEl.textContent = 'Your winner appears here 🧸';
         resetMachine();
         randomizeFaces();
@@ -939,7 +1021,7 @@
         var items = itemsOf(namesEl.value);
         if (!items.length) { metaEl.textContent = 'Nothing to save — the names box is empty.'; return; }
         var before = selectedSaved;
-        saveList(false);
+        saveList(false, true, true);
         metaEl.textContent = (selectedSaved === before && before >= 0) ? 'Saved list updated.' : 'List saved.';
       });
       clearBtn.addEventListener('click', clearOptions);
@@ -993,10 +1075,14 @@
       function copyResult() {
         var items = [];
         if (selectedSaved >= 0 && selectedSaved < savedLists.length && Array.isArray(savedLists[selectedSaved].res)) {
-          for (var i = 0; i < savedLists[selectedSaved].res.length; i++) items.push(savedLists[selectedSaved].res[i].n);
+          var RB = savedLists[selectedSaved].res;
+          for (var i = 0; i < RB.length; i++) {
+            var pk = (RB[i] && RB[i].picks) || [];
+            for (var k = 0; k < pk.length; k++) items.push(pk[k]);
+          }
         }
         if (!items.length) {
-          var chips = historyEl.querySelectorAll('.chip');
+          var chips = historyEl.querySelectorAll('.batch .chip');
           for (var j = 0; j < chips.length; j++) items.push(chips[j].textContent);
         }
         if (!items.length) { metaEl.textContent = 'Nothing to copy — pick a name first.'; return; }
