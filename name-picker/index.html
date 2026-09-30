@@ -885,16 +885,25 @@
           }
         }
       }
+      /* 货架补货来源：
+         - 没勾「不重复」→ 全部名单（可重复抽，娃娃抓走还会补回来）；
+         - 勾了「不重复」→ 只显示还没被抓走的名字，抓走的立即下架，
+           抽到所剩不足 8 个时货架开始变空，全部抽完即清空。 */
+      function shelfSource() {
+        if (!removeChk.checked) return parseNames();
+        var used = currentBatchPicks();
+        return parseNames().filter(function(n){ return used.indexOf(n) === -1; });
+      }
       /* 整柜重新随机上货：进页面 / Reset / 切换名单时用 */
       function randomizeShelf() {
-        var names = shuffleArr(parseNames().slice()).slice(0, 8);
+        var names = shuffleArr(shelfSource().slice()).slice(0, 8);
         for (var i = 0; i < 8; i++) shelf[i] = names[i] || '';
         renderShelf();
       }
-      /* 只清掉「已经不在名单里」的名字 + 补空位，不做随机重排 ——
+      /* 只清掉「已经不在剩余名单里」的名字 + 补空位，不做随机重排 ——
          免得打字或抽奖的时候娃娃自己乱跳（那正是用户说的"没意义的重新排序"）。 */
       function syncShelf() {
-        var names = parseNames();
+        var names = shelfSource();
         var dirty = false;
         for (var i = 0; i < 8; i++) {
           if (shelf[i] && names.indexOf(shelf[i]) < 0) { shelf[i] = ''; dirty = true; }
