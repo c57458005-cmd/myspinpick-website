@@ -73,7 +73,7 @@
       "name": "How does a random name picker work?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Type or paste your list of names, then press \"Pick One\". The picker draws one name at random using your browser's built-in randomizer. Everything runs locally in your browser — your names never leave your device."
+        "text": "Type or paste your list of names, then press \"Pick\". The picker draws one name at random using your browser's built-in randomizer. Everything runs locally in your browser — your names never leave your device."
       }
     },
     {
@@ -113,7 +113,7 @@
       "name": "How can I pick a random name from a list?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Paste your names and press \"Pick One\" — the tool instantly picks a random name for you. It works as a random name generator from list data you already have, such as a class roster, giveaway entrants or team members, and with \"Remove winner after pick\" enabled every name gets drawn exactly once."
+        "text": "Paste your names and press \"Pick\" — the tool instantly picks a random name for you. It works as a random name generator from list data you already have, such as a class roster, giveaway entrants or team members, and with \"Remove winner after pick\" enabled every name gets drawn exactly once."
       }
     },
     {
@@ -121,7 +121,7 @@
       "name": "Is this also a random list generator?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It can be. Paste any list — names, chores, tasks, quiz questions, prizes — comma separated, then press Pick One to draw a single random item. That makes it a simple random list generator: every pick is drawn fresh in your browser from the list you paste in."
+        "text": "It can be. Paste any list — names, chores, tasks, quiz questions, prizes — comma separated, then press Pick to draw a single random item. That makes it a simple random list generator: every pick is drawn fresh in your browser from the list you paste in."
       }
     },
     {
@@ -129,7 +129,7 @@
       "name": "How do I pick a giveaway winner fairly?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Paste your entrants — comma separated, a multi-line paste is converted automatically — then press Pick One. With Remove winner after pick ticked the first winner leaves the pool, so second and third prizes are drawn from the remaining entries and nobody can win twice. Share your screen while the claw drops and the draw is visible to everyone watching."
+        "text": "Paste your entrants — comma separated, a multi-line paste is converted automatically — then press Pick. With Remove winner after pick ticked the first winner leaves the pool, so second and third prizes are drawn from the remaining entries and nobody can win twice. Share your screen while the claw drops and the draw is visible to everyone watching."
       }
     },
     {
@@ -197,6 +197,7 @@
     button.primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
     button.primary:disabled { background: #f9a8d4; border-color: #f9a8d4; }
     .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    .meta:empty { display: none; }
     .opt { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); margin: 4px 0 2px; }
 
     /* claw machine */
@@ -210,11 +211,10 @@
     @keyframes blink { 0%,100% { opacity: 1 } 50% { opacity: .25 } }
 
     .cabinet { position: relative; height: 196px; border-radius: 12px; overflow: hidden; background: linear-gradient(180deg,#ffffff 0%,#fff1f6 58%,#ffe4ef 100%); border: 1px solid #fbcfe8; box-shadow: inset 0 -20px 26px -18px rgba(219,39,119,.35); }
-    .cabinet.shaking { animation: shake .26s linear infinite; }
-    @keyframes shake { 0%{transform:translate(0,0)} 25%{transform:translate(-1.6px,1px)} 50%{transform:translate(1.6px,-1px)} 75%{transform:translate(-1px,-1.4px)} 100%{transform:translate(0,0)} }
     .rail { position: absolute; top: 10px; left: 10px; right: 10px; height: 4px; border-radius: 2px; background: linear-gradient(90deg,#cbd5e1,#94a3b8,#cbd5e1); box-shadow: 0 1px 0 #fff; }
 
     .claw { position: absolute; top: 10px; left: 0; width: 44px; margin-left: -22px; transform: translateX(180px); transition: transform .5s cubic-bezier(.4,0,.2,1); z-index: 3; }
+    .claw.idle { transition: none; }
     .cable { width: 3px; height: 20px; margin: 0 auto; background: linear-gradient(180deg,#94a3b8,#e2e8f0); transition: height .55s cubic-bezier(.4,0,.2,1); }
     .claw-head { position: relative; width: 44px; height: 22px; margin: 0 auto; }
     .claw-base { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 26px; height: 10px; border-radius: 5px; background: linear-gradient(180deg,#f472b6,#db2777); box-shadow: 0 1px 3px rgba(0,0,0,.2); }
@@ -234,14 +234,34 @@
     .toy .tag { display: inline-block; max-width: 64px; margin-top: 2px; padding: 1px 6px; border-radius: 999px; background: #fff; border: 1px solid #fbcfe8; font-size: 10px; font-weight: 700; color: #9d174d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .toy.hot .face { animation: pop .13s ease; }
     @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.3) rotate(-8deg)} 100%{transform:scale(1)} }
+    /* 待机时娃娃在机箱里随机滚动：每个娃娃的时长/延迟/幅度由 JS 随机注入 */
+    @media (prefers-reduced-motion: no-preference) {
+      .toys .toy { animation: wander var(--wdur, 3.4s) ease-in-out var(--wdel, 0s) infinite; }
+    }
+    @keyframes wander {
+      0%   { transform: translate(0,0) rotate(0deg); }
+      25%  { transform: translate(var(--wx1,5px), var(--wy1,-5px)) rotate(var(--wr1,4deg)); }
+      50%  { transform: translate(var(--wx2,-4px), var(--wy2,2px)) rotate(0deg); }
+      75%  { transform: translate(var(--wx3,4px), var(--wy3,6px)) rotate(var(--wr2,-4deg)); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
     .glass-shine { position: absolute; inset: 0; pointer-events: none; z-index: 4; background: linear-gradient(115deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 36%,rgba(255,255,255,0) 64%,rgba(255,255,255,.25) 100%); }
-    .hole { position: absolute; left: 8px; bottom: 6px; width: 62px; height: 26px; border-radius: 8px; background: linear-gradient(180deg,#831843,#4c0519); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; letter-spacing: .1em; color: #fbcfe8; box-shadow: inset 0 3px 6px rgba(0,0,0,.5); z-index: 2; }
+    /* 落物口：仅作为爪子的落点定位，不显示（原来的深色 PRIZE 标签已移除） */
+    .hole { position: absolute; left: 8px; bottom: 6px; width: 62px; height: 26px; z-index: 2; }
     .hole.hit { animation: holePop .35s ease; }
     @keyframes holePop { 0%{transform:scale(1)} 45%{transform:scale(1.12)} 100%{transform:scale(1)} }
 
-    .chute { margin-top: 10px; display: flex; align-items: center; gap: 8px; }
-    .chute-label { font-size: 9px; font-weight: 800; letter-spacing: .12em; color: #fff; background: var(--accent); padding: 10px 6px; border-radius: 8px; writing-mode: vertical-rl; text-orientation: mixed; }
-    .prize-slot { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; background: #fff; border: 2px dashed #f9a8d4; border-radius: 12px; font-size: 19px; font-weight: 800; color: var(--accent); padding: 6px 10px; word-break: break-word; }
+    .chute { margin-top: 10px; display: flex; align-items: stretch; gap: 8px; }
+    .prize-slot { flex: 0 0 calc(50% - 4px); min-height: 44px; display: flex; align-items: center; justify-content: center; background: #fff; border: 2px dashed #f9a8d4; border-radius: 12px; font-size: 15px; font-weight: 800; color: var(--accent); padding: 4px 8px; word-break: break-word; text-align: center; line-height: 1.25; }
+    .chute #pick { flex: 1 1 0; min-width: 0; margin: 0; padding: 8px; font-size: 14px; white-space: nowrap; }
+    /* 首次进入页面：Pick 按钮闪动 3 秒提示可点 */
+    @media (prefers-reduced-motion: no-preference) {
+      .chute #pick.attn { animation: attnPulse 1s ease-in-out 3; }
+    }
+    @keyframes attnPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(219,39,119,.55); }
+      50%      { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(219,39,119,0); }
+    }
     .prize-slot.win { border-style: solid; border-color: var(--accent); background: linear-gradient(180deg,#fff,#fff1f6); box-shadow: 0 6px 16px rgba(219,39,119,.18); animation: winPulse .5s ease; }
     @keyframes winPulse { 0%{transform:scale(.92)} 60%{transform:scale(1.07)} 100%{transform:scale(1)} }
     .confetti { position: absolute; width: 8px; height: 8px; border-radius: 2px; pointer-events: none; z-index: 9; animation: fall 1.15s ease-in forwards; }
@@ -264,6 +284,7 @@
 
     .history { margin-top: 10px; }
     .history:empty { display: none; }
+    .history .hist-head { margin: 0 0 8px; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
     .batch { border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; background: #f8fafc; }
     .batch-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
     .batch-head .b-label { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .02em; text-transform: uppercase; }
@@ -307,14 +328,14 @@
     </header>
 
     <main class="tool">
-      <div class="machine" id="machine" aria-hidden="true">
-        <div class="machine-top">
+      <div class="machine" id="machine">
+        <div class="machine-top" aria-hidden="true">
           <span class="m-brand"><span style="color:#ef4444">My</span><span style="color:#f59e0b">Spin</span><span style="color:#3b82f6">Pick</span></span>
           <span class="m-lights"><i></i><i></i><i></i></span>
         </div>
-        <div class="cabinet" id="cabinet">
+        <div class="cabinet" id="cabinet" aria-hidden="true">
           <div class="rail"></div>
-          <div class="hole" id="hole">PRIZE</div>
+          <div class="hole" id="hole"></div>
           <div class="toys" id="toys"></div>
           <div class="claw" id="claw">
             <div class="cable" id="cable"></div>
@@ -328,24 +349,27 @@
           <div class="glass-shine"></div>
         </div>
         <div class="chute">
-          <span class="chute-label">PRIZE</span>
-          <div class="prize-slot" id="prizeSlot">Your winner appears here 🧸</div>
+          <div class="prize-slot" id="prizeSlot" role="status" aria-live="polite"></div>
+          <button type="button" class="primary" id="pick">🕹️ Pick</button>
         </div>
-        <div class="machine-foot"></div>
+        <div class="machine-foot" aria-hidden="true"></div>
       </div>
 
       <div class="btns nowrap">
         <button type="button" class="icon-btn" id="soundBtn" aria-label="Toggle sound" title="Sound on/off">🔊</button>
-        <button type="button" class="primary" id="pick">🕹️ Pick One</button>
-        <button type="button" id="reset">Reset</button>
+        <button type="button" id="reset" title="Clear this list's results and start a new round">Reset</button>
         <button type="button" id="copyBtn">Copy Result</button>
       </div>
 
-      <p class="meta" id="meta">0 names in the pool.</p>
+      <div class="opt">
+        <input type="checkbox" id="removeWinner" />
+        <label for="removeWinner">Remove winner after pick (no repeats)</label>
+      </div>
+      <p class="meta" id="meta"></p>
+
+      <div class="history" id="history"></div>
 
       <textarea id="names" rows="1" aria-label="Names, comma separated" placeholder="Enter names, separated by commas&#10;e.g. Alice,Bob,Charlie" spellcheck="false">Alice,Bob,Charlie,Diana,Ethan</textarea>
-
-
 
       <div class="btns list-btns">
         <button type="button" id="saveBtn">💾 Save</button>
@@ -353,21 +377,16 @@
         <button type="button" id="removeBtn">Remove</button>
       </div>
 
-      <div class="opt">
-        <input type="checkbox" id="removeWinner" />
-        <label for="removeWinner">Remove winner after pick (no repeats)</label>
-      </div>
       <div class="saved-head"><span class="label">Saved lists</span></div>
       <p class="saved-hint">Tip: save your frequently used lists for quick reuse — each list keeps its own results.</p>
       <div id="savedLists"></div>
-      <div class="history" id="history"></div>
     </main>
 
     <section id="about">
       <h2>How to use this random name picker</h2>
       <ol>
         <li>Paste or type your names into the box, comma separated — a multi-line paste is converted automatically.</li>
-        <li>Press <strong>Pick One</strong>: the claw machine shuffles your names, the claw drops, and one random winner is grabbed.</li>
+        <li>Press <strong>Pick</strong>: the claw machine shuffles your names, the claw drops, and one random winner is grabbed.</li>
         <li>Tick <strong>Remove winner after pick</strong> to draw without repeats — keep going until everyone has been picked once.</li>
         <li>Press <strong>💾 Save</strong> to keep a list in the Saved lists section — each list remembers its own results, and you can switch between lists any time.</li>
       </ol>
@@ -385,14 +404,14 @@
 
     <section id="classroom">
       <h2>Classroom Tools: A Random Name Picker Teachers Can Trust</h2>
-      <p>Teachers reach for a name picker for one reason: the choice has to look fair to thirty pairs of eyes. Paste your class list, press <strong>Pick One</strong> and the claw machine makes the call — the question of whose turn it is settles itself, and with <strong>Remove winner after pick</strong> switched on every student is drawn exactly once before anyone comes round again.</p>
+      <p>Teachers reach for a name picker for one reason: the choice has to look fair to thirty pairs of eyes. Paste your class list, press <strong>Pick</strong> and the claw machine makes the call — the question of whose turn it is settles itself, and with <strong>Remove winner after pick</strong> switched on every student is drawn exactly once before anyone comes round again.</p>
     </section>
 
     <section id="faq">
       <h2>Frequently Asked Questions</h2>
       <details>
         <summary>How does a random name picker work?</summary>
-        <p>Type or paste your list of names, then press "Pick One". The picker draws one name at random using your browser's built-in randomizer. Everything runs locally in your browser — your names never leave your device.</p>
+        <p>Type or paste your list of names, then press "Pick". The picker draws one name at random using your browser's built-in randomizer. Everything runs locally in your browser — your names never leave your device.</p>
       </details>
       <details>
         <summary>What is a claw machine name picker?</summary>
@@ -412,15 +431,15 @@
         </details>
       <details>
         <summary>How can I pick a random name from a list?</summary>
-        <p>Paste your names and press "Pick One" — the tool instantly picks a random name for you. It works as a random name generator from list data you already have, such as a class roster, giveaway entrants or team members, and with "Remove winner after pick" enabled every name gets drawn exactly once.</p>
+        <p>Paste your names and press "Pick" — the tool instantly picks a random name for you. It works as a random name generator from list data you already have, such as a class roster, giveaway entrants or team members, and with "Remove winner after pick" enabled every name gets drawn exactly once.</p>
       </details>
       <details>
         <summary>Is this also a random list generator?</summary>
-        <p>It can be. Paste any list — names, chores, tasks, quiz questions, prizes — comma separated, then press Pick One to draw a single random item. That makes it a simple random list generator: every pick is drawn fresh in your browser from the list you paste in.</p>
+        <p>It can be. Paste any list — names, chores, tasks, quiz questions, prizes — comma separated, then press Pick to draw a single random item. That makes it a simple random list generator: every pick is drawn fresh in your browser from the list you paste in.</p>
       </details>
       <details>
         <summary>How do I pick a giveaway winner fairly?</summary>
-        <p>Paste your entrants — comma separated, a multi-line paste is converted automatically — then press Pick One. With Remove winner after pick ticked the first winner leaves the pool, so second and third prizes are drawn from the remaining entries and nobody can win twice. Share your screen while the claw drops and the draw is visible to everyone watching.</p>
+        <p>Paste your entrants — comma separated, a multi-line paste is converted automatically — then press Pick. With Remove winner after pick ticked the first winner leaves the pool, so second and third prizes are drawn from the remaining entries and nobody can win twice. Share your screen while the claw drops and the draw is visible to everyone watching.</p>
       </details>
       <details>
         <summary>Is my list of names stored anywhere?</summary>
@@ -620,8 +639,8 @@
         selectedSaved = idx;
         resetMachine();
         randomizeFaces();
-        paintToys(parseNames().slice(0, 8));
-        prizeEl.textContent = 'Your winner appears here 🧸';
+        randomizeShelf();
+        prizeEl.textContent = '';
         prizeEl.classList.remove('win');
         renderHistoryFor(idx);
         updateMeta();
@@ -660,7 +679,7 @@
         list.pop();
         namesEl.value = list.join(',');
         updateMeta();
-        paintToys(parseNames().slice(0, 8));
+        syncShelf();
         persistLast();
         autoGrow();
       }
@@ -683,6 +702,10 @@
       var batchClosed = false;
 
       function recordResult(name) {
+        if (!(selectedSaved >= 0 && selectedSaved < savedLists.length)) {
+          /* 兜底：万一没有选中的名单，先自动存一条，保证结果一定有地方落 */
+          saveList(true, true);
+        }
         if (selectedSaved >= 0 && selectedSaved < savedLists.length) {
           var R = savedLists[selectedSaved].res;
           if (!Array.isArray(R)) { R = []; savedLists[selectedSaved].res = R; }
@@ -709,49 +732,59 @@
         return hh + ":" + mm;
       }
 
+      /* 结果常驻展示：不再依赖「Remove winner after pick」勾选，
+         只要本轮抽过就有记录。批次倒序，最新的一轮在最上面。 */
       function renderHistoryFor(idx) {
         historyEl.innerHTML = '';
-        if (!removeChk.checked) return;
         if (!(idx >= 0 && idx < savedLists.length)) return;
         var res = savedLists[idx].res || [];
+        var cards = [];
         for (var b = res.length - 1; b >= 0; b--) {
-          (function(bi) {
-            var batch = res[bi];
-            var picks = (batch && batch.picks) || [];
-            if (!picks.length) return;
-            var card = document.createElement('div');
-            card.className = 'batch';
-            var head = document.createElement('div');
-            head.className = 'batch-head';
-            var lb = document.createElement('span');
-            lb.className = 'b-label';
-            lb.textContent = "Batch " + (bi + 1);
-            var ct = document.createElement('span');
-            ct.className = 'b-count';
-            var tm = batchTime(batch.t);
-            ct.textContent = picks.length + (picks.length > 1 ? " picks" : " pick") + (tm ? " \u00b7 " + tm : "");
-            var del = document.createElement('button');
-            del.type = 'button';
-            del.className = 'b-del';
-            del.textContent = "\u2715";
-            del.setAttribute("aria-label", "Delete this batch");
-            del.title = "Delete this batch";
-            del.addEventListener("click", function() { deleteBatch(idx, bi); });
-            head.appendChild(lb); head.appendChild(ct); head.appendChild(del);
-            var chips = document.createElement('div');
-            chips.className = 'batch-chips';
-            for (var j = 0; j < picks.length; j++) {
-              var chip = document.createElement('div');
-              chip.className = 'chip';
-              chip.style.background = chipColor(j);
-              chip.title = picks[j];
-              chip.textContent = picks[j];
-              chips.appendChild(chip);
-            }
-            card.appendChild(head); card.appendChild(chips);
-            historyEl.appendChild(card);
-          })(b);
+          var batch = res[b];
+          var picks = (batch && batch.picks) || [];
+          if (!picks.length) continue;
+          cards.push(buildBatchCard(idx, b, batch, picks));
         }
+        if (!cards.length) return;
+        var head = document.createElement('div');
+        head.className = 'hist-head';
+        head.textContent = 'Results';
+        historyEl.appendChild(head);
+        for (var c = 0; c < cards.length; c++) historyEl.appendChild(cards[c]);
+      }
+
+      function buildBatchCard(idx, bi, batch, picks) {
+        var card = document.createElement('div');
+        card.className = 'batch';
+        var head = document.createElement('div');
+        head.className = 'batch-head';
+        var lb = document.createElement('span');
+        lb.className = 'b-label';
+        lb.textContent = "Batch " + (bi + 1);
+        var ct = document.createElement('span');
+        ct.className = 'b-count';
+        var tm = batchTime(batch.t);
+        ct.textContent = picks.length + (picks.length > 1 ? " picks" : " pick") + (tm ? " \u00b7 " + tm : "");
+        var del = document.createElement('button');
+        del.type = "button";
+        del.className = "b-del";
+        del.textContent = "\u2715";
+        del.setAttribute("aria-label", "Delete this batch");
+        del.title = "Delete this batch";
+        del.addEventListener("click", function() { deleteBatch(idx, bi); });
+        head.appendChild(lb); head.appendChild(ct); head.appendChild(del);
+        var chips = document.createElement('div');
+        chips.className = "batch-chips";
+        for (var j = 0; j < picks.length; j++) {
+          var chip = document.createElement('div');
+          chip.className = "chip";
+          chip.style.background = chipColor(j);
+          chip.title = picks[j];
+          chip.textContent = (j + 1) + ". " + picks[j];
+          chips.appendChild(chip);
+        }
+        card.appendChild(head); card.appendChild(chips);
+        return card;
       }
 
       function deleteBatch(idx, bi) {
@@ -835,17 +868,45 @@
           toyEls.push(t);
         }
       })();
-      function paintToys(list) {
+      /* 货架：8 个娃娃位，''=空位。抽奖只在「名单」里随机，货架只负责展示 ——
+         所以点击 Pick 时不重排货架；名单超过 8 个、中奖名字不在架上时，
+         等钩爪落下去遮住娃娃的那一刻把名字换给它，一次只动一个。 */
+      var shelf = ['','','','','','','',''];
+      var shelfTimer = null;
+      function renderShelf() {
         for (var i = 0; i < 8; i++) {
-          var t = toyEls[i];
-          if (i < list.length) {
+          var t = toyEls[i], nm = shelf[i];
+          if (nm) {
             t.style.display = '';
             var tag = t.querySelector('.tag');
-            if (tag.textContent !== list[i]) { tag.textContent = list[i]; t.classList.add('hot'); setTimeout((function(el){return function(){ el.classList.remove('hot'); };})(t), 140); }
+            if (tag.textContent !== nm) { tag.textContent = nm; t.classList.add('hot'); setTimeout((function(el){return function(){ el.classList.remove('hot'); };})(t), 140); }
           } else {
             t.style.display = 'none';
           }
         }
+      }
+      /* 整柜重新随机上货：进页面 / Reset / 切换名单时用 */
+      function randomizeShelf() {
+        var names = shuffleArr(parseNames().slice()).slice(0, 8);
+        for (var i = 0; i < 8; i++) shelf[i] = names[i] || '';
+        renderShelf();
+      }
+      /* 只清掉「已经不在名单里」的名字 + 补空位，不做随机重排 ——
+         免得打字或抽奖的时候娃娃自己乱跳（那正是用户说的"没意义的重新排序"）。 */
+      function syncShelf() {
+        var names = parseNames();
+        var dirty = false;
+        for (var i = 0; i < 8; i++) {
+          if (shelf[i] && names.indexOf(shelf[i]) < 0) { shelf[i] = ''; dirty = true; }
+        }
+        for (var s = 0; s < 8; s++) {
+          if (!shelf[s]) {
+            for (var k = 0; k < names.length; k++) {
+              if (shelf.indexOf(names[k]) < 0) { shelf[s] = names[k]; dirty = true; break; }
+            }
+          }
+        }
+        if (dirty) renderShelf();
       }
       function randomizeFaces() {
         var pool = FACES.slice();
@@ -868,26 +929,30 @@
         }
       }
 
-      function buildDisplay(pool, winner) {
-        var rest = pool.filter(function(n) { return n !== winner; });
-        shuffleArr(rest);
-        var shown;
-        if (pool.length <= 8) { shown = pool.slice(); }
-        else { shown = rest.slice(0, 7); shown.push(winner); }
-        return shuffleArr(shown);
-      }
-
       function parseNames() {
         return namesEl.value.split(/[\n,]+/).map(function(s){ return s.trim(); }).filter(Boolean);
       }
+      /* 当前这一轮（最后一张批次卡片）已经抽走的名字。
+         注意：结果区现在常驻显示，所以池子不能再从 DOM 里读 chip，
+         必须只读「当前批次」的数据，否则关掉「不重复」后名字也回不来。 */
+      function currentBatchPicks() {
+        if (!(selectedSaved >= 0 && selectedSaved < savedLists.length)) return [];
+        var R = savedLists[selectedSaved].res;
+        if (!Array.isArray(R) || !R.length) return [];
+        var last = R[R.length - 1];
+        return (last && Array.isArray(last.picks)) ? last.picks : [];
+      }
       function pool() {
-        var used = Array.prototype.slice.call(historyEl.querySelectorAll('.chip')).map(function(c){ return c.textContent; });
-        return parseNames().filter(function(n){ return used.indexOf(n) === -1; });
+        var names = parseNames();
+        /* 关掉「不重复」，或上一轮已结束（batchClosed，等待下一次抽取开新卡片）时，池子都是满的 */
+        if (!removeChk.checked || batchClosed) return names;
+        var used = currentBatchPicks();
+        return names.filter(function(n){ return used.indexOf(n) === -1; });
       }
       function updateMeta() {
-        var total = parseNames().length;
-        var left = pool().length;
-        metaEl.textContent = total ? (left + ' of ' + total + ' names in the pool.') : 'Enter names below to start.';
+        /* 不再显示 "N of M names in the pool."：这一行只留给临时提示
+           （如 Saved list updated. / All names have been picked…），无提示时整行隐藏 */
+        if (metaEl.textContent) metaEl.textContent = '';
         pickBtn.disabled = rolling;
         resetBtn.disabled = rolling;
         copyBtn.disabled = rolling;
@@ -902,11 +967,69 @@
 
       function setClawX(px) { clawEl.style.transform = 'translateX(' + px + 'px)'; }
       function setCable(px) { cableEl.style.height = px + 'px'; }
+
+      /* ---------- 待机动画：钩爪自动左右巡游 ----------
+         用 rAF 逐帧改 transform（而不是 CSS 动画），这样点击 Pick 时可以直接
+         从当前帧的位置继续落到目标上，接缝看不出来。 */
+      var swayRAF = null;
+      var REDUCE = false;
+      try { REDUCE = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) {}
+
+      function stopSway() {
+        if (swayRAF) { cancelAnimationFrame(swayRAF); swayRAF = null; }
+        clawEl.classList.remove('idle');
+      }
+      /* 巡游 = 在整个横向区间里随机挑下一个点，跑过去、停一下、再挑下一个。
+         不像正弦那样只在中间来回蹭：下一次落点默认挑在"柜子的另一半"，
+         所以观感上是钩爪左右横扫整条轨道、满场乱走的真娃娃机。 */
+      function roamRange() {
+        var w = cabinetEl.clientWidth || 320;
+        return [26, Math.max(34, w - 26)];
+      }
+      function startSway() {
+        if (REDUCE || swayRAF || rolling) return;
+        clawEl.classList.add('idle');   /* 必须关掉 .5s 过渡，否则逐帧赋值会被过渡拖住 */
+        var range = roamRange();
+        var x = (range[0] + range[1]) / 2;
+        var from = x, to = x, t0 = performance.now(), dur = 0, pause = 0, moving = false;
+        setClawX(x);
+        function plan(now) {
+          var rr = roamRange(), span = rr[1] - rr[0], mid = rr[0] + span / 2;
+          from = x;
+          /* 优先落到柜子的另一半，保证每次位移都横跨整个区间；
+             留 20% 概率纯随机，免得变成机械的左右横跳。 */
+          if (Math.random() < 0.8) {
+            var wantRight = x <= mid;
+            to = wantRight ? (mid + Math.random() * (rr[1] - mid))
+                           : (rr[0] + Math.random() * (mid - rr[0]));
+          } else {
+            to = rr[0] + Math.random() * span;
+          }
+          t0 = now;
+          dur = Math.min(1700, Math.max(480, Math.abs(to - from) * 5.6));  /* 约 160px/s */
+          pause = 60 + Math.random() * 320;
+          moving = true;
+        }
+        (function loop(now) {
+          if (rolling) { swayRAF = null; clawEl.classList.remove('idle'); return; }
+          if (!moving) {
+            if (now >= t0) plan(now);
+          } else {
+            var u = Math.min(1, (now - t0) / dur);
+            var e = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;   /* easeInOutCubic */
+            x = from + (to - from) * e;
+            setClawX(x);
+            if (u >= 1) { moving = false; t0 = now + pause; }
+          }
+          swayRAF = requestAnimationFrame(loop);
+        })(performance.now());
+      }
       function resetMachine() {
         gripEl.innerHTML = '';
         clawHeadEl.classList.remove('closed');
         setCable(20);
-        setClawX(cabinetEl.clientWidth ? cabinetEl.clientWidth / 2 : 160);
+        /* 巡游中不要去抢钩爪位置，否则会闪一下又回到巡游轨迹 */
+        if (!swayRAF) setClawX(cabinetEl.clientWidth ? cabinetEl.clientWidth / 2 : 160);
         prizeEl.classList.remove('win');
         for (var i = 0; i < 8; i++) {
           if (toyEls[i].parentNode !== toysEl) toysEl.appendChild(toyEls[i]);
@@ -914,51 +1037,67 @@
           toyEls[i].style.top = SLOTS[i][1] + '%';
           toyEls[i].classList.remove('dropping');
         }
+        randomizeWander();
+      }
+
+      /* 给每个娃娃随机一套「滚动」参数，让机箱里的娃娃动起来像真的被搅动 */
+      function randomizeWander() {
+        function r(a, b) { return (a + Math.random() * (b - a)).toFixed(1); }
+        for (var i = 0; i < 8; i++) {
+          var s = toyEls[i].style;
+          s.setProperty('--wdur', (2.6 + Math.random() * 2.2).toFixed(2) + 's');
+          s.setProperty('--wdel', (-Math.random() * 3).toFixed(2) + 's');
+          s.setProperty('--wx1', r(3, 8) + 'px');  s.setProperty('--wy1', r(-7, -3) + 'px'); s.setProperty('--wr1', r(3, 7) + 'deg');
+          s.setProperty('--wx2', r(-8, -3) + 'px'); s.setProperty('--wy2', r(1, 5) + 'px');
+          s.setProperty('--wx3', r(2, 6) + 'px');  s.setProperty('--wy3', r(3, 7) + 'px');  s.setProperty('--wr2', r(-7, -3) + 'deg');
+        }
       }
 
       function runClaw() {
         if (rolling) return Promise.resolve();
         var p = pool();
         if (!p.length) {
+          metaEl.textContent = parseNames().length
+            ? 'All names have been picked in this round — press Reset to start a new round.'
+            : 'Enter names below to start.';
           namesEl.focus();
           return Promise.resolve();
         }
         rolling = true;
         updateMeta();
         saveList(true, true);
-        resetMachine();
-        prizeEl.textContent = 'Shuffling…';
-        cabinetEl.classList.add('shaking');
-        tone(150, .5, 'sawtooth', .028);
-        randomizeFaces();
+        /* 不再「整柜震动 + 重新排序」：那一段对结果没有任何影响（中奖人是在之后才随机的），
+           纯属假动作，而且会把用户正在看的娃娃全换掉、让抓取看起来是演的。
+           现在直接从「当前这一柜」里挑一个抓手，钩爪落下去就抓。 */
+        stopSway();                          /* 巡游结束，接管钩爪 */
+        void clawEl.offsetWidth;             /* 先让去掉 .idle 后的过渡生效，落爪才有动画 */
+        clawHeadEl.classList.remove('closed');
+        setCable(20);
+        prizeEl.textContent = '';
+        prizeEl.classList.remove('win');
 
-        var flick = p.slice();
-        var step = 0;
-        return new Promise(function(resolve) {
-          (function tick() {
-            shuffleArr(flick);
-            paintToys(flick.slice(0, Math.min(8, flick.length)));
-            tone(500 + Math.random() * 280, .035, 'square', .02);
-            step++;
-            if (step < 12) { setTimeout(tick, 70); } else { resolve(); }
-          })();
+        var winner = p[Math.floor(Math.random() * p.length)];
+        var visIdx = [];
+        for (var vi = 0; vi < 8; vi++) { if (shelf[vi]) visIdx.push(vi); }
+        if (!visIdx.length) randomizeShelf();
+        visIdx = [];
+        for (var vi2 = 0; vi2 < 8; vi2++) { if (shelf[vi2]) visIdx.push(vi2); }
+        var idx = shelf.indexOf(winner);
+        if (idx < 0) idx = visIdx.length ? visIdx[Math.floor(Math.random() * visIdx.length)] : 0;
+        var toy = toyEls[idx];
+        var targetX = toy.offsetLeft + toy.offsetWidth / 2;
+        var needSwap = shelf[idx] !== winner;
+
+        return wait(150).then(function() {
+          tone(250, .28, 'sawtooth', .03);
+          setClawX(targetX);
+          return wait(520);
         }).then(function() {
-          cabinetEl.classList.remove('shaking');
-          var winner = p[Math.floor(Math.random() * p.length)];
-          var shown = buildDisplay(p, winner);
-          paintToys(shown);
-          var idx = Math.max(0, shown.indexOf(winner));
-          var toy = toyEls[idx];
-          var targetX = toy.offsetLeft + toy.offsetWidth / 2;
-          var origLeft = toy.style.left, origTop = toy.style.top;
-          return wait(200).then(function() {
-            tone(250, .28, 'sawtooth', .03);
-            setClawX(targetX);
-            return wait(480);
-          }).then(function() {
-            tone(320, .45, 'sine', .035);
-            setCable(Math.max(26, toy.offsetTop - 13));
-            return wait(560);
+          tone(320, .45, 'sine', .035);
+          /* 钩爪正从娃娃上方落下，这一刻换名字基本看不见 —— 只动这一个娃娃 */
+          if (needSwap) { shelf[idx] = winner; renderShelf(); }
+          setCable(Math.max(26, toy.offsetTop - 13));
+          return wait(560);
           }).then(function() {
             clawHeadEl.classList.add('closed');
             tone(920, .07, 'square', .05);
@@ -992,27 +1131,35 @@
             recordResult(winner);
             track('pick_name', { method: 'claw_machine' });
             setTimeout(function() { gripEl.innerHTML = ''; }, 900);
+            /* 被夹走的位置空出来，下次抽奖前补一个新名字（名单都抽完了就空着，
+               正好呼应"全部抽完"的状态） */
+            shelf[idx] = '';
+            syncShelf();
             rolling = false;
             updateMeta();
+            startSway();   /* 抓完后钩爪继续巡游 */
           });
-        });
       }
 
-      pickBtn.addEventListener('click', function() { runClaw(); });
+      pickBtn.addEventListener('click', function() {
+        pickBtn.classList.remove('attn');   /* 用户已经会点了，提示动画立即撤掉 */
+        runClaw();
+      });
 
       function resetAll() {
         if (rolling) return;
         prizeEl.classList.remove('win');
+        /* Reset = 清空这一名单的结果 + 结束本轮，下一抽重新从 Batch 1 开始 */
         if (selectedSaved >= 0 && selectedSaved < savedLists.length) {
           savedLists[selectedSaved].res = [];
           persistSaved();
         }
         startBatch();
         renderHistoryFor(selectedSaved);
-        prizeEl.textContent = 'Your winner appears here 🧸';
+        prizeEl.textContent = '';
         resetMachine();
         randomizeFaces();
-        paintToys(parseNames().slice(0, 8));
+        randomizeShelf();
         updateMeta();
       }
       resetBtn.addEventListener('click', resetAll);
@@ -1046,29 +1193,51 @@
           namesEl.dispatchEvent(new Event('input', { bubbles: true }));
         }
       });
-      function autoGrow() {
-        namesEl.style.height = 'auto';
-        namesEl.style.height = Math.max(46, namesEl.scrollHeight) + 'px';
+      /* 文本框高度自适应：随内容长高，超过窗口 40%（160–320px 之间）后改为内部滚动 */
+      function taCap() {
+        return Math.max(160, Math.min(320, Math.round(window.innerHeight * 0.4)));
       }
+      function autoGrow() {
+        var cap = taCap();
+        namesEl.style.height = 'auto';
+        var h = namesEl.scrollHeight;
+        namesEl.style.height = Math.max(46, Math.min(h, cap)) + 'px';
+        namesEl.style.overflowY = h > cap ? 'auto' : 'hidden';
+      }
+      window.addEventListener('resize', autoGrow);
       namesEl.addEventListener('input', function() {
         updateMeta();
-        paintToys(parseNames().slice(0, 8));
+        /* 打字时不要立刻重排货架（会让人眼花），停手 350ms 再对齐：
+           只清掉已不存在的名字 + 补空位，不随机重排 */
+        clearTimeout(shelfTimer);
+        shelfTimer = setTimeout(syncShelf, 350);
         persistLast();
         autoGrow();
       });
       removeChk.addEventListener('change', function() {
+        /* 开关「不重复」等于换一轮：池子按新规则重置，下一次抽取另开一张批次卡片 */
+        if (removeChk.checked) startBatch();
         updateMeta();
         renderHistoryFor(selectedSaved);
         persistLast();
       });
       window.addEventListener('resize', function() {
-        if (!rolling) setClawX(cabinetEl.clientWidth / 2);
+        if (!rolling && !swayRAF) setClawX(cabinetEl.clientWidth / 2);
       });
       loadSaved();
       updateMeta();
       resetMachine();
       randomizeFaces();
-      paintToys(parseNames().slice(0, 8));
+      randomizeShelf();
+      startSway();                                      /* 进页面钩爪就开始左右巡游 */
+      /* 首次进入：Pick 闪动 3 秒提示可点。等 load 后再起算，
+         否则图片加载慢时用户几乎看不到这段提示。 */
+      function flashPick() {
+        pickBtn.classList.add('attn');
+        setTimeout(function() { pickBtn.classList.remove('attn'); }, 3100);
+      }
+      if (document.readyState === 'complete') { flashPick(); }
+      else { window.addEventListener('load', flashPick); }
 
       copyBtn.addEventListener('click', copyResult);
 
