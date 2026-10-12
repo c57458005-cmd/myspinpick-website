@@ -221,9 +221,52 @@
     .saved-row button { flex: 0 0 20px; width: 20px; height: 20px; min-width: 20px; min-height: 20px; aspect-ratio: 1; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
     .saved-row button:hover { background: #fee2e2; border-color: #fca5a5; }
 
+    /* ===== 优化 v2：主 CTA / 选项行 / 中奖弹窗 / 全屏投影 ===== */
+    button.primary { background: var(--accent); border-color: var(--accent-dark); color: #fff; }
+    .btns button.primary { font-size: 16px; padding: 12px 30px; box-shadow: 0 2px 8px rgba(219,39,119,.28); }
+    button.primary:hover { background: var(--accent-dark); border-color: #9d174d; color: #fff; }
+    button.primary:disabled { background: #f9a8d4; border-color: #f9a8d4; color: #fff; }
+    @media (max-width: 480px) { .btns.nowrap button.primary { padding: 11px 18px; font-size: 15px; } }
+    @media (max-width: 420px) { .btns.nowrap { flex-wrap: wrap; } }
+
+    .meta-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+    .meta-row .meta { margin-bottom: 0; }
+    .tool-opt { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; white-space: nowrap; user-select: none; }
+
+    .win-modal { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(15,23,42,.55); }
+    .win-modal[hidden] { display: none; }
+    .win-confetti { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .win-card { position: relative; background: #fff; border-radius: 18px; padding: 26px 34px 22px; text-align: center; max-width: 92vw; box-shadow: 0 24px 60px rgba(15,23,42,.28); animation: winPop .28s cubic-bezier(.2,1.3,.4,1) both; }
+    @keyframes winPop { from { transform: scale(.86); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+    @media (prefers-reduced-motion: reduce) { .win-card { animation: none } }
+    .win-kicker { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .win-name { font-size: 34px; font-weight: 800; color: var(--accent); line-height: 1.2; margin: 6px 0 18px; overflow-wrap: anywhere; }
+    .win-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    @media (max-width: 480px) { .win-name { font-size: 26px; } .win-card { padding: 22px 22px 18px; } }
+
+    body.fs { background: #f6f8fb; }
+    body.fs .wrap { max-width: none; padding: 0; }
+    body.fs header, body.fs section, body.fs footer, body.fs .saved-head, body.fs .saved-hint,
+    body.fs #savedLists, body.fs .list-btns, body.fs #options, body.fs .meta-row,
+    body.fs .history { display: none !important; }
+    body.fs .tool { border: 0; box-shadow: none; border-radius: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+    body.fs .wheel-wrap { margin-bottom: 0; }
+    body.fs .result { font-size: 26px; }
 </style>
 </head>
 <body>
+  <div class="win-modal" id="winModal" role="dialog" aria-modal="true" aria-labelledby="winName" hidden>
+    <canvas class="win-confetti" id="confetti" aria-hidden="true"></canvas>
+    <div class="win-card">
+      <p class="win-kicker">Winner</p>
+      <p class="win-name" id="winName"></p>
+      <div class="win-actions">
+        <button type="button" class="primary" id="winAgain">Spin again</button>
+        <button type="button" id="winClose">Close</button>
+      </div>
+    </div>
+  </div>
+
   <div class="wrap">
     <header>
       <div class="topbar">
@@ -239,6 +282,7 @@
           <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
         </div>
         <div class="btns nowrap">
+          <button type="button" class="icon-btn" id="fsBtn" onclick="toggleFullscreen()" aria-label="Fullscreen presentation mode" title="Fullscreen presentation mode">⛶</button>
           <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button>
           <button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
           <button type="button" onclick="resetAll()">Reset</button>
@@ -246,7 +290,10 @@
         </div>
         <div class="result" id="result" aria-live="polite">Spin the wheel to pick a color</div>
         <div class="history" id="history" aria-live="polite"></div>
-        <p class="meta">Separate options with commas or new lines.</p>
+        <div class="meta-row">
+          <p class="meta">Separate options with commas or new lines.</p>
+          <label class="tool-opt" for="popupChk"><input type="checkbox" id="popupChk" checked /> 🎉 Winner popup</label>
+        </div>
         <textarea id="options" rows="1" aria-label="Wheel options" spellcheck="false">Red,Orange,Yellow,Green,Blue,Purple,Pink,Black,White,Teal</textarea>
         <div class="btns list-btns">
           <button type="button" onclick="saveList(false)">💾 Save</button>
@@ -383,6 +430,14 @@
 
     var optionsEl = document.getElementById('options');
 
+    var VIEW = 440, DPR = 1;
+    var POPUP_KEY = 'myspinpick.wheelOfColors.popup';
+    var popupOn = true;
+    var winModal = document.getElementById('winModal');
+    var confCanvas = document.getElementById('confetti');
+    var confCtx = (confCanvas && confCanvas.getContext) ? confCanvas.getContext('2d') : null;
+    var confParts = [], confRAF = 0, confEnd = 0;
+
     function recordResult(name, colorIdx) {
       if (selectedSaved>= 0 && selectedSaved < savedLists.length) {
         if (!savedLists[selectedSaved].res) savedLists[selectedSaved].res = [];
@@ -413,7 +468,7 @@
 
     function drawWheel(angle) {
       var n = options.length;
-      var cw = canvas.width, ch = canvas.height;
+      var cw = VIEW, ch = VIEW;
       var cx = cw / 2, cy = ch / 2, r = Math.min(cx, cy) - 24; var rr = r - 7.5;
       ctx.clearRect(0, 0, cw, ch);
       if (n === 0) {
@@ -676,6 +731,129 @@
       optionsEl.style.height = Math.max(46, optionsEl.scrollHeight) + 'px';
     }
 
+    /* ===== 优化 v2：高分屏适配 / 全屏投影 / 分享链接 / 中奖弹窗与彩带 ===== */
+    function reduceMotion() {
+      try { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) { return false; }
+    }
+
+    function fitCanvas() {
+      var isFs = document.body.classList.contains('fs');
+      var avail;
+      if (isFs) {
+        avail = Math.min(Math.round(window.innerWidth * 0.92), Math.round(window.innerHeight * 0.70), 900);
+      } else {
+        var host = canvas.parentElement;
+        avail = Math.min(440, (host && host.clientWidth) ? host.clientWidth : 440);
+      }
+      avail = Math.max(avail, 240);
+      DPR = Math.min(window.devicePixelRatio || 1, 3);
+      canvas.style.width = avail + 'px';
+      canvas.style.height = avail + 'px';
+      canvas.width = Math.round(avail * DPR);
+      canvas.height = Math.round(avail * DPR);
+      ctx.setTransform((avail * DPR) / VIEW, 0, 0, (avail * DPR) / VIEW, 0, 0);
+    }
+
+    var rsTimer = 0;
+    window.addEventListener('resize', function () {
+      clearTimeout(rsTimer);
+      rsTimer = setTimeout(function () { fitCanvas(); drawWheel(currentAngle); }, 120);
+    });
+
+    function setFsBtn() {
+      var b = document.getElementById('fsBtn');
+      if (!b) return;
+      var on = document.body.classList.contains('fs');
+      var label = on ? 'Exit fullscreen presentation mode' : 'Fullscreen presentation mode';
+      b.title = label;
+      b.setAttribute('aria-label', label);
+    }
+    function toggleFullscreen() {
+      var el = document.documentElement;
+      if (!document.body.classList.contains('fs')) {
+        var req = el.requestFullscreen || el.webkitRequestFullscreen;
+        if (req) { try { req.call(el); } catch (e) {} }
+        document.body.classList.add('fs');
+      } else {
+        document.body.classList.remove('fs');
+        var ex = document.exitFullscreen || document.webkitExitFullscreen;
+        if (ex && (document.fullscreenElement || document.webkitFullscreenElement)) { try { ex.call(document); } catch (e) {} }
+      }
+      setFsBtn();
+      fitCanvas();
+      drawWheel(currentAngle);
+    }
+    document.addEventListener('fullscreenchange', function () {
+      if (!document.fullscreenElement && document.body.classList.contains('fs')) {
+        document.body.classList.remove('fs');
+        setFsBtn();
+        fitCanvas();
+        drawWheel(currentAngle);
+      }
+    });
+
+    function showWinner(name) {
+      if (!popupOn || !winModal) return;
+      var nameEl = document.getElementById('winName');
+      if (nameEl) nameEl.textContent = name;
+      winModal.hidden = false;
+      confettiBurst(130);
+      var again = document.getElementById('winAgain');
+      if (again) { try { again.focus({ preventScroll: true }); } catch (e) { again.focus(); } }
+    }
+    function hideWinner() {
+      if (!winModal || winModal.hidden) return;
+      winModal.hidden = true;
+      confParts = [];
+      if (confCtx) confCtx.clearRect(0, 0, confCanvas.clientWidth || 0, confCanvas.clientHeight || 0);
+    }
+
+    function confettiBurst(count) {
+      if (!confCtx || reduceMotion()) return;
+      var w = confCanvas.clientWidth || window.innerWidth;
+      var h = confCanvas.clientHeight || window.innerHeight;
+      var d = Math.min(window.devicePixelRatio || 1, 2);
+      confCanvas.width = Math.round(w * d);
+      confCanvas.height = Math.round(h * d);
+      confCtx.setTransform(d, 0, 0, d, 0, 0);
+      confParts = [];
+      for (var i = 0; i < count; i++) {
+        confParts.push({
+          x: w / 2 + (cryptoRandom() - .5) * w * .55,
+          y: h * .42 + (cryptoRandom() - .5) * 40,
+          vx: (cryptoRandom() - .5) * 11,
+          vy: -(3 + cryptoRandom() * 7),
+          g: .28 + cryptoRandom() * .12,
+          s: 5 + cryptoRandom() * 7,
+          rot: cryptoRandom() * 6.2832,
+          vr: (cryptoRandom() - .5) * .3,
+          c: colors[Math.floor(cryptoRandom() * colors.length)],
+          round: cryptoRandom() < .28
+        });
+      }
+      confEnd = performance.now() + 2600;
+      if (!confRAF) confRAF = requestAnimationFrame(confStep);
+    }
+    function confStep(ts) {
+      if (!confCtx) { confRAF = 0; return; }
+      var w = confCanvas.clientWidth, h = confCanvas.clientHeight;
+      confCtx.clearRect(0, 0, w, h);
+      for (var i = confParts.length - 1; i >= 0; i--) {
+        var p = confParts[i];
+        p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.vx *= .995;
+        if (p.y > h + 40) { confParts.splice(i, 1); continue; }
+        confCtx.save();
+        confCtx.translate(p.x, p.y);
+        confCtx.rotate(p.rot);
+        confCtx.fillStyle = p.c;
+        if (p.round) { confCtx.beginPath(); confCtx.arc(0, 0, p.s * .5, 0, 6.2832); confCtx.fill(); }
+        else { confCtx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); }
+        confCtx.restore();
+      }
+      if (confParts.length && ts < confEnd) confRAF = requestAnimationFrame(confStep);
+      else { confCtx.clearRect(0, 0, w, h); confRAF = 0; }
+    }
+
     function animate(total, duration) {
       if (!spinning) return;
       var start = null;
@@ -705,7 +883,8 @@
           document.getElementById('meta').textContent = options.length + ' options on the wheel.';
           spinning = false;
           setBtnsDisabled(false);
-          track('spin', { options: options.length, winner: options[idx] });
+          showWinner(options[idx]);
+          track('spin', { options: options.length, winner: options[idx], popup: popupOn });
         }
       }
       requestAnimationFrame(step);
@@ -715,6 +894,7 @@
       options = getOptions();
       if (options.length === 0) { document.getElementById('meta').textContent = 'Please add at least one option.'; return; }
       if (spinning) return;
+      hideWinner();
       saveList(true, true);
       spinning = true;
       winnerIdx = null;
@@ -744,6 +924,7 @@
 
     function clearOptions() {
       if (spinning) return;
+      hideWinner();
       optionsEl.value = '';
       options = [];
       winnerIdx = null;
@@ -759,6 +940,7 @@
 
     function resetAll() {
       winnerIdx = null;
+      hideWinner();
       spinning = false;
       setBtnsDisabled(false);
       if (selectedSaved>= 0 && selectedSaved < savedLists.length) {
@@ -781,11 +963,32 @@
 
     try { muted = localStorage.getItem('myspinpick.wheelOfColors.sound') === 'off'; } catch (e) {}
     document.getElementById('muteBtn').textContent = muted ? '🔇' : '🔊';
+    try { if (localStorage.getItem(POPUP_KEY) === 'off') popupOn = false; } catch (e) {}
+    var popupChk = document.getElementById('popupChk');
+    if (popupChk) {
+      popupChk.checked = popupOn;
+      popupChk.addEventListener('change', function () {
+        popupOn = !!popupChk.checked;
+        try { localStorage.setItem(POPUP_KEY, popupOn ? 'on' : 'off'); } catch (e) {}
+        if (!popupOn) hideWinner();
+      });
+    }
+    setFsBtn();
     options = getOptions();
     if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
+    fitCanvas();
     drawWheel(0);
     autoGrow();
     loadSaved();
+
+    if (winModal) {
+      var winCloseEl = document.getElementById('winClose');
+      var winAgainEl = document.getElementById('winAgain');
+      if (winCloseEl) winCloseEl.addEventListener('click', hideWinner);
+      if (winAgainEl) winAgainEl.addEventListener('click', function () { hideWinner(); buildAndSpin(); });
+      winModal.addEventListener('click', function (e) { if (e.target === winModal) hideWinner(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !winModal.hidden) hideWinner(); });
+    }
 
     function copyResult() {
       var meta = document.getElementById('meta');
