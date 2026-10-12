@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>
+  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for Math.random().
+     Uses the Web Crypto API (crypto.getRandomValues) so every spin, draw and
+     shuffle on this page is backed by a cryptographically secure random source.
+     Falls back to Math.random() only if Web Crypto is unavailable. */
+  function cryptoRandom() {
+    if (window.crypto && window.crypto.getRandomValues) {
+      var buf = new Uint32Array(1);
+      window.crypto.getRandomValues(buf);
+      return buf[0] / 4294967296; /* 2^32 -> uniform [0,1) */
+    }
+    return Math.random();
+  }
+</script>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -261,7 +275,7 @@ Ethan</textarea>
       var SLOTS = [[7,62],[24,74],[41,60],[58,72],[75,60],[15,45],[48,42],[68,46]];
 
       function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
-      function shuffleArr(a) { for (var i = a.length - 1; i> 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+      function shuffleArr(a) { for (var i = a.length - 1; i> 0; i--) { var j = Math.floor(cryptoRandom() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
 
       /* ---------- sound ---------- */
       var actx = null;
@@ -337,10 +351,10 @@ Ethan</textarea>
         for (var i = 0; i < 34; i++) {
           var c = document.createElement('i');
           c.className = 'confetti';
-          c.style.left = (6 + Math.random() * 88) + '%';
-          c.style.top = (12 + Math.random() * 18) + '%';
-          c.style.background = colors[Math.floor(Math.random() * colors.length)];
-          c.style.animationDelay = (Math.random() * 0.28) + 's';
+          c.style.left = (6 + cryptoRandom() * 88) + '%';
+          c.style.top = (12 + cryptoRandom() * 18) + '%';
+          c.style.background = colors[Math.floor(cryptoRandom() * colors.length)];
+          c.style.animationDelay = (cryptoRandom() * 0.28) + 's';
           machineEl.appendChild(c);
           (function(el) { setTimeout(function() { el.remove(); }, 1600); })(c);
         }
@@ -352,7 +366,7 @@ Ethan</textarea>
         var shown;
         if (pool.length <= 8) { shown = pool.slice(); }
         else { shown = rest.slice(0, 7); shown.push(winner); }
-        window.__capFace = FACES[Math.floor(Math.random() * FACES.length)];
+        window.__capFace = FACES[Math.floor(cryptoRandom() * FACES.length)];
         return shuffleArr(shown);
       }
 
@@ -415,7 +429,7 @@ Ethan</textarea>
         cabinetEl.classList.add('shaking');
         tone(150, .5, 'sawtooth', .028);
         randomizeFaces();
-        gripEl.innerHTML = '<div class="toy fake"><span class="face">' + FACES[Math.floor(Math.random() * FACES.length)] + '</span></div>';
+        gripEl.innerHTML = '<div class="toy fake"><span class="face">' + FACES[Math.floor(cryptoRandom() * FACES.length)] + '</span></div>';
 
         var flick = p.slice();
         var step = 0;
@@ -424,17 +438,17 @@ Ethan</textarea>
             shuffleArr(flick);
             paintToys(flick.slice(0, Math.min(8, flick.length)));
             var face = gripEl.querySelector('.face');
-            if (face) face.textContent = FACES[Math.floor(Math.random() * FACES.length)];
-            tone(500 + Math.random() * 280, .035, 'square', .02);
+            if (face) face.textContent = FACES[Math.floor(cryptoRandom() * FACES.length)];
+            tone(500 + cryptoRandom() * 280, .035, 'square', .02);
             step++;
             if (step < 12) { setTimeout(tick, 70); } else { resolve(); }
           })();
         }).then(function() {
           cabinetEl.classList.remove('shaking');
-          var winner = p[Math.floor(Math.random() * p.length)];
+          var winner = p[Math.floor(cryptoRandom() * p.length)];
           var shown = buildDisplay(p, winner);
           paintToys(shown);
-          window.__capFace = FACES[Math.floor(Math.random() * FACES.length)];
+          window.__capFace = FACES[Math.floor(cryptoRandom() * FACES.length)];
           var face = gripEl.querySelector('.face');
           if (face) face.textContent = window.__capFace;
           var idx = Math.max(0, shown.indexOf(winner));
@@ -573,7 +587,7 @@ Ethan</textarea>
           return;
         }
         for (var i = all.length - 1; i> 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
+          var j = Math.floor(cryptoRandom() * (i + 1));
           var t = all[i]; all[i] = all[j]; all[j] = t;
         }
         resultEl.textContent = '';
