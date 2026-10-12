@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <script>
-  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for cryptoRandom().
+  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for Math.random().
      Uses the Web Crypto API (crypto.getRandomValues) so every spin, draw and
      shuffle on this page is backed by a cryptographically secure random source.
-     Falls back to cryptoRandom() only if Web Crypto is unavailable. */
+     Falls back to Math.random() only if Web Crypto is unavailable. */
   function cryptoRandom() {
     if (window.crypto && window.crypto.getRandomValues) {
       var buf = new Uint32Array(1);
       window.crypto.getRandomValues(buf);
       return buf[0] / 4294967296; /* 2^32 -> uniform [0,1) */
     }
-    return cryptoRandom();
+    return Math.random();
   }
 </script>
 <head>
@@ -87,7 +87,7 @@
       "name": "How do I spin a wheel of names?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Type your names or options into the box (comma separated), then click \"Spin\". The random name wheel rotates and stops on a random entry. You can remove a winner and spin again."
+        "text": "Type your names or options into the box (comma separated), then click \"Spin\". The random name wheel rotates and stops on a random entry. Delete a winner from the box and spin again to draw another name."
       }
     },
     {
@@ -111,7 +111,7 @@
       "name": "Can I use this as a classroom name picker?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Paste your class list and spin the random name picker wheel to pick a student — it's a quick classroom tool with no repeats when you remove each winner."
+        "text": "Yes. Paste your class list and spin the random name picker wheel to pick a student — it's a quick classroom tool with no repeats when you delete each winner from the box before the next spin."
       }
     },
     {
@@ -143,7 +143,7 @@
       "name": "Is this a name wheel picker?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. This name wheel picker puts your list on a spinning wheel and picks one at random. It works the same way as a random wheel name picker or a name picker wheel — paste names, spin, and remove each winner so nobody is picked twice."
+        "text": "Yes. This name wheel picker puts your list on a spinning wheel and picks one at random. It works the same way as a random wheel name picker or a name picker wheel — paste names, spin, and delete each winner from the box so nobody is picked twice."
       }
     },
     {
@@ -151,7 +151,7 @@
       "name": "Can I use it as a random picker wheel for names?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely. A random picker wheel is just a wheel spinner loaded with names — type or paste your class list, team roster or giveaway entrants, hit Spin, and the wheel lands on one random name. Switch Remove winner on to draw several names in a row without repeats."
+        "text": "Absolutely. A random picker wheel is just a wheel spinner loaded with names — type or paste your class list, team roster or giveaway entrants, hit Spin, and the wheel lands on one random name. To draw several names in a row without repeats, delete each winner from the box before spinning again — the wheel always draws from whatever is in the box."
       }
     },
     {
@@ -189,7 +189,7 @@
     {
       "@type": "Question",
       "name": "Can I use this wheel spinner for a giveaway or raffle?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Paste the entrants one per line and spin; press Remove Winner after each draw to keep winners out of the following spin, which is exactly what a prize draw with no repeats needs." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Paste the entrants one per line and spin; delete each winner from the box before the next draw to keep it out of the following spin, which is exactly what a prize draw with no repeats needs." }
     },
     {
       "@type": "Question",
@@ -276,9 +276,53 @@
     #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
     #embed .embed-preview:hover { text-decoration: underline; }
     #embed .embed-hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+
+    /* ===== 优化 v2：主 CTA / 选项行 / 中奖弹窗 / 全屏投影 ===== */
+    button.primary { background: var(--accent); border-color: var(--accent-dark); color: #fff; }
+    .btns button.primary { font-size: 16px; padding: 12px 30px; box-shadow: 0 2px 8px rgba(219,39,119,.28); }
+    button.primary:hover { background: var(--accent-dark); border-color: #9d174d; color: #fff; }
+    button.primary:disabled { background: #f9a8d4; border-color: #f9a8d4; color: #fff; }
+    @media (max-width: 480px) { .btns.nowrap button.primary { padding: 11px 18px; font-size: 15px; } }
+    @media (max-width: 420px) { .btns.nowrap { flex-wrap: wrap; } }
+
+    .meta-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+    .meta-row .meta { margin-bottom: 0; }
+    .tool-opt { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; white-space: nowrap; user-select: none; }
+
+    .win-modal { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(15,23,42,.55); }
+    .win-modal[hidden] { display: none; }
+    .win-confetti { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .win-card { position: relative; background: #fff; border-radius: 18px; padding: 26px 34px 22px; text-align: center; max-width: 92vw; box-shadow: 0 24px 60px rgba(15,23,42,.28); animation: winPop .28s cubic-bezier(.2,1.3,.4,1) both; }
+    @keyframes winPop { from { transform: scale(.86); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+    @media (prefers-reduced-motion: reduce) { .win-card { animation: none } }
+    .win-kicker { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .win-name { font-size: 34px; font-weight: 800; color: var(--accent); line-height: 1.2; margin: 6px 0 18px; overflow-wrap: anywhere; }
+    .win-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    @media (max-width: 480px) { .win-name { font-size: 26px; } .win-card { padding: 22px 22px 18px; } }
+
+    body.fs { background: #f6f8fb; }
+    body.fs .wrap { max-width: none; padding: 0; }
+    body.fs header, body.fs section, body.fs footer, body.fs .saved-head, body.fs .saved-hint,
+    body.fs #savedLists, body.fs .list-btns, body.fs #options, body.fs .meta-row,
+    body.fs .history { display: none !important; }
+    body.fs .tool { border: 0; box-shadow: none; border-radius: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+    body.fs .wheel-wrap { margin-bottom: 0; }
+    body.fs .result { font-size: 26px; }
 </style>
 </head>
 <body>
+  <div class="win-modal" id="winModal" role="dialog" aria-modal="true" aria-labelledby="winName" hidden>
+    <canvas class="win-confetti" id="confetti" aria-hidden="true"></canvas>
+    <div class="win-card">
+      <p class="win-kicker">Winner</p>
+      <p class="win-name" id="winName"></p>
+      <div class="win-actions">
+        <button type="button" class="primary" id="winAgain">Spin again</button>
+        <button type="button" id="winClose">Close</button>
+      </div>
+    </div>
+  </div>
+
   <div class="wrap">
     <header>
       <div class="topbar">
@@ -294,6 +338,7 @@
           <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
         </div>
         <div class="btns nowrap">
+          <button type="button" class="icon-btn" id="fsBtn" onclick="toggleFullscreen()" aria-label="Fullscreen presentation mode" title="Fullscreen presentation mode">⛶</button>
           <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button>
           <button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
           <button type="button" onclick="resetAll()">Reset</button>
@@ -301,12 +346,16 @@
         </div>
         <div class="result" id="result" aria-live="polite">Spin the wheel to pick a winner</div>
         <div class="history" id="history" aria-live="polite"></div>
-        <p class="meta">Separate options with commas or new lines.</p>
+        <div class="meta-row">
+          <p class="meta">Separate options with commas or new lines.</p>
+          <label class="tool-opt" for="popupChk"><input type="checkbox" id="popupChk" checked /> 🎉 Winner popup</label>
+        </div>
         <textarea id="options" rows="1" aria-label="Wheel options" spellcheck="false">Alice,Bob,Carol,David,Eve,Frank,Grace,Henry,Ivy,Jack,Kate,Liam</textarea>
         <div class="btns list-btns">
           <button type="button" onclick="saveList(false)">💾 Save</button>
           <button type="button" onclick="clearOptions()">Clear</button>
           <button type="button" onclick="removeLast()">Remove</button>
+          <button type="button" onclick="shareList()">🔗 Share</button>
         </div>
         <div class="saved-head"><span class="label">Saved lists</span></div>
         <p class="saved-hint">Tip: save your frequently used lists for quick reuse.</p>
@@ -327,7 +376,7 @@
         <ol>
           <li><strong>Type or paste your entries.</strong> Separate them with commas or start each one on a new line. Names, numbers, foods, chores, prizes or trivia answers all work the same way.</li>
           <li><strong>Watch the wheel build itself.</strong> Every entry gets its own slice and color, so a long list stays readable. Aim for at least four entries — two or three produce a very thin slice that is hard to read.</li>
-          <li><strong>Spin and remove winners.</strong> Click Spin to land on one entry at random. Turn on Remove winner if you want a new result each time instead of repeats.</li>
+          <li><strong>Spin, then clear the winner.</strong> Click Spin to land on one entry at random. If you want a new result each time instead of repeats, delete that entry from the box — or press Remove to drop the last option — before the next spin. Need automatic no-repeat draws? The <a href="../name-picker/">Random Name Picker</a> has a "Remove winner after pick" option.</li>
           <li><strong>Save your wheel for next time.</strong> Click Save and the list is stored in your browser, ready to reload the next time you visit — this is what makes it a reusable <strong>make your own wheel</strong> tool rather than a one-off spin.</li>
         </ol>
         <p>Because everything runs locally, you can build a wheel with student names, customer entries or prize lists without uploading anything. If you would rather skip the setup, the pre-filled tools below cover the most common cases — pick a color, decide what to eat or get a straight yes or no.</p>
@@ -336,7 +385,7 @@
       <section id="uses">
         <h2>Wheel Spinner for Classrooms, Teams and Giveaways</h2>
         <p>Teachers, coaches and hosts use the same wheel for three different jobs. In a classroom it picks a pupil to answer, a group to present or the order of a quiz round. On a pitch or in a meeting room it splits a squad into teams and settles who plays first. At an event it draws a prize winner from a list of ticket holders, with the result visible to everyone watching.</p>
-        <p>Each of those jobs runs off the same list you paste into the box, and pressing Remove Winner after a draw takes that name out so nobody can be picked twice in a row.</p>
+        <p>Each of those jobs runs off the same list you paste into the box, and deleting that name from the box before the next spin takes it out of the draw, so nobody can be picked twice in a row.</p>
       </section>
 
 <section id="embed">
@@ -389,7 +438,7 @@
         <h2>Frequently Asked Questions</h2>
         <details>
           <summary>How do I spin a wheel of names?</summary>
-          <p>Type your names or options into the box (comma separated), then click "Spin". The random name wheel rotates and stops on a random entry. You can remove a winner and spin again.</p>
+          <p>Type your names or options into the box (comma separated), then click "Spin". The random name wheel rotates and stops on a random entry. Delete a winner from the box and spin again to draw another name.</p>
         </details>
         <details>
           <summary>Is this wheel spinner free?</summary>
@@ -401,7 +450,7 @@
         </details>
         <details>
           <summary>Can I use this as a classroom name picker?</summary>
-          <p>Yes. Paste your class list and spin the random name picker wheel to pick a student — it's a quick classroom tool with no repeats when you remove each winner.</p>
+          <p>Yes. Paste your class list and spin the random name picker wheel to pick a student — it's a quick classroom tool with no repeats when you delete each winner from the box before the next spin.</p>
         </details>
         <details>
           <summary>How do I make my own wheel spinner?</summary>
@@ -417,11 +466,11 @@
         </details>
         <details>
           <summary>Is this a name wheel picker?</summary>
-          <p>Yes. This <strong>name wheel picker</strong> puts your list on a spinning wheel and picks one at random. It works the same way as a random wheel name picker or a name picker wheel — paste names, spin, and remove each winner so nobody is picked twice.</p>
+          <p>Yes. This <strong>name wheel picker</strong> puts your list on a spinning wheel and picks one at random. It works the same way as a random wheel name picker or a name picker wheel — paste names, spin, and delete each winner from the box so nobody is picked twice.</p>
         </details>
         <details>
           <summary>Can I use it as a random picker wheel for names?</summary>
-          <p>Absolutely. A <strong>random picker wheel</strong> is just a wheel spinner loaded with names — type or paste your class list, team roster or giveaway entrants, hit Spin, and the wheel lands on one random name. Switch Remove winner on to draw several names in a row without repeats.</p>
+          <p>Absolutely. A <strong>random picker wheel</strong> is just a wheel spinner loaded with names — type or paste your class list, team roster or giveaway entrants, hit Spin, and the wheel lands on one random name. To draw several names in a row without repeats, delete each winner from the box before spinning again — the wheel always draws from whatever is in the box.</p>
         </details>
         <details>
           <summary>How many wheel spinner names can I add?</summary>
@@ -441,7 +490,7 @@
       </details>
       <details>
         <summary>Can I use this wheel spinner for a giveaway or raffle?</summary>
-        <p>Yes. Paste the entrants one per line and spin; press Remove Winner after each draw to keep winners out of the following spin, which is exactly what a prize draw with no repeats needs.</p>
+        <p>Yes. Paste the entrants one per line and spin; delete each winner from the box before the next draw to keep it out of the following spin, which is exactly what a prize draw with no repeats needs.</p>
       </details>
       <details>
         <summary>Is a google wheel spinner any different from the wheel on this page?</summary>
@@ -473,6 +522,13 @@
     var LAST_KEY = 'myspinpick.wheel.last';
     var savedLists = [];
     var selectedSaved = -1;
+    var VIEW = 440, DPR = 1;
+    var POPUP_KEY = 'myspinpick.wheel.popup';
+    var popupOn = true;
+    var winModal = document.getElementById('winModal');
+    var confCanvas = document.getElementById('confetti');
+    var confCtx = (confCanvas && confCanvas.getContext) ? confCanvas.getContext('2d') : null;
+    var confParts = [], confRAF = 0, confEnd = 0;
 
     var optionsEl = document.getElementById('options');
 
@@ -506,7 +562,7 @@
 
     function drawWheel(angle) {
       var n = options.length;
-      var cw = canvas.width, ch = canvas.height;
+      var cw = VIEW, ch = VIEW;
       var cx = cw / 2, cy = ch / 2, r = Math.min(cx, cy) - 24; var rr = r - 7.5;
       ctx.clearRect(0, 0, cw, ch);
       if (n === 0) {
@@ -642,7 +698,7 @@
     function keyOf(text) {
       return itemsOf(text).map(function(s){ return s.toLowerCase(); }).sort().join('|');
     }
-    function loadSaved() {
+    function loadSaved(keepOptions) {
       try {
         var s = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
         if (Array.isArray(s)) {
@@ -654,7 +710,7 @@
       } catch (e) { savedLists = []; }
       var last = null;
       try { last = JSON.parse(localStorage.getItem(LAST_KEY) || 'null'); } catch (e) {}
-      if (last && typeof last.text === 'string') {
+      if (!keepOptions && last && typeof last.text === 'string') {
         optionsEl.value = last.text;
         options = getOptions();
         if (typeof last.sel === 'number' && last.sel >= 0 && last.sel < savedLists.length) selectedSaved = last.sel;
@@ -769,6 +825,157 @@
       optionsEl.style.height = Math.max(46, optionsEl.scrollHeight) + 'px';
     }
 
+    /* ===== 优化 v2：高分屏适配 / 全屏投影 / 分享链接 / 中奖弹窗与彩带 ===== */
+    function reduceMotion() {
+      try { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) { return false; }
+    }
+
+    function fitCanvas() {
+      var isFs = document.body.classList.contains('fs');
+      var avail;
+      if (isFs) {
+        avail = Math.min(Math.round(window.innerWidth * 0.92), Math.round(window.innerHeight * 0.70), 900);
+      } else {
+        var host = canvas.parentElement;
+        avail = Math.min(440, (host && host.clientWidth) ? host.clientWidth : 440);
+      }
+      avail = Math.max(avail, 240);
+      DPR = Math.min(window.devicePixelRatio || 1, 3);
+      canvas.style.width = avail + 'px';
+      canvas.style.height = avail + 'px';
+      canvas.width = Math.round(avail * DPR);
+      canvas.height = Math.round(avail * DPR);
+      ctx.setTransform((avail * DPR) / VIEW, 0, 0, (avail * DPR) / VIEW, 0, 0);
+    }
+
+    var rsTimer = 0;
+    window.addEventListener('resize', function () {
+      clearTimeout(rsTimer);
+      rsTimer = setTimeout(function () { fitCanvas(); drawWheel(currentAngle); }, 120);
+    });
+
+    function setFsBtn() {
+      var b = document.getElementById('fsBtn');
+      if (!b) return;
+      var on = document.body.classList.contains('fs');
+      var label = on ? 'Exit fullscreen presentation mode' : 'Fullscreen presentation mode';
+      b.title = label;
+      b.setAttribute('aria-label', label);
+    }
+    function toggleFullscreen() {
+      var el = document.documentElement;
+      if (!document.body.classList.contains('fs')) {
+        var req = el.requestFullscreen || el.webkitRequestFullscreen;
+        if (req) { try { req.call(el); } catch (e) {} }
+        document.body.classList.add('fs');
+      } else {
+        document.body.classList.remove('fs');
+        var ex = document.exitFullscreen || document.webkitExitFullscreen;
+        if (ex && (document.fullscreenElement || document.webkitFullscreenElement)) { try { ex.call(document); } catch (e) {} }
+      }
+      setFsBtn();
+      fitCanvas();
+      drawWheel(currentAngle);
+    }
+    document.addEventListener('fullscreenchange', function () {
+      if (!document.fullscreenElement && document.body.classList.contains('fs')) {
+        document.body.classList.remove('fs');
+        setFsBtn();
+        fitCanvas();
+        drawWheel(currentAngle);
+      }
+    });
+
+    function shareList() {
+      var meta = document.getElementById('meta');
+      var items = getOptions();
+      if (!items.length) { meta.textContent = 'Add some options first, then share the wheel.'; return; }
+      var url = location.origin + location.pathname + '#l=' + encodeURIComponent(items.join('\n'));
+      var done = function () {
+        meta.textContent = 'Share link copied — paste it anywhere.';
+        track('share', { tool: 'wheel-spinner', options: items.length });
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, function () { fallbackCopy(url, function (ok) { if (ok) done(); else meta.textContent = 'Copy failed'; }); });
+      } else {
+        fallbackCopy(url, function (ok) { if (ok) done(); else meta.textContent = 'Copy failed'; });
+      }
+    }
+    function readShared() {
+      var m = /(?:^|[#&])l=([^&]+)/.exec(location.hash || '');
+      if (!m) return false;
+      var raw = '';
+      try { raw = decodeURIComponent(m[1]); } catch (e) { return false; }
+      var items = itemsOf(raw);
+      if (!items.length) return false;
+      optionsEl.value = items.join(',');
+      options = getOptions();
+      autoGrow();
+      return true;
+    }
+
+    function showWinner(name) {
+      if (!popupOn || !winModal) return;
+      var nameEl = document.getElementById('winName');
+      if (nameEl) nameEl.textContent = name;
+      winModal.hidden = false;
+      confettiBurst(130);
+      var again = document.getElementById('winAgain');
+      if (again) { try { again.focus({ preventScroll: true }); } catch (e) { again.focus(); } }
+    }
+    function hideWinner() {
+      if (!winModal || winModal.hidden) return;
+      winModal.hidden = true;
+      confParts = [];
+      if (confCtx) confCtx.clearRect(0, 0, confCanvas.clientWidth || 0, confCanvas.clientHeight || 0);
+    }
+
+    function confettiBurst(count) {
+      if (!confCtx || reduceMotion()) return;
+      var w = confCanvas.clientWidth || window.innerWidth;
+      var h = confCanvas.clientHeight || window.innerHeight;
+      var d = Math.min(window.devicePixelRatio || 1, 2);
+      confCanvas.width = Math.round(w * d);
+      confCanvas.height = Math.round(h * d);
+      confCtx.setTransform(d, 0, 0, d, 0, 0);
+      confParts = [];
+      for (var i = 0; i < count; i++) {
+        confParts.push({
+          x: w / 2 + (cryptoRandom() - .5) * w * .55,
+          y: h * .42 + (cryptoRandom() - .5) * 40,
+          vx: (cryptoRandom() - .5) * 11,
+          vy: -(3 + cryptoRandom() * 7),
+          g: .28 + cryptoRandom() * .12,
+          s: 5 + cryptoRandom() * 7,
+          rot: cryptoRandom() * 6.2832,
+          vr: (cryptoRandom() - .5) * .3,
+          c: colors[Math.floor(cryptoRandom() * colors.length)],
+          round: cryptoRandom() < .28
+        });
+      }
+      confEnd = performance.now() + 2600;
+      if (!confRAF) confRAF = requestAnimationFrame(confStep);
+    }
+    function confStep(ts) {
+      if (!confCtx) { confRAF = 0; return; }
+      var w = confCanvas.clientWidth, h = confCanvas.clientHeight;
+      confCtx.clearRect(0, 0, w, h);
+      for (var i = confParts.length - 1; i >= 0; i--) {
+        var p = confParts[i];
+        p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.vx *= .995;
+        if (p.y > h + 40) { confParts.splice(i, 1); continue; }
+        confCtx.save();
+        confCtx.translate(p.x, p.y);
+        confCtx.rotate(p.rot);
+        confCtx.fillStyle = p.c;
+        if (p.round) { confCtx.beginPath(); confCtx.arc(0, 0, p.s * .5, 0, 6.2832); confCtx.fill(); }
+        else { confCtx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); }
+        confCtx.restore();
+      }
+      if (confParts.length && ts < confEnd) confRAF = requestAnimationFrame(confStep);
+      else { confCtx.clearRect(0, 0, w, h); confRAF = 0; }
+    }
+
     function animate(total, duration) {
       if (!spinning) return;
       var start = null;
@@ -798,7 +1005,8 @@
           document.getElementById('meta').textContent = options.length + ' options on the wheel.';
           spinning = false;
           setBtnsDisabled(false);
-          track('spin', { options: options.length, winner: options[idx] });
+          showWinner(options[idx]);
+          track('spin', { options: options.length, winner: options[idx], popup: popupOn });
         }
       }
       requestAnimationFrame(step);
@@ -808,6 +1016,7 @@
       options = getOptions();
       if (options.length === 0) { document.getElementById('meta').textContent = 'Please add at least one option.'; return; }
       if (spinning) return;
+      hideWinner();
       saveList(true, true);
       spinning = true;
       winnerIdx = null;
@@ -837,6 +1046,7 @@
 
     function clearOptions() {
       if (spinning) return;
+      hideWinner();
       optionsEl.value = '';
       options = [];
       winnerIdx = null;
@@ -851,6 +1061,7 @@
     }
 
     function resetAll() {
+      hideWinner();
       winnerIdx = null;
       spinning = false;
       setBtnsDisabled(false);
@@ -873,12 +1084,35 @@
     });
 
     try { muted = localStorage.getItem('myspinpick.wheel.sound') === 'off'; } catch (e) {}
+    try { if (localStorage.getItem(POPUP_KEY) === 'off') popupOn = false; } catch (e) {}
+    var popupChk = document.getElementById('popupChk');
+    if (popupChk) {
+      popupChk.checked = popupOn;
+      popupChk.addEventListener('change', function () {
+        popupOn = !!popupChk.checked;
+        try { localStorage.setItem(POPUP_KEY, popupOn ? 'on' : 'off'); } catch (e) {}
+        if (!popupOn) hideWinner();
+      });
+    }
     document.getElementById('muteBtn').textContent = muted ? '🔇' : '🔊';
+    setFsBtn();
     options = getOptions();
     if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
+    fitCanvas();
     drawWheel(0);
     autoGrow();
-    loadSaved();
+    var sharedLoaded = readShared();
+    loadSaved(sharedLoaded);
+    if (sharedLoaded) document.getElementById('meta').textContent = options.length + ' options loaded from a shared link — press Spin.';
+
+    if (winModal) {
+      var winCloseEl = document.getElementById('winClose');
+      var winAgainEl = document.getElementById('winAgain');
+      if (winCloseEl) winCloseEl.addEventListener('click', hideWinner);
+      if (winAgainEl) winAgainEl.addEventListener('click', function () { hideWinner(); buildAndSpin(); });
+      winModal.addEventListener('click', function (e) { if (e.target === winModal) hideWinner(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !winModal.hidden) hideWinner(); });
+    }
 
     function copyResult() {
       var meta = document.getElementById('meta');
@@ -893,12 +1127,15 @@
       } else { fallbackCopy(text); }
     }
 
-    function fallbackCopy(text) {
+    function fallbackCopy(text, cb) {
       var ta = document.createElement('textarea');
       ta.value = text; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
-      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
       document.body.removeChild(ta);
+      if (cb) { cb(ok); return; }
+      document.getElementById('meta').textContent = ok ? 'Copied!' : 'Copy failed';
+      if (ok) track('copy');
     }
   </script>
 <footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">
