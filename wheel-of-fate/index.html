@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <script>
-  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for cryptoRandom().
+  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for Math.random().
      Uses the Web Crypto API (crypto.getRandomValues) so every spin, draw and
      shuffle on this page is backed by a cryptographically secure random source.
-     Falls back to cryptoRandom() only if Web Crypto is unavailable. */
+     Falls back to Math.random() only if Web Crypto is unavailable. */
   function cryptoRandom() {
     if (window.crypto && window.crypto.getRandomValues) {
       var buf = new Uint32Array(1);
       window.crypto.getRandomValues(buf);
       return buf[0] / 4294967296; /* 2^32 -> uniform [0,1) */
     }
-    return cryptoRandom();
+    return Math.random();
   }
 </script>
 <head>
@@ -35,7 +35,7 @@
 
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta property="og:title" content="Name Wheel Picker — Spin the Wheel to Pick | MySpinPick" />
+  <meta property="og:title" content="Wheel of Fate — Spin to Let Fate Decide | MySpinPick" />
   <meta property="og:description" content="Free wheel of fate spinner. Spin and let fate answer — yes, no, maybe, try again and more playful outcomes for decisions and fun. No sign-up needed." />
   <meta property="og:url" content="https://myspinpick.com/wheel-of-fate/" />
   <meta property="og:image" content="https://myspinpick.com/og-image.png" />
@@ -142,6 +142,21 @@
         "@type": "Question",
         "name": "Can I use this wheel of fate spinner for a quick decision?",
         "acceptedAnswer": { "@type": "Answer", "text": "Ask the question out loud, press Spin, and take whatever the pointer lands on as your answer. It suits low-stakes calls such as where to eat or who goes first, and you can rewrite the segments before spinning if the defaults do not fit." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I share the wheel of fate with friends?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Press Share and the current list is packed into a link — anyone who opens it gets the exact same wheel, with no sign-up needed." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I embed the wheel of fate on my own site?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Copy the iframe snippet from the embed section and paste it into any HTML block — the widget is free, responsive and keeps a small credit link back to MySpinPick." }
+      },
+      {
+        "@type": "Question",
+        "name": "What should I put on the wheel for a Halloween party?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Party dares, trick-or-treat outcomes or a spooky movie list all work well. The Halloween Fate Challenges section has three ready-made lists that load into the wheel with one click." }
       }
     ]
   }
@@ -213,6 +228,16 @@
     .saved-row button { flex: 0 0 20px; width: 20px; height: 20px; min-width: 20px; min-height: 20px; aspect-ratio: 1; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
     .saved-row button:hover { background: #fee2e2; border-color: #fca5a5; }
 
+    /* /embed/ 嵌入板块 */
+    #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #embed .embed-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 10px 0 0; }
+    #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
+    #embed .embed-preview:hover { text-decoration: underline; }
+    #embed .embed-hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+
+    /* 万圣节预设列表 */
+    .preset-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+
 </style>
 </head>
 <body>
@@ -243,7 +268,8 @@
         <div class="btns list-btns">
           <button type="button" onclick="saveList(false)">💾 Save</button>
           <button type="button" onclick="clearOptions()">Clear</button>
-          <button type="button" onclick="removeLast()">Remove</button>
+          <button type="button" onclick="removeWinner()">Remove Winner</button>
+          <button type="button" onclick="shareList()">🔗 Share</button>
         </div>
         <div class="saved-head"><span class="label">Saved lists</span></div>
         <p class="saved-hint">Tip: save your frequently used lists for quick reuse.</p>
@@ -272,6 +298,16 @@
               <p>Ask a question out loud, spin, and let the wheel answer for the room. It works as a light-hearted tie-breaker for games, a way to choose the next dare or forfeit, or an ice-breaker that hands a group something to react to.</p>
               <p>Because everyone watches the same wheel and the same result, there is nothing to dispute — fate has spoken.</p>
             </section>
+            <section id="halloween">
+              <h2>Halloween Fate Challenges</h2>
+              <p>A Halloween party is where the wheel of fate earns its name: instead of arguing over who gets the next dare, the group asks the wheel and the spin decides. Load one of the ready-made lists below and the wheel updates in a click — then edit anything you like before the first spin.</p>
+              <div class="preset-row">
+                <button type="button" onclick="loadPreset('dares')">🎃 Halloween Dares</button>
+                <button type="button" onclick="loadPreset('trickortreat')">🍬 Trick or Treat</button>
+                <button type="button" onclick="loadPreset('movies')">🍿 Spooky Movie Night</button>
+              </div>
+              <p>The dares list suits older crowds, the trick-or-treat list plays like a dramatic coin flip for younger guests, and the movie list settles what the group watches once the sweets run out. Every list is just text in the options box — swap in your own entries at any time.</p>
+            </section>
             <section id="saved-lists">
               <h2>Save Your Favourite Fate Lists</h2>
               <p>Press Save to keep the current set of answers in your browser, then reload it whenever the same group plays again. You can hold one list of playful replies for parties and another of straight yes or no answers for real decisions, and switch between them in a click.</p>
@@ -287,6 +323,38 @@
               </ul>
               <p>Ask the question out loud, spin, and treat the answer as a nudge rather than an order. The value is in the pause it creates, not in the verdict itself.</p>
             </section>
+
+      <section id="embed">
+        <h2>Embed the Wheel of Fate on Your Site</h2>
+        <p>Teachers, streamers and event hosts can put this exact wheel on their own page. Copy the snippet below into any HTML block — it loads the same free wheel of fate from myspinpick.com, stretches to the width of your container, and needs no account or download.</p>
+        <p>The embed is free to use. A small "Wheel of Fate by MySpinPick" credit link sits under the wheel; please leave it in place so people who land on your page can find the tool again.</p>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Wheel of Fate">&lt;iframe src="https://myspinpick.com/embed/wheel-of-fate/" width="100%" height="1020" style="border:0;max-width:100%" title="Wheel of Fate by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <p class="embed-actions">
+          <button type="button" id="embed-copy">Copy embed code</button>
+          <a class="embed-preview" href="https://myspinpick.com/embed/wheel-of-fate/" target="_blank" rel="noopener">Preview the widget</a>
+        </p>
+        <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>height</b> value in the snippet.</p>
+<script>
+  (function () {
+    var btn = document.getElementById('embed-copy');
+    var box = document.getElementById('embed-code');
+    if (!btn || !box) return;
+    btn.addEventListener('click', function () {
+      var done = function () {
+        if (btn.dataset.busy) return;
+        btn.dataset.busy = '1';
+        var t = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function () { btn.textContent = t; delete btn.dataset.busy; }, 1800);
+      };
+      var fallback = function () { var r = document.createRange(); r.selectNodeContents(box); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); } catch (e) {} done(); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(box.textContent).then(done, fallback);
+      } else { fallback(); }
+    });
+  })();
+</script>
+      </section>
 
       <section id="related">
         <h2>Related Tools</h2>
@@ -350,6 +418,18 @@
           <summary>Can I use this wheel of fate spinner for a quick decision?</summary>
           <p>Ask the question out loud, press Spin, and take whatever the pointer lands on as your answer. It suits low-stakes calls such as where to eat or who goes first, and you can rewrite the segments before spinning if the defaults do not fit.</p>
         </details>
+        <details>
+          <summary>Can I share the wheel of fate with friends?</summary>
+          <p>Yes. Press Share and the current list is packed into a link — anyone who opens it gets the exact same wheel, with no sign-up needed.</p>
+        </details>
+        <details>
+          <summary>Can I embed the wheel of fate on my own site?</summary>
+          <p>Yes. Copy the iframe snippet from the embed section and paste it into any HTML block — the widget is free, responsive and keeps a small credit link back to MySpinPick.</p>
+        </details>
+        <details>
+          <summary>What should I put on the wheel for a Halloween party?</summary>
+          <p>Party dares, trick-or-treat outcomes or a spooky movie list all work well. The Halloween Fate Challenges section has three ready-made lists that load into the wheel with one click.</p>
+        </details>
       </section>
     </main>
 
@@ -364,6 +444,7 @@
     var currentAngle = 0;
     var spinning = false;
     var winnerIdx = null;
+    var lastWinnerText = null;
     var lastTickIdx = -1;
     var muted = false;
     var audioCtx = null;
@@ -541,7 +622,7 @@
     function keyOf(text) {
       return itemsOf(text).map(function(s){ return s.toLowerCase(); }).sort().join('|');
     }
-    function loadSaved() {
+    function loadSaved(skipLastText) {
       try {
         var s = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
         if (Array.isArray(s)) {
@@ -553,7 +634,7 @@
       } catch (e) { savedLists = []; }
       var last = null;
       try { last = JSON.parse(localStorage.getItem(LAST_KEY) || 'null'); } catch (e) {}
-      if (last && typeof last.text === 'string') {
+      if (last && typeof last.text === 'string' && !skipLastText) {
         optionsEl.value = last.text;
         options = getOptions();
         if (typeof last.sel === 'number' && last.sel >= 0 && last.sel < savedLists.length) selectedSaved = last.sel;
@@ -690,6 +771,7 @@
           currentAngle = (currentAngle + total) % (Math.PI * 2);
           var idx = pickWinner();
           winnerIdx = idx;
+          lastWinnerText = options[idx] || null;
           drawWheel(currentAngle);
           document.getElementById('result').textContent = RESULT_PREFIX + options[idx];
           recordResult(options[idx], idx);
@@ -720,18 +802,81 @@
       animate(total, 3000);
     }
 
-    function removeLast() {
+    function removeWinner() {
       if (spinning) return;
       var list = getOptions();
       if (!list.length) return;
-      list.pop();
+      var target = -1;
+      if (lastWinnerText !== null) target = list.indexOf(lastWinnerText);
+      if (target < 0 && winnerIdx !== null && winnerIdx >= 0 && winnerIdx < list.length) target = winnerIdx;
+      var removed = (target >= 0) ? list.splice(target, 1)[0] : list.pop();
       optionsEl.value = list.join(',');
       options = getOptions();
       winnerIdx = null;
+      lastWinnerText = null;
       drawWheel(currentAngle);
-      document.getElementById('meta').textContent = options.length + ' options left.';
+      document.getElementById('meta').textContent = removed
+        ? ((target >= 0 ? 'Removed winner \u201c' : 'Removed \u201c') + removed + '\u201d. ' + list.length + ' options left.')
+        : list.length + ' options left.';
       autoGrow();
       persistLast();
+    }
+
+    /* ---------- share ---------- */
+    function shareList() {
+      var meta = document.getElementById('meta');
+      var items = getOptions();
+      if (!items.length) { meta.textContent = 'Add some options first, then share the wheel.'; return; }
+      var url = location.origin + location.pathname + '#l=' + encodeURIComponent(items.join('\n'));
+      var done = function () {
+        meta.textContent = 'Share link copied — paste it anywhere.';
+        track('share', { tool: 'wheel-of-fate', options: items.length });
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, function () { fallbackCopy(url, function (ok) { if (ok) done(); else meta.textContent = 'Copy failed'; }); });
+      } else {
+        fallbackCopy(url, function (ok) { if (ok) done(); else meta.textContent = 'Copy failed'; });
+      }
+    }
+    function readShared() {
+      var m = /(?:^|[#&])l=([^&]+)/.exec(location.hash || '');
+      if (!m) return false;
+      var raw = '';
+      try { raw = decodeURIComponent(m[1]); } catch (e) { return false; }
+      var items = itemsOf(raw);
+      if (!items.length) return false;
+      optionsEl.value = items.join(',');
+      options = getOptions();
+      autoGrow();
+      track('share_view', { tool: 'wheel-of-fate', options: items.length });
+      return true;
+    }
+
+    /* ---------- seasonal presets ---------- */
+    var PRESETS = {
+      dares: { name: 'Halloween Dares', list: ['Do your best witch cackle', 'Tell a spooky story', 'Zombie-walk across the room', 'Wear a costume prop', 'Do a spooky impression', 'Scariest face contest', 'Recite a magic spell', 'Swap seats with someone'] },
+      trickortreat: { name: 'Trick or Treat', list: ['Trick: do a dare', 'Treat: grab a sweet', 'Trick: tell a joke', 'Treat: pick a song', 'Trick: swap seats', 'Treat: skip a round'] },
+      movies: { name: 'Spooky Movie Night', list: ['Hocus Pocus', 'Casper', 'Ghostbusters', 'The Addams Family', 'Hotel Transylvania', 'Corpse Bride', 'Beetlejuice', 'Monster House'] }
+    };
+    function loadPreset(key) {
+      if (spinning) return;
+      var p = PRESETS[key];
+      if (!p) return;
+      optionsEl.value = p.list.join(',');
+      options = getOptions();
+      winnerIdx = null;
+      lastWinnerText = null;
+      selectedSaved = -1;
+      renderSaved();
+      renderHistoryFor(-1);
+      drawWheel(currentAngle);
+      autoGrow();
+      document.getElementById('result').textContent = RESULT_INIT;
+      document.getElementById('meta').textContent = 'Loaded "' + p.name + '" — ' + options.length + ' options. Spin it or edit the list.';
+      persistLast();
+      track('load_preset', { tool: 'wheel-of-fate', preset: key });
+      var tool = document.querySelector('.tool');
+      if (tool && tool.scrollIntoView) tool.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function clearOptions() {
@@ -777,7 +922,9 @@
     if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
     drawWheel(0);
     autoGrow();
-    loadSaved();
+    var sharedLoaded = readShared();
+    loadSaved(sharedLoaded);
+    if (sharedLoaded) { document.getElementById('meta').textContent = options.length + ' options loaded from a shared link — press Spin.'; }
 
     function copyResult() {
       var meta = document.getElementById('meta');
@@ -792,12 +939,15 @@
       } else { fallbackCopy(text); }
     }
 
-    function fallbackCopy(text) {
+    function fallbackCopy(text, cb) {
       var ta = document.createElement('textarea');
       ta.value = text; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
-      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
       document.body.removeChild(ta);
+      if (cb) { cb(ok); return; }
+      document.getElementById('meta').textContent = ok ? 'Copied!' : 'Copy failed';
+      if (ok) track('copy');
     }
   </script>
 <footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">

@@ -27,7 +27,7 @@ unrelated third-party sites use a "spinpick" name and are not affiliated with th
 - [What to Eat Wheel](https://myspinpick.com/what-to-eat-wheel/): Spin a wheel of meals to decide what to eat.
 - [Yes or No Wheel](https://myspinpick.com/yes-no-wheel/): A two-slice wheel that answers yes or no.
 - [Wheel of Colors](https://myspinpick.com/wheel-of-colors/): Spin to pick a random color from the spectrum.
-- [Wheel of Fate](https://myspinpick.com/wheel-of-fate/): Let fate decide with a spin of the wheel.
+- [Wheel of Fate](https://myspinpick.com/wheel-of-fate/): Let fate decide with a spin — playful magic-8-ball style answers, shareable wheel links, an embeddable widget and Halloween-ready challenge lists.
 
 ### Name pickers and draw tools
 - [Random Name Picker](https://myspinpick.com/name-picker/): Claw-machine style picker — paste names and the claw grabs one at random, with per-list result batches.

@@ -1,43 +1,68 @@
-# MySpinPick 修复包（基于线上最新代码，2026-10-12 抓取）
+# MySpinPick P0 更新包（2026-10-12）— Wheel of Fate 分享 / 嵌入 / 万圣节
 
-改动基于 myspinpick.com 线上 24 页实抓快照，共 **17 个文件**（16 个 crypto 修复页 + 首页，其中 what-to-eat-wheel 同时含内容扩写），直接可用原文覆盖部署。
-改动仅涉及：① 新增一段 `<script>` 助手；② JS 调用点替换；③ HTML 内容区块与 JSON-LD 新增。**未改动任何现有 CSS / 布局 / 工具逻辑。**
+本轮完成 wheel-of-fate 的三个 P0：① 上线 `/embed/wheel-of-fate/`；② 分享链接闭环；③ 万圣节内容与预设列表。
+**另已并入两批「本地已完成、尚未上传」的 wheel-of-fate 改动**（详见第三节「版本关系」）。本包该页为超集，上传不会丢任何已有改动。
 
-## 一、Crypto 随机数修复（16 页 / 44 处）
+## 一、本包文件（4 个，按仓库相对路径覆盖上传）
 
-**方案**：每页 `<head>` 起始处注入 `cryptoRandom()` 助手（Web Crypto API `getRandomValues`，返回与 `Math.random()` 语义完全一致的 [0,1) 均匀分布，带降级回退），然后把全部 `Math.random()` 调用点替换为 `cryptoRandom()`。洗牌、抽奖、转盘落点、骰子、硬币、抽奖号码等所有决定结果的随机源全部走 CSPRNG，动画随机也一并覆盖。
+| 文件 | 类型 | 说明 |
+|---|---|---|
+| `wheel-of-fate/index.html` | 更新 | 主页面：分享按钮 + Embed 板块 + 万圣节区块 + 3 条新 FAQ |
+| `embed/wheel-of-fate/index.html` | **新增** | 可嵌入部件页（`noindex, follow`，canonical 指向主页面） |
+| `llms.txt` | 更新 | Wheel of Fate 条目补充 share / embed / Halloween 事实 |
+| `CHANGES.md` | 说明 | 本文件，覆盖仓库根旧版 |
 
-| 页面 | 替换处数 |
-|---|---|
-| name-picker | 15 |
-| random-letter-picker | 4 |
-| random-number-generator | 3 |
-| dice-roller | 3 |
-| coin-flip / decision-wheel-spinner / wheel-spinner / yes-no-wheel / wheel-of-colors / wheel-of-fate / what-to-eat-wheel | 各 2 |
-| secret-santa / random-group / random-draft-order / lottery-number / duck-race | 各 1 |
+上传方式：GitHub 网页端解压后，把 `wheel-of-fate/` 与 `embed/` 两个目录、以及 `llms.txt`、`CHANGES.md` 拖进仓库对应位置。`embed/` 目录已存在，拖入为**合并**上传，不会影响其它 embed 子页。
 
-校验：16 页均已无裸 `Math.random` 调用（仅保留助手内降级回退一处）。
+## 二、改动明细
 
-## 二、首页（home.html）
+### 1. 分享链接（新功能）
+- 列表按钮行新增 `🔗 Share`，交互与 wheel-spinner 待上线实现同款：`#l=<encodeURIComponent(列表)>`。
+- 点击后把 `https://myspinpick.com/wheel-of-fate/#l=...` 复制到剪贴板，状态行提示 "Share link copied — paste it anywhere."；剪贴板 API 不可用时自动降级为 execCommand 复制。
+- 打开带 `#l=` 的链接会自动载入该列表（优先于 localStorage 上次状态），状态行提示 "… loaded from a shared link — press Spin."。
+- 埋点：`share`（含选项数）、`share_view`。
 
-1. **新增 FAQPage JSON-LD**（6 问，与页面可见 FAQ 逐字一致，符合 Google 结构化数据规范）。
-2. **可见 FAQ 从 3 问扩到 6 问**，新增：How random are the results?（顺势把 crypto 卖点写成信任信号）/ Can I use MySpinPick for giveaways and raffles? / Do I need to install anything?
-3. **内容扩写 574 → 1009 词**：新增 "How People Use MySpinPick" 场景区块（教师课堂 / 抽奖 / 团队 / 家庭四个 H3，含内链到 group generator、name picker、draft order、what to eat wheel 等工具页）；About 区块新增一段（Web Crypto 随机性 + 隐私 + 速度）。
-4. 现有 4 个 JSON-LD（WebSite+Org、3 个 ItemList）保留不动。
+### 2. /embed/wheel-of-fate/（新页面）
+- 基于 `/embed/wheel-spinner/` 模板改造：`noindex, follow`、canonical → `/wheel-of-fate/`、页脚 "Wheel of Fate by MySpinPick" 回链、`embed_view` 埋点（记录被哪些父域嵌入）。
+- 默认列表与主页面一致（Yes/No/Maybe…）；localStorage key 与主页面共享（`myspinpick.wheelOfFate.*`），与 wheel-spinner 主/嵌共用 key 的既有约定一致。
+- **本页自诞生即使用 `cryptoRandom()`（CSPRNG）**——注：其它已上线 embed 页仍是 `Math.random`（历史批次遗漏），建议后续单独补一轮。
+- iframe 建议高度按实测校准为 **1020**（420 / 760 / 980px 三档宽度实测 scrollHeight 最大 1019）。
 
-## 三、What to Eat Wheel（what-to-eat-wheel.html）
+### 3. 主页面 Embed 板块
+- 新增 `#embed` 板块（版式与 wheel-spinner 一致）：iframe 代码框 + "Copy embed code" 按钮 + "Preview the widget" 链接 + 高度说明。
 
-1. **内容扩写 752 → 1514 词**：#about 首段新增 40–60 词直接答案段（AI 提取友好）；新增 5 个内容区块——
-   - What to Eat Tonight: Ideas for Every Situation（忙碌工作日 / 挑食家庭 / 情侣室友 / 学生合租）
-   - House Rules That Keep the Spin Fun（三转规则、否决权、输家做饭）
-   - Why Spinning Works Better Than Asking（决策疲劳、选择瘫痪）
-   - Beyond Dinner: Lunches, Snacks and Meal Prep
-   - Tips for a Better Food Wheel（5 条实操清单）
-2. 页面原有 WebApplication / BreadcrumbList / FAQPage 三组 schema 均未动（FAQ 可见内容未改，schema 无需同步）。
-3. crypto 修复已同步包含在本文件（2 处）。
+### 4. 万圣节内容卡位（Q4 季节性）
+- 新增 `Halloween Fate Challenges` H2 区块 + 3 个一键预设列表：🎃 Halloween Dares（8 项）/ 🍬 Trick or Treat（6 项）/ 🍿 Spooky Movie Night（8 项）。
+- 点击预设：载入列表 → 重置结果与历史 → 平滑滚动回工具区 → 状态行提示 `Loaded "xxx" — N options.`；埋点 `load_preset`。
 
-## 四、部署提示
+### 5. FAQ 与结构化数据
+- 可见 FAQ 12 → 15 条，新增 share / embed / Halloween 三问；JSON-LD FAQPage 同步为 15 问（与可见文案逐字一致，已通过 JSON 解析校验）。
 
-- 直接覆盖同名文件即可；部署后用浏览器控制台跑一遍各工具确认功能正常。
-- 部署后记得：① 在 Bing Webmaster Tools / GSC 请求重新抓取首页与 what-to-eat-wheel；② 更新 llms.txt 中的随机数表述（现在与事实一致了）；③ Roboto：JSON-LD 可用 Rich Results Test 验证。
-- 其余 8 个无 Math.random 的页面（privacy-policy、about、contact、metronome、bubble-level、color-picker、password-generator 等）无需改动，不在本包内。
+### 6. 并入的既有改动（来自本地未上传批次）
+- **CSPRNG 降级分支递归修复**：`return cryptoRandom();` → `return Math.random();`（含上方注释两行）。
+- **Remove Winner**：按钮 "Remove" → "Remove Winner"，逻辑从"删最后一个"改为"删刚命中的那个"；未转先点则回退删最后一项，状态行 "Removed winner "X". N options left."。
+
+### 7. 顺手修正
+- `og:title` 原误为 "Name Wheel Picker — …"（复制粘贴遗留）→ 改为 "Wheel of Fate — Spin to Let Fate Decide | MySpinPick"。
+
+## 三、版本关系（上传前必读）
+
+你本地存在两批包含 wheel-of-fate、尚未上传的改动，本包**已全部并入**，避免上传顺序互相覆盖：
+
+1. **16 页 CSPRNG 递归修复批次**（未上传）——其中 wheel-of-fate 部分已并入本包。上传那批时，wheel-of-fate 请用本包版本（或跳过该页）；其余 15 页与本包无关，照常上传。
+2. **6 文件 "Remove Winner" 批次**（未上传）——其中 wheel-of-fate 部分已并入本包。上传那批时，wheel-of-fate 请用本包版本（或跳过该页）；其余 5 页照常上传。
+
+本包的 `wheel-of-fate/index.html` = 线上当前版本 + 上述两批中 wheel-of-fate 的全部改动 + 本轮 P0。**建议最后上传本包，且上传后不要再用旧版 wheel-of-fate 覆盖。**
+
+## 四、验证记录（本机真实浏览器，系统 Chrome）
+
+44/44 项通过（截图存档于工作区 `shots/`）：
+
+- 主页面：无 JS 报错；Spin 出结果 "Fate says: …"；Remove Winner 8→7；Share 链接往返一致（编码→解码→新页面载入同列表）；三个预设各 8 / 6 / 8 项且状态行文案正确；Embed 代码复制成功；可见 FAQ 15 = schema 15；390px 无横向溢出、按钮行自动换行。
+- Embed 页：无 JS 报错；默认列表 / 标题 / 页脚回链 / robots / canonical 正确；Spin 正常（走 CSPRNG 路径）。
+
+## 五、上线后自查（2 分钟）
+
+1. `https://myspinpick.com/wheel-of-fate/?cb=1` → 列表按钮行有 `🔗 Share`，点击出现 "Share link copied…"。
+2. `https://myspinpick.com/embed/wheel-of-fate/` → 200 可转，页脚 "Wheel of Fate by MySpinPick"。
+3. 页面底部有 "Embed the Wheel of Fate on Your Site" 板块；万圣节区块三个按钮可一键载入列表。
