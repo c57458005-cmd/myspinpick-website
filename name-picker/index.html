@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>
+  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for cryptoRandom().
+     Uses the Web Crypto API (crypto.getRandomValues) so every spin, draw and
+     shuffle on this page is backed by a cryptographically secure random source.
+     Falls back to cryptoRandom() only if Web Crypto is unavailable. */
+  function cryptoRandom() {
+    if (window.crypto && window.crypto.getRandomValues) {
+      var buf = new Uint32Array(1);
+      window.crypto.getRandomValues(buf);
+      return buf[0] / 4294967296; /* 2^32 -> uniform [0,1) */
+    }
+    return cryptoRandom();
+  }
+</script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -813,7 +827,7 @@
       var SLOTS = [[7,62],[24,74],[41,60],[58,72],[75,60],[15,45],[48,42],[68,46]];
 
       function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
-      function shuffleArr(a) { for (var i = a.length - 1; i> 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+      function shuffleArr(a) { for (var i = a.length - 1; i> 0; i--) { var j = Math.floor(cryptoRandom() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
 
       /* ---------- sound ---------- */
       var actx = null;
@@ -929,10 +943,10 @@
         for (var i = 0; i < 34; i++) {
           var c = document.createElement('i');
           c.className = 'confetti';
-          c.style.left = (6 + Math.random() * 88) + '%';
-          c.style.top = (12 + Math.random() * 18) + '%';
-          c.style.background = colors[Math.floor(Math.random() * colors.length)];
-          c.style.animationDelay = (Math.random() * 0.28) + 's';
+          c.style.left = (6 + cryptoRandom() * 88) + '%';
+          c.style.top = (12 + cryptoRandom() * 18) + '%';
+          c.style.background = colors[Math.floor(cryptoRandom() * colors.length)];
+          c.style.animationDelay = (cryptoRandom() * 0.28) + 's';
           machineEl.appendChild(c);
           (function(el) { setTimeout(function() { el.remove(); }, 1600); })(c);
         }
@@ -1007,16 +1021,16 @@
           from = x;
           /* 优先落到柜子的另一半，保证每次位移都横跨整个区间；
              留 20% 概率纯随机，免得变成机械的左右横跳。 */
-          if (Math.random() < 0.8) {
+          if (cryptoRandom() < 0.8) {
             var wantRight = x <= mid;
-            to = wantRight ? (mid + Math.random() * (rr[1] - mid))
-                           : (rr[0] + Math.random() * (mid - rr[0]));
+            to = wantRight ? (mid + cryptoRandom() * (rr[1] - mid))
+                           : (rr[0] + cryptoRandom() * (mid - rr[0]));
           } else {
-            to = rr[0] + Math.random() * span;
+            to = rr[0] + cryptoRandom() * span;
           }
           t0 = now;
           dur = Math.min(1700, Math.max(480, Math.abs(to - from) * 5.6));  /* 约 160px/s */
-          pause = 60 + Math.random() * 320;
+          pause = 60 + cryptoRandom() * 320;
           moving = true;
         }
         (function loop(now) {
@@ -1051,11 +1065,11 @@
 
       /* 给每个娃娃随机一套「滚动」参数，让机箱里的娃娃动起来像真的被搅动 */
       function randomizeWander() {
-        function r(a, b) { return (a + Math.random() * (b - a)).toFixed(1); }
+        function r(a, b) { return (a + cryptoRandom() * (b - a)).toFixed(1); }
         for (var i = 0; i < 8; i++) {
           var s = toyEls[i].style;
-          s.setProperty('--wdur', (2.6 + Math.random() * 2.2).toFixed(2) + 's');
-          s.setProperty('--wdel', (-Math.random() * 3).toFixed(2) + 's');
+          s.setProperty('--wdur', (2.6 + cryptoRandom() * 2.2).toFixed(2) + 's');
+          s.setProperty('--wdel', (-cryptoRandom() * 3).toFixed(2) + 's');
           s.setProperty('--wx1', r(3, 8) + 'px');  s.setProperty('--wy1', r(-7, -3) + 'px'); s.setProperty('--wr1', r(3, 7) + 'deg');
           s.setProperty('--wx2', r(-8, -3) + 'px'); s.setProperty('--wy2', r(1, 5) + 'px');
           s.setProperty('--wx3', r(2, 6) + 'px');  s.setProperty('--wy3', r(3, 7) + 'px');  s.setProperty('--wr2', r(-7, -3) + 'deg');
@@ -1085,14 +1099,14 @@
         prizeEl.textContent = '';
         prizeEl.classList.remove('win');
 
-        var winner = p[Math.floor(Math.random() * p.length)];
+        var winner = p[Math.floor(cryptoRandom() * p.length)];
         var visIdx = [];
         for (var vi = 0; vi < 8; vi++) { if (shelf[vi]) visIdx.push(vi); }
         if (!visIdx.length) randomizeShelf();
         visIdx = [];
         for (var vi2 = 0; vi2 < 8; vi2++) { if (shelf[vi2]) visIdx.push(vi2); }
         var idx = shelf.indexOf(winner);
-        if (idx < 0) idx = visIdx.length ? visIdx[Math.floor(Math.random() * visIdx.length)] : 0;
+        if (idx < 0) idx = visIdx.length ? visIdx[Math.floor(cryptoRandom() * visIdx.length)] : 0;
         var toy = toyEls[idx];
         var targetX = toy.offsetLeft + toy.offsetWidth / 2;
         var needSwap = shelf[idx] !== winner;

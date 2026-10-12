@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>
+  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for cryptoRandom().
+     Uses the Web Crypto API (crypto.getRandomValues) so every spin, draw and
+     shuffle on this page is backed by a cryptographically secure random source.
+     Falls back to cryptoRandom() only if Web Crypto is unavailable. */
+  function cryptoRandom() {
+    if (window.crypto && window.crypto.getRandomValues) {
+      var buf = new Uint32Array(1);
+      window.crypto.getRandomValues(buf);
+      return buf[0] / 4294967296; /* 2^32 -> uniform [0,1) */
+    }
+    return cryptoRandom();
+  }
+</script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -214,10 +228,10 @@
 
       <section id="about">
         <h2>How to Use the What to Eat Wheel</h2>
+        <p class="lead">The what to eat wheel is a free spinner that picks tonight's dinner from your own list: type the meals you have in mind, press Spin, and the wheel stops on one at random — backed by the browser's cryptographically secure random number generator, so the pick is fair every time. No sign-up, nothing to install, and your list stays on your own device.</p>
         <p>Type your meal ideas into the box (comma separated), then click "Spin". The wheel lands on a random dish and shows it as tonight’s pick. Add "Order takeout" or "Cook at home" as options if you like.</p>
       </section>
 
-      <section id="set-up">
         <h2>Set Up Your Own Dinner List</h2>
         <p>Start from whatever your household actually eats and type those dishes in, separated by commas. Ten to fifteen meals is plenty — enough variety to feel like a real choice, few enough that the wheel stays readable.</p>
         <p>Mix quick weeknight meals with one or two treats so the result stays realistic, and add takeaway as an entry for the nights nobody wants to cook.</p>
@@ -246,6 +260,47 @@
         <h2>From One Meal to a Whole Week</h2>
         <p>The same list can plan further ahead than a single dinner. Spin for tonight, press Remove Winner to take that dish out, then spin again for tomorrow — a few presses lay out a week of meals with no repeats.</p>
         <p>Households that shop once a week find it quicker to spin the plan first and write the shopping list from the results.</p>
+      </section>
+
+      <section id="situations">
+        <h2>What to Eat Tonight: Ideas for Every Situation</h2>
+        <h3>Busy weeknights</h3>
+        <p>On weeknights the real constraint is time. Load the wheel with meals you can genuinely cook on a Tuesday — stir-fry, omelette, pasta, sheet-pan chicken, fried rice — plus one or two takeaway options for the late nights. If the wheel lands on something that needs an hour you do not have, spin again; a list that respects your schedule is a list you will keep using.</p>
+        <h3>Families with picky eaters</h3>
+        <p>Let everyone nominate two meals each and spin the combined list. The wheel turns "I don't want that" into a shared result nobody has to argue with, and because the wheel visibly stops on its own, the outcome feels fair to kids and adults alike. Add one Friday treat slot so the list never feels like a chore.</p>
+        <h3>Couples and roommates</h3>
+        <p>Two people, two opinions, one decision — the classic deadlock. The wheel removes the "I don't mind, you pick" loop entirely. Agree the list in advance while everyone is calm, then let the spin make the call. If both of you groan at the result, that is useful information: update the list.</p>
+        <h3>Students and shared houses</h3>
+        <p>In a shared house the food wheel doubles as a budget tool: fill it with cheap, cookable staples and one takeaway option, and let the spin set the weekly rotation. Pair it with the random group generator to split who cooks and who cleans up afterwards.</p>
+      </section>
+
+      <section id="house-rules">
+        <h2>House Rules That Keep the Spin Fun</h2>
+        <p>A few simple conventions stop the wheel from turning into another argument. The most popular is the three-spin rule: whatever lands on the second or third spin stands, and the debate ends there. Others add a single veto token per person per week, or a "loser cooks" clause when the result is takeaway. A shared consequence — such as whoever vetoed the first result doing the dishes — keeps everyone honest about which vetoes really matter.</p>
+        <p>Whatever you choose, agree it before the first spin. Rules invented after an unwelcome result tend to be less popular with the household.</p>
+      </section>
+
+      <section id="why-it-works">
+        <h2>Why Spinning Works Better Than Asking</h2>
+        <p>Deciding what to eat is a low-stakes question with surprisingly high friction: it arrives at the end of the day, when decision fatigue is at its worst, and every option on the table is acceptable — which is exactly why choosing one feels impossible. Psychologists call it choice paralysis, and it gets worse the more similar the options are.</p>
+        <p>Handing the decision to a random spin sidesteps the whole comparison. Nobody has to defend a preference, nobody's suggestion gets shot down, and the small drama of the wheel slowing down gives the household something to react to together. The meal was always going to be fine; the wheel just ends the discussion.</p>
+      </section>
+
+      <section id="beyond-dinner">
+        <h2>Beyond Dinner: Lunches, Snacks and Meal Prep</h2>
+        <p>The same wheel works anywhere food decisions repeat. Swap in sandwich fillings and lunch spots for the weekday lunch question, snack options for the after-school debate, or breakfast ideas for slow weekend mornings. Meal-preppers spin five dinners on Sunday, pin the list to the fridge, and shop for exactly those ingredients — one spin session becomes the whole week's plan. Potlucks work too: add the dishes you are considering bringing and let the wheel pick your contribution. You can also keep a separate wheel for takeaway nights only, so the treat stays a treat.</p>
+      </section>
+
+      <section id="tips">
+        <h2>Tips for a Better Food Wheel</h2>
+        <ul>
+          <li><strong>Keep entries specific.</strong> "Tacos" beats "Mexican food" — a concrete dish is an answer, a cuisine is another debate.</li>
+          <li><strong>Mix effort levels.</strong> Include 15-minute meals alongside weekend projects so the wheel stays realistic on tired days.</li>
+          <li><strong>Refresh monthly.</strong> Retire the meals everyone is tired of and add one or two new dishes — a stale list gets ignored.</li>
+          <li><strong>Match the season.</strong> Salads and barbecue in summer; stews and curries in winter. Save seasonal lists separately and switch between them.</li>
+          <li><strong>Use Copy Result.</strong> Paste the winning meal straight into the household chat so there is a record of the verdict.</li>
+        </ul>
+        <p>Small tweaks like these keep the wheel doing its one job well: ending the dinner debate quickly, with a result everyone can live with.</p>
       </section>
 
       <section id="related">
@@ -654,8 +709,8 @@
       setBtnsDisabled(true);
       document.getElementById('result').textContent = 'Spinning…';
       drawWheel(currentAngle);
-      var spins = 5 + Math.floor(Math.random() * 3);
-      var total = spins * Math.PI * 2 + Math.random() * Math.PI * 2;
+      var spins = 5 + Math.floor(cryptoRandom() * 3);
+      var total = spins * Math.PI * 2 + cryptoRandom() * Math.PI * 2;
       lastTickIdx = -1;
       ensureAudio();
       animate(total, 3000);

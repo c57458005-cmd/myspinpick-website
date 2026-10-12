@@ -118,6 +118,46 @@
   }
   </script>
 
+  <!-- JSON-LD: FAQPage (mirrors visible FAQ content) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Are these tools really free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every tool on MySpinPick is 100% free and never requires a sign-up, account or download." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do my text and data stay private?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. All tools process everything locally in your browser. Your text, names and results never leave your device." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do these tools work on mobile?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every tool is responsive and works on phones, tablets and desktops alike." }
+      },
+      {
+        "@type": "Question",
+        "name": "How random are the results?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Very. Every spin, draw and shuffle is powered by the browser's cryptographically secure random number generator (the Web Crypto API) rather than simple Math.random tricks, so results are fair and cannot be predicted." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use MySpinPick for giveaways and raffles?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The wheel spinner, name picker and lottery number generator are commonly used for giveaways, raffles and classroom picks. Paste your entries, spin or draw, and announce the result — no account needed." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to install anything?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. Every tool runs directly in your browser on desktop, tablet and phone. There is nothing to install and no sign-up." }
+      }
+    ]
+  }
+  </script>
+
   <style>
     :root {
       --bg: #f6f8fb;
@@ -432,10 +472,24 @@
         </div>
       </section>
 
+            <section class="plain" id="use-cases">
+        <h2>How People Use MySpinPick</h2>
+        <p>MySpinPick gathers more than twenty small decision tools in one place, and each one solves a recurring moment where a group gets stuck on a choice. These are the situations people reach for them most. Each tool takes seconds to learn, works on any device, and keeps everything you type on your own device.</p>
+        <h3>Teachers and classrooms</h3>
+        <p>Pick a student to answer, split the class into random groups with the group generator, or spin a wheel of names so nobody feels singled out. Because every draw is cryptographically random and runs on the classroom screen, students can see for themselves that the pick is fair.</p>
+        <h3>Parties, giveaways and raffles</h3>
+        <p>Load your entrant list into the name picker or wheel spinner and draw winners live on stream, or use the lottery number generator for number-based raffles. The claw-machine style name picker makes a fun reveal for office parties, launches and family events.</p>
+        <h3>Teams and stand-ups</h3>
+        <p>Randomize the daily stand-up order with the draft order generator, decide who makes the coffee run with a yes/no wheel, or settle "where do we eat for lunch?" with the what to eat wheel. Small team decisions, settled in seconds instead of a chat thread.</p>
+        <h3>Families and roommates</h3>
+        <p>Race rubber ducks for who does the dishes, spin the wheel of fate when nobody wants to choose the movie, or use the decision wheel for weekend plans. Save the wheels your household uses most and reload them whenever the same debate comes back.</p>
+      </section>
+
       <section class="plain" id="about">
         <h2>About MySpinPick</h2>
         <p>MySpinPick is a home for spin-the-wheel and random-pick tools built for real decisions. Spin a wheel of names to choose a student or winner, split a class into fair random groups, decide with a yes/no wheel, draw lottery numbers for a raffle, or flip a coin when you're stuck.</p>
         <p>Every tool is free, requires no account, and runs 100% in your browser — your names and results never leave your device.</p>
+        <p>Under the hood, every tool draws its randomness from the browser's built-in Web Crypto API — the same source of entropy trusted for encryption — so results are not just instant, they are genuinely unpredictable. Combine that with zero sign-ups, a privacy-first design that keeps your lists on your own device, and pages that load fast on any connection, and you get decision tools you can confidently put in front of a classroom, a livestream or a raffle crowd.</p>
         <p><strong>It is your tool.</strong> Save the wheels and lists you use most and they stay on your device — nothing you type is uploaded. MySpinPick (myspinpick.com) is an independent site and is not affiliated with, endorsed by, or connected to any other picker, spinner or spin-pick-style website.</p>
       </section>
 
@@ -452,6 +506,18 @@
         <details>
           <summary>Do these tools work on mobile?</summary>
           <p>Yes. Every tool is responsive and works on phones, tablets and desktops alike.</p>
+        </details>
+        <details>
+          <summary>How random are the results?</summary>
+          <p>Very. Every spin, draw and shuffle is powered by the browser's cryptographically secure random number generator (the Web Crypto API) rather than simple Math.random tricks, so results are fair and cannot be predicted.</p>
+        </details>
+        <details>
+          <summary>Can I use MySpinPick for giveaways and raffles?</summary>
+          <p>Yes. The wheel spinner, name picker and lottery number generator are commonly used for giveaways, raffles and classroom picks. Paste your entries, spin or draw, and announce the result — no account needed.</p>
+        </details>
+        <details>
+          <summary>Do I need to install anything?</summary>
+          <p>No. Every tool runs directly in your browser on desktop, tablet and phone. There is nothing to install and no sign-up.</p>
         </details>
       </section>
     </main>

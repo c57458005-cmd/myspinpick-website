@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>
+  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for cryptoRandom().
+     Uses the Web Crypto API (crypto.getRandomValues) so every spin, draw and
+     shuffle on this page is backed by a cryptographically secure random source.
+     Falls back to cryptoRandom() only if Web Crypto is unavailable. */
+  function cryptoRandom() {
+    if (window.crypto && window.crypto.getRandomValues) {
+      var buf = new Uint32Array(1);
+      window.crypto.getRandomValues(buf);
+      return buf[0] / 4294967296; /* 2^32 -> uniform [0,1) */
+    }
+    return cryptoRandom();
+  }
+</script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -410,7 +424,7 @@
     // next accumulated angle: keep spinning forward, land on target face
     function nextAngle(cur, target) {
       var diff = ((target - (cur % 360)) % 360 + 360) % 360;
-      return cur + 360 * (2 + Math.floor(Math.random() * 2)) + diff;
+      return cur + 360 * (2 + Math.floor(cryptoRandom() * 2)) + diff;
     }
 
     function roll() {
@@ -436,11 +450,11 @@
 
       var total = 0, maxDur = 0;
       cubeEls.forEach(function(cube, i) {
-        var v = 1 + Math.floor(Math.random() * 6);
+        var v = 1 + Math.floor(cryptoRandom() * 6);
         total += v;
         var base = FACE[v];
         cubeRot[i] = { x: nextAngle(cubeRot[i].x, base[0]), y: nextAngle(cubeRot[i].y, base[1]) };
-        var dur = 900 + Math.floor(Math.random() * 400);
+        var dur = 900 + Math.floor(cryptoRandom() * 400);
         if (dur > maxDur) maxDur = dur;
         cube.style.transitionDuration = (dur / 1000) + 's';
         cube.style.transform = 'rotateX(' + cubeRot[i].x + 'deg) rotateY(' + cubeRot[i].y + 'deg)';
