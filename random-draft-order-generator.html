@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for cryptoRandom().
+     Uses the Web Crypto API (crypto.getRandomValues) so every spin, draw and
+     shuffle on this page is backed by a cryptographically secure random source.
+     Falls back to cryptoRandom() only if Web Crypto is unavailable. */
+  function cryptoRandom() {
+    if (window.crypto && window.crypto.getRandomValues) {
+      var buf = new Uint32Array(1);
+      window.crypto.getRandomValues(buf);
+      return buf[0] / 4294967296; /* 2^32 -> uniform [0,1) */
+    }
+    return cryptoRandom();
+  }
+</script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <title>Random Draft Order Generator — Fantasy Sports | MySpinPick</title>
+  <meta name="description" content="Free random draft order generator. Randomize the order for your sports league, fantasy draft or board game. Fair, instant, no sign-up." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://myspinpick.com/random-draft-order-generator/" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VYS6D8Q5NS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VYS6D8Q5NS');
+    function track(name, params) { if (typeof gtag === 'function') { gtag('event', name, params); } }
+  </script>
+
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:title" content="Random Draft Order Generator — Fantasy Sports | MySpinPick" />
+  <meta property="og:description" content="Randomize draft order for leagues and fantasy." />
+  <meta property="og:url" content="https://myspinpick.com/random-draft-order-generator/" />
+  <meta property="og:image" content="https://myspinpick.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="MySpinPick — free wheel spinner and random picker tools" />
+  <meta name="twitter:image" content="https://myspinpick.com/og-image.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Random Draft Order Generator",
+    "url": "https://myspinpick.com/random-draft-order-generator/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Free tool to randomize draft order."
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://myspinpick.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Random Draft Order Generator",
+        "item": "https://myspinpick.com/random-draft-order-generator/"
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I generate a random draft order?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Type teams or players separated by commas, click Generate, and the list is shuffled into a fair random draft order with pick numbers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the draft order really random?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It uses a Fisher-Yates shuffle in your browser, so every order is equally likely."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this also a random order generator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. This is a random order generator built for draft picks — paste your names and it shuffles them into a fresh sequence. The same shuffle works for deciding speaking order, seating order, queue position or who goes first in a game."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use this for a snake draft?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Read the shuffled order forwards for round one and backwards for round two — that gives you the classic snake or serpentine draft with no extra setup. Press Generate Order again whenever you want a fresh sequence for the next season."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many names can I shuffle at once?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is no fixed limit. The shuffle runs in your browser, so a full league, a class list or a few hundred names all work and the result is instant — longer lists just take one extra scroll to read through."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need an app or an account?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The draft order generator is free, needs no sign-up and no download, and runs entirely in your browser on a desktop or a phone. Your list of names is never uploaded to a server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the order the same every time I press Generate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Every click reshuffles the names from scratch, so you get a new sequence each time — that is what makes it a draw rather than a fixed list. If you want the result to stay put, keep the list you generated and leave the button alone."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I draw a single name instead of the whole order?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. If you only need one winner — who buys the coffee, who takes the penalty, who goes home with the prize — the Random Name Picker draws one name at a time with a claw machine animation. This page orders your whole list; that one picks from it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I shuffle a list into a random order?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste the names or teams, press Generate Order, and the list comes back in a random order with a number beside each entry. Every press re-shuffles from scratch, so nothing about the previous sequence carries over."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does shuffling change the list I pasted?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The page keeps your original text untouched and builds a separate shuffled sequence beside it, so clearing the result or reloading returns you to exactly what you typed in."
+      }
+    }
+  ]
+}</script>
+
+  <style>
+    :root {
+      --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
+      --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+    header { padding: 18px 0 6px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: nowrap; }
+.topbar h1 { flex: 1 1 auto; min-width: 0; }
+    .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .brand-mini { display: inline-flex; align-items: center; gap: 0; font-weight: 700; font-size: 14px; color: var(--accent); text-decoration: none; }
+    .brand-mini > svg { margin-right: 5px; }
+    h1 { font-size: 24px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
+    
+
+    input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+    .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+    .wheel-wrap { text-align: center; margin-bottom: 16px; }
+    canvas { max-width: 100%; }
+    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: #bfdbfe; border-color: #60a5fa; }
+    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
+    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
+    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history:empty { display: none; }
+    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    section { margin-top: 26px; }
+    h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
+    section p, section li { color: #334155; font-size: 15px; }
+    ul, ol { padding-left: 20px; }
+    .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
+    .related a:hover { border-color: var(--accent); color: var(--accent); }
+    .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+    details p { margin-top: 8px; color: #475569; }
+    footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px) { h1 { font-size: 21px; } .brand-mini span { display: none; } }
+    @media (max-width: 480px) { h1 { font-size: 20px; } button { min-height: 44px; } }
+  
+    /* ---- tool-specific ---- */
+    .result { margin-top:14px; background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:12px 14px; font-size:16px; white-space:pre-wrap; min-height:40px; }
+
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <h1>Random Draft Order Generator</h1>
+        <div class="topright"><a class="brand-mini" href="/"><picture style="display:block"><source media="(max-width: 640px)" srcset="/logo-512.png" /><img class="brand-mini-logo" src="/brand-logo.png" alt="MySpinPick" style="height:22px;width:auto;display:block" /></picture></a></div>
+      </div>
+      <p class="sub">Randomize the draft order for your league, fantasy or game night.</p>
+    </header>
+<main>
+                  <div class="tool">
+        <input type="text" id="names" aria-label="List of names" value="Team A,Team B,Team C,Team D,Team E,Team F">
+        <div class="btns">
+          <button type="button" id="genBtn" class="primary" onclick="generate()">Generate Order</button>
+          <button type="button" onclick="resetAll()">Reset</button>
+          <button type="button" onclick="copyResult()">Copy Result</button>
+        </div>
+        <div class="meta" id="meta" aria-live="polite"></div>
+        <div class="result" id="result" aria-live="polite"></div>
+      </div>
+
+      <section id="about">
+        <h2>How to Generate a Random Draft Order</h2>
+        <p>Paste your team or player names into the box — the sample list is already loaded if you just want to try it — then press <strong>Generate Order</strong>. Every name is shuffled and printed back with its pick number, so who picks first is decided by chance instead of by whoever shouted loudest. Press <strong>Reset</strong> for a clean list and generate as many times as you like: it is free, needs no account and nothing you type is uploaded.</p>
+      </section>
+
+      <section id="use-cases">
+        <h2>Where a Random Draft Order Generator Helps</h2>
+        <ul>
+          <li><strong>Fantasy leagues</strong> — settle your draft order in seconds before the season starts, and re-run it when a manager joins late.</li>
+          <li><strong>Classroom speaking order</strong> — decide who presents or answers first, so the same students are not always at the front of the queue.</li>
+          <li><strong>Game nights</strong> — pick the playing order for a board game, a quiz round or a turn-based tournament.</li>
+          <li><strong>Draft day on stream</strong> — share your screen and let the whole league watch the order come out, with nobody able to claim it was rigged.</li>
+        </ul>
+      </section>
+
+      <section id="snake">
+        <h2>Snake Draft, Speaking Order and More</h2>
+        <p>The tool hands you one clean random sequence, which is exactly what a <strong>snake draft</strong> needs: read it top to bottom for round one, then reverse it for round two and keep alternating. The same list works as a speaking order, a queue for the next round of a tournament, a batting order or a rota for chores. If you also need to split those names into teams for the season, send them straight to the <a href="../random-group-generator/">Random Group Generator</a>; for a slower, more theatrical reveal in front of an audience, use the <a href="../wheel-spinner/">Wheel Spinner</a> instead.</p>
+      </section>
+
+      <section id="draft-day">
+        <h2>Running a Draft Day Everyone Trusts</h2>
+        <p>Most arguments about draft order start with the method, not with the result. Generating the order in front of the league — or posting the finished list with its pick numbers before anyone opens a spreadsheet — removes that doubt completely. Everyone can see that the first name really did come out on top, and that nobody edited the list afterwards.</p>
+        <p>Keep the list you generated: it is your record for the season, and it tells you who is on the clock in every round. When a manager drops out or a new one joins late, re-run the generator with the updated names and you have a fresh order that is fair again, with no need to renegotiate the rules mid-season.</p>
+      </section>
+
+      <section id="rounds">
+        <h2>Pick Numbers, Rounds and Turn Order</h2>
+        <p>Each line of the result is a pick number: line one picks first, line two picks second, and so on until the last manager is on the clock. How many rounds you need is up to you — most fantasy leagues run one pick per manager per round, while a board game or a quiz night usually only needs the top of the list. For a serpentine or snake draft, reverse the sequence in even rounds; for a straight draft, read it top to bottom every time.</p>
+        <p>Prefer to draw the numbers separately and match them to names afterwards? Use the <a href="../random-number-generator/">Random Number Generator</a> for that half of the job.</p>
+      </section>
+
+      <section id="related">
+        <h2>Related Tools</h2>
+        <div class="related">
+          <a href="../random-group-generator/">Random Group Generator <span>Split groups</span></a>
+          <a href="../wheel-spinner/">Wheel Spinner <span>Spin names</span></a>
+          <a href="../random-number-generator/">Random Number Generator <span>Any range</span></a>
+          <a href="../lottery-number-generator/">Lottery Number Generator <span>Lucky numbers</span></a>
+          <a href="../secret-santa-name-picker/">Secret Santa Name Picker <span>Draw names</span></a>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>How do I generate a random draft order?</summary>
+          <p>Type teams or players separated by commas, click Generate, and the list is shuffled into a fair random draft order with pick numbers.</p>
+        </details>
+        <details>
+          <summary>Is the draft order really random?</summary>
+          <p>Yes. It uses a Fisher-Yates shuffle in your browser, so every order is equally likely.</p>
+        </details>
+        <details>
+          <summary>Is this also a random order generator?</summary>
+          <p>Yes. This is a <strong>random order generator</strong> built for draft picks — paste your names and it shuffles them into a fresh sequence. The same shuffle works for deciding speaking order, seating order, queue position or who goes first in a game.</p>
+        </details>
+        <details>
+          <summary>Can I use this for a snake draft?</summary>
+          <p>Yes. Read the shuffled order forwards for round one and backwards for round two — that gives you the classic snake or serpentine draft with no extra setup. Press Generate Order again whenever you want a fresh sequence for the next season.</p>
+        </details>
+        <details>
+          <summary>How many names can I shuffle at once?</summary>
+          <p>There is no fixed limit. The shuffle runs in your browser, so a full league, a class list or a few hundred names all work and the result is instant — longer lists just take one extra scroll to read through.</p>
+        </details>
+        <details>
+          <summary>Do I need an app or an account?</summary>
+          <p>No. The draft order generator is free, needs no sign-up and no download, and runs entirely in your browser on a desktop or a phone. Your list of names is never uploaded to a server.</p>
+        </details>
+        <details>
+          <summary>Is the order the same every time I press Generate?</summary>
+          <p>No. Every click reshuffles the names from scratch, so you get a new sequence each time — that is what makes it a draw rather than a fixed list. If you want the result to stay put, keep the list you generated and leave the button alone.</p>
+        </details>
+        <details>
+          <summary>Can I draw a single name instead of the whole order?</summary>
+          <p>Yes. If you only need one winner — who buys the coffee, who takes the penalty, who goes home with the prize — the Random Name Picker draws one name at a time with a claw machine animation. This page orders your whole list; that one picks from it.</p>
+        </details>
+        <details>
+          <summary>How do I shuffle a list into a random order?</summary>
+          <p>Paste the names or teams, press Generate Order, and the list comes back in a random order with a number beside each entry. Every press re-shuffles from scratch, so nothing about the previous sequence carries over.</p>
+        </details>
+        <details>
+          <summary>Does shuffling change the list I pasted?</summary>
+          <p>No. The page keeps your original text untouched and builds a separate shuffled sequence beside it, so clearing the result or reloading returns you to exactly what you typed in.</p>
+        </details>
+
+      </section>
+    </main>
+
+</div>
+
+  <script>
+    var drawTimer = null;
+    var genBtn = document.getElementById('genBtn');
+
+    function generate() {
+      if (drawTimer) { clearInterval(drawTimer); drawTimer = null; }
+      var raw = document.getElementById('names').value;
+      var names = raw.split(/[\n,]/).map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 0; });
+      if (names.length < 2) { document.getElementById('result').textContent = 'Enter at least two names.'; return; }
+      for (var i = names.length - 1; i > 0; i--) {
+        var j = Math.floor(cryptoRandom() * (i + 1));
+        var t = names[i]; names[i] = names[j]; names[j] = t;
+      }
+      // reveal the order one line at a time
+      var box = document.getElementById('result');
+      genBtn.disabled = true;
+      box.textContent = '';
+      var idx = 0;
+      drawTimer = setInterval(function() {
+        box.textContent += (idx + 1) + '. ' + names[idx] + '\n';
+        idx++;
+        if (idx >= names.length) {
+          clearInterval(drawTimer);
+          drawTimer = null;
+          box.textContent = box.textContent.trim();
+          track('generate', { tool: 'draft-order' });
+          genBtn.disabled = false;
+        }
+      }, 110);
+    }
+    var DEFAULT_DRAFT = ['Team A','Team B','Team C','Team D','Team E','Team F'];
+    function resetAll() {
+      if (drawTimer) { clearInterval(drawTimer); drawTimer = null; }
+      genBtn.disabled = false;
+      document.getElementById('names').value = DEFAULT_DRAFT.join(',');
+      document.getElementById('result').textContent = '';
+    }
+
+    function copyResult() {
+      if (drawTimer) { document.getElementById('meta').textContent = 'Wait for the reveal to finish.'; return; }
+      var box = document.getElementById('result');
+      var text = box ? box.textContent.trim() : '';
+      if (!text) { document.getElementById('meta').textContent = 'Nothing to copy — generate an order first.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy', { tool: 'random-draft-order-generator' }); }).catch(function(){ fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
+    }
+  </script>
+<footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">
+      <p class="slogan" style="margin:0 0 8px;">MySpinPick — free wheel spinner &amp; random decision tools.</p>
+      <p style="margin:0;">
+        <a href="/privacy-policy/" style="color:inherit;text-decoration:underline;">Privacy Policy</a> ·
+        <a href="/about/" style="color:inherit;text-decoration:underline;">About</a> ·
+        <a href="/contact/" style="color:inherit;text-decoration:underline;">Contact</a>
+      </p>
+    </footer>
+
+<style>
+  footer .slogan { white-space: nowrap; font-size: 14px; }
+  @media (max-width: 640px) { footer .slogan { font-size: 10.5px; } }
+</style>
+</body>
+</html>

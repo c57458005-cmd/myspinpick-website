@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for cryptoRandom().
+     Uses the Web Crypto API (crypto.getRandomValues) so every spin, draw and
+     shuffle on this page is backed by a cryptographically secure random source.
+     Falls back to cryptoRandom() only if Web Crypto is unavailable. */
+  function cryptoRandom() {
+    if (window.crypto && window.crypto.getRandomValues) {
+      var buf = new Uint32Array(1);
+      window.crypto.getRandomValues(buf);
+      return buf[0] / 4294967296; /* 2^32 -> uniform [0,1) */
+    }
+    return cryptoRandom();
+  }
+</script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <title>Random Number Generator — Any Range, No Repeat | MySpinPick</title>
+  <meta name="description" content="Free random number generator: pick a number in any range — 2-20, 1-50, 1-100 or custom. Optional no-repeat mode, copy in one click." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://myspinpick.com/random-number-generator/" />
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VYS6D8Q5NS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VYS6D8Q5NS');
+    function track(name, params) { if (typeof gtag === 'function') { gtag('event', name, params); } }
+  </script>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:title" content="Random Number Generator — Any Range, No Repeat | MySpinPick" />
+  <meta property="og:description" content="Free random number generator: pick a number in any range — 2-20, 1-50, 1-100 or custom. Optional no-repeat mode, copy in one click." />
+  <meta property="og:url" content="https://myspinpick.com/random-number-generator/" />
+  <meta property="og:image" content="https://myspinpick.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="MySpinPick — free wheel spinner and random picker tools" />
+  <meta name="twitter:image" content="https://myspinpick.com/og-image.png" />
+
+  <!-- JSON-LD: WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Random Number Generator",
+    "url": "https://myspinpick.com/random-number-generator/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Free online tool to generate random numbers within any range."
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://myspinpick.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Random Number Generator",
+        "item": "https://myspinpick.com/random-number-generator/"
+      }
+    ]
+  }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I generate a random number?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Enter a minimum and maximum value, choose how many numbers you want, then click \"Generate\". The tool returns random numbers within that range instantly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I generate random numbers without repeats?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Turn on the \"No-repeat\" mode to get unique random numbers with no duplicates. Note the count must not exceed the size of your range."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I use a random number generator 2-20?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Set the minimum to 2 and the maximum to 20, then click Generate. It works like a quick dice-style roll in that range."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I generate a random number between 1 and 100?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use a random number generator 1-100 — set the minimum to 1 and the maximum to 100, then click Generate. Or tap the 1-100 quick range button to fill it in instantly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I pick a random number between 1 and 50?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A random number generator 1-50 works the same way — set the range or tap the 1-50 quick range button, then click Generate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this tool work on mobile?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The random number generator is fully responsive and works on phones, tablets and desktops alike."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are the numbers truly random?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The tool uses your browser's built-in random number source to generate unbiased random numbers within your chosen range."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I pick a random number between 1 and 9 or 1 and 25?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the preset buttons: 1–9 and 1–25 set the range in one click. You can also type any custom minimum and maximum — for example 1-10, 2-20 or 1-100 — then press Generate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I generate a random number 1-32?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Tap the 1–32 preset button and click Generate — it is one click from the default range. It is a popular range for league draws, deck-style picks and classroom lists where you need more than 25 but fewer than 40 options."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I generate a random number 1-40?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Use the 1–40 preset, or type 1 into Minimum and 40 into Maximum. Raise the How many field if you want a pair of numbers, and tick No-repeat so the same value cannot come up twice in the same draw."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this the same as a Google random number generator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It does the same job: you give it a range, it returns an unbiased number inside that range. The difference is that this one is a stand-alone page — no sign-in, no download, and the draw happens in your own browser rather than on a search engine's servers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I draw six unique numbers for a lottery-style pick?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Set your range, set How many to 6, and tick No-repeat. The generator returns six different numbers in one click. Keep the count at or below the size of the range, or a unique draw is mathematically impossible."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I generate more than one number at a time?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — the How many field takes any count from 1 to 1000, so you can pull a single winner or a whole block of random IDs. Multi-number draws come back as a list you can read off the screen or copy with the Copy Result button."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is a google number generator random the same as this tool?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. A google number generator random is the same request typed in a different order, and it lands on this page. Set the two ends of your range, choose how many numbers you want, and press Generate; the draw runs in your browser, so you can rerun it as often as you like without creating an account." }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I pull a number from a short range such as 1-9, 1-13 or 1-25?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Type the two ends into the minimum and maximum fields and press Generate. A random number generator 1-9 suits digits, seats or a nine-item list; 1-13 covers a deck of cards or a thirteen-entry bracket; 1-25 fits bingo-style draws and seating plans. Every value in the range carries an equal chance, including both endpoints, and the quick range buttons cover the most common spans." }
+    }
+  ]
+}</script>
+
+  <style>
+    :root {
+      --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
+      --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 16px; }
+    header { padding: 18px 0 6px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: nowrap; }
+.topbar h1 { flex: 1 1 auto; min-width: 0; }
+    .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .brand-mini { display: inline-flex; align-items: center; gap: 0; font-weight: 700; font-size: 14px; color: var(--accent); text-decoration: none; }
+    .brand-mini > svg { margin-right: 5px; }
+    h1 { font-size: 24px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
+    .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
+    
+
+    input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+    .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+    .wheel-wrap { text-align: center; margin-bottom: 16px; }
+    canvas { max-width: 100%; }
+    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
+    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: #bfdbfe; border-color: #60a5fa; }
+    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
+    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
+    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history:empty { display: none; }
+    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    section { margin-top: 26px; }
+    h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
+    section p, section li { color: #334155; font-size: 15px; }
+    ul, ol { padding-left: 20px; }
+    .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
+    .related a:hover { border-color: var(--accent); color: var(--accent); }
+    .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+    details p { margin-top: 8px; color: #475569; }
+    footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px) { h1 { font-size: 21px; } .brand-mini span { display: none; } }
+    @media (max-width: 480px) { h1 { font-size: 20px; } button { min-height: 44px; } }
+  
+    /* ---- tool-specific ---- */
+    .controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:14px; }
+    .field { display:flex; flex-direction:column; }
+    .field label { font-size:13px; color:var(--muted); margin-bottom:4px; }
+    #result { min-height:90px; background:#f8fafc; border:1px dashed var(--border); border-radius:10px; padding:14px; font-size:22px; font-weight:700; word-break:break-all; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .num { background:#fff; border:1px solid var(--border); border-radius:8px; padding:6px 12px; }
+
+    /* /embed/ 嵌入板块 */
+    #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #embed .embed-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 10px 0 0; }
+    #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
+    #embed .embed-preview:hover { text-decoration: underline; }
+    #embed .embed-hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <h1>Random Number Generator</h1>
+        <div class="topright"><a class="brand-mini" href="/"><picture style="display:block"><source media="(max-width: 640px)" srcset="/logo-512.png" /><img class="brand-mini-logo" src="/brand-logo.png" alt="MySpinPick" style="height:22px;width:auto;display:block" /></picture></a></div>
+      </div>
+      <p class="sub">Generate a random number in any range — 1-100, 2-20 or custom min/max, with optional no-repeat.</p>
+    </header>
+<main>
+      <div class="tool">
+        <div class="controls">
+          <div class="field">
+            <label for="min">Minimum</label>
+            <input type="number" id="min" value="1" />
+          </div>
+          <div class="field">
+            <label for="max">Maximum</label>
+            <input type="number" id="max" value="100" />
+          </div>
+          <div class="field">
+            <label for="count">How many</label>
+            <input type="number" id="count" value="5" min="1" max="1000" />
+          </div>
+          <div class="field" style="justify-content:flex-end;">
+            <label><input type="checkbox" id="unique" style="width:auto; margin-right:4px;" /> No-repeat</label>
+          </div>
+        </div>
+        <div class="btns">
+          <button type="button" id="genBtn" class="primary" onclick="generate()">Generate</button>
+          <button type="button" onclick="copyResult()">Copy Result</button>
+        </div>
+        <div class="btns presets" id="presets">
+          <button type="button" onclick="setRange(2,20)">2–20</button>
+          <button type="button" onclick="setRange(1,7)">1–7</button>
+          <button type="button" onclick="setRange(1,9)">1–9</button>
+          <button type="button" onclick="setRange(1,25)">1–25</button>
+          <button type="button" onclick="setRange(1,32)">1–32</button>
+          <button type="button" onclick="setRange(1,40)">1–40</button>
+          <button type="button" onclick="setRange(1,50)">1–50</button>
+          <button type="button" onclick="setRange(1,100)">1–100</button>
+        </div>
+        <div class="meta" id="meta" aria-live="polite"></div>
+        <div id="result" aria-label="Generated numbers"></div>
+      </div>
+<section id="about">
+        <h2>How to Generate Random Numbers (1-10, 2-20, 1-25 or Any Range)</h2>
+        <p>Enter a minimum and maximum value to set your range, choose how many numbers you want, then click "Generate". Turn on "No-repeat" to get unique numbers with no duplicates. Everything runs in your browser — nothing is uploaded.</p>
+      </section>
+
+      <section id="use-cases">
+        <h2>When to Use a Random Number Generator</h2>
+        <ul>
+          <li><strong>Games &amp; raffles</strong> — draw a random winner or roll a number.</li>
+          <li><strong>Math practice</strong> — generate practice problems for kids.</li>
+          <li><strong>Sampling</strong> — pick random rows or IDs without bias.</li>
+          <li><strong>Lotteries &amp; decisions</strong> — pick a number for any choice.</li>
+        </ul>
+      </section>
+
+      <section id="quick-ranges">
+        <h2>Quick Range Buttons: 1-10, 1-25, 1-32 and 1-40</h2>
+        <p>The preset row under the Generate button fills both number fields for you, so you never have to type the same range twice. Tap <strong>2–20</strong> for a dice-style roll, <strong>1–7</strong> for the days of a week, <strong>1–9</strong> for a single digit, <strong>1–25</strong> for a bingo-style draw, <strong>1–50</strong> for a half-century, or <strong>1–100</strong> for a percentage-style pick. Two extra buttons, <strong>1–32</strong> and <strong>1–40</strong>, cover the ranges people ask for most often in league draws, deck-style picks and classroom lists.</p>
+        <p>Every preset is a shortcut and nothing more: the minimum and maximum boxes stay editable, so you can type any custom range at all — 1-10, 1-32, 1-40, 5-15 or 1000-9999. Set the range, choose how many numbers you need, then press Generate.</p>
+      </section>
+
+      <section id="no-repeat-mode">
+        <h2>What No-Repeat Mode Actually Does</h2>
+        <p>For some draws you want a single number; for others you want a set with no duplicates at all — six unique lottery-style numbers, five different seat numbers, or ten distinct student IDs. Tick the <strong>No-repeat</strong> box and the generator switches from drawing with replacement to drawing without replacement: once a number comes up it leaves the pool and cannot appear again in the same run.</p>
+        <p>That rule comes with one condition. The count can never be larger than the size of your range, because you cannot draw ten different numbers from a range of nine. Keep the count at or below (maximum − minimum + 1). With No-repeat switched off the same value may appear more than once, which is exactly what you want for dice-like rolls where duplicates are perfectly normal.</p>
+      </section>
+
+      <section id="fair-and-private">
+        <h2>Fair, Private and Instant: What Happens Behind the Button</h2>
+        <p>There is no server in the loop. The generator uses your browser's built-in random number source, draws the values on your own device and prints them straight onto the page, so the range you type is never uploaded, logged or tied to an account. That is also why the result appears the moment you click: nothing is waiting on a network round trip.</p>
+        <p>Every draw is independent of the one before it. A number that came up a moment ago is exactly as likely as any other on the next click, so long runs and repeats are normal rather than suspicious. That makes the tool a fair way to pick a winner, deal a seat, sample a row or settle an argument.</p>
+        <p>One caveat worth stating plainly: this is a general-purpose number generator for everyday draws, games and sampling. For passwords, encryption keys or anything security-critical, use a tool built specifically for that job rather than a general number generator.</p>
+      </section>
+
+      <section id="embed">
+        <h2>Embed This Random Number Generator on Your Site</h2>
+        <p>Giveaways, quizzes and classroom draws can run on the same number generator. Paste the snippet into any HTML block — it loads the free tool from myspinpick.com, matches the width of your page, and works without an account or download.</p>
+        <p>The embed is free to use. A small "Random Number Generator by MySpinPick" credit link sits under the tool; please keep it so visitors can find the source.</p>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Random Number Generator">&lt;iframe src="https://myspinpick.com/embed/random-number-generator/" width="100%" height="424" style="border:0;max-width:100%" title="Random Number Generator by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <p class="embed-actions">
+          <button type="button" id="embed-copy">Copy embed code</button>
+          <a class="embed-preview" href="https://myspinpick.com/embed/random-number-generator/" target="_blank" rel="noopener">Preview the widget</a>
+        </p>
+        <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>height</b> value in the snippet.</p>
+      <script>
+        (function () {
+          var btn = document.getElementById('embed-copy');
+          var box = document.getElementById('embed-code');
+          if (!btn || !box) return;
+          btn.addEventListener('click', function () {
+            var done = function () {
+              if (btn.dataset.busy) return;
+              btn.dataset.busy = '1';
+              var t = btn.textContent;
+              btn.textContent = 'Copied!';
+              setTimeout(function () { btn.textContent = t; delete btn.dataset.busy; }, 1800);
+            };
+            var fallback = function () { var r = document.createRange(); r.selectNodeContents(box); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); } catch (e) {} done(); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(box.textContent).then(done, fallback);
+            } else { fallback(); }
+          });
+        })();
+      </script>
+      </section>
+
+      <section id="related">
+        <h2>Related Tools</h2>
+        <div class="related">
+          <a href="../wheel-spinner/">Wheel Spinner <span>Spin a random name or decision</span></a>
+          <a href="../dice-roller/">Dice Roller <span>Roll dice online</span></a>
+          <a href="../coin-flip/">Coin Flip <span>Flip a coin</span></a>
+          <a href="../lottery-number-generator/">Lottery Number Generator <span>Powerball &amp; EuroMillions numbers</span></a>
+          <a href="../random-group-generator/">Random Group Generator <span>Split names into groups</span></a>
+        <a href="../password-generator/">Password Generator<span>Create strong random passwords free.</span></a>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <details>
+          <summary>How do I generate a random number?</summary>
+          <p>Enter a minimum and maximum value, choose how many numbers you want, then click "Generate". The tool returns random numbers within that range instantly.</p>
+        </details>
+        <details>
+          <summary>Can I generate random numbers without repeats?</summary>
+          <p>Yes. Turn on the "No-repeat" mode to get unique random numbers with no duplicates. Note the count must not exceed the size of your range.</p>
+        </details>
+        <details>
+          <summary>How do I use a random number generator 2-20?</summary>
+          <p>Set the minimum to 2 and the maximum to 20, then click Generate. It works like a quick dice-style roll in that range.</p>
+        </details>
+        <details>
+          <summary>How do I generate a random number between 1 and 100?</summary>
+          <p>Use a random number generator 1-100 — set the minimum to 1 and the maximum to 100, then click Generate. Or tap the 1-100 quick range button to fill it in instantly.</p>
+        </details>
+        <details>
+          <summary>Can I pick a random number between 1 and 50?</summary>
+          <p>Yes. A random number generator 1-50 works the same way — set the range or tap the 1-50 quick range button, then click Generate.</p>
+        </details>
+        <details>
+          <summary>Does this tool work on mobile?</summary>
+          <p>Yes. The random number generator is fully responsive and works on phones, tablets and desktops alike.</p>
+        </details>
+        <details>
+          <summary>Are the numbers truly random?</summary>
+          <p>Yes. The tool uses your browser's built-in random number source to generate unbiased random numbers within your chosen range.</p>
+        </details>
+        <details>
+          <summary>How do I pick a random number between 1 and 9 or 1 and 25?</summary>
+          <p>Use the preset buttons: <strong>1–9</strong> and <strong>1–25</strong> set the range in one click. You can also type any custom minimum and maximum — for example 1-10, 2-20 or 1-100 — then press Generate.</p>
+        </details>
+        <details>
+          <summary>How do I generate a random number 1-32?</summary>
+          <p>Tap the 1–32 preset button and click Generate — it is one click from the default range. It is a popular range for league draws, deck-style picks and classroom lists where you need more than 25 but fewer than 40 options.</p>
+        </details>
+        <details>
+          <summary>Can I generate a random number 1-40?</summary>
+          <p>Yes. Use the 1–40 preset, or type 1 into Minimum and 40 into Maximum. Raise the How many field if you want a pair of numbers, and tick No-repeat so the same value cannot come up twice in the same draw.</p>
+        </details>
+        <details>
+          <summary>Is this the same as a Google random number generator?</summary>
+          <p>It does the same job: you give it a range, it returns an unbiased number inside that range. The difference is that this one is a stand-alone page — no sign-in, no download, and the draw happens in your own browser rather than on a search engine's servers.</p>
+        </details>
+        <details>
+          <summary>Can I draw six unique numbers for a lottery-style pick?</summary>
+          <p>Yes. Set your range, set How many to 6, and tick No-repeat. The generator returns six different numbers in one click. Keep the count at or below the size of the range, or a unique draw is mathematically impossible.</p>
+        </details>
+        <details>
+          <summary>Can I generate more than one number at a time?</summary>
+          <p>Yes — the How many field takes any count from 1 to 1000, so you can pull a single winner or a whole block of random IDs. Multi-number draws come back as a list you can read off the screen or copy with the Copy Result button.</p>
+        </details>
+        </details>
+        <details>
+          <summary>Is a google number generator random the same as this tool?</summary>
+          <p>Yes. A google number generator random is the same request typed in a different order, and it lands on this page. Set the two ends of your range, choose how many numbers you want, and press Generate; the draw runs in your browser, so you can rerun it as often as you like without creating an account.</p>
+        </details>
+        <details>
+          <summary>How do I pull a number from a short range such as 1-9, 1-13 or 1-25?</summary>
+          <p>Type the two ends into the minimum and maximum fields and press Generate. A random number generator 1-9 suits digits, seats or a nine-item list; 1-13 covers a deck of cards or a thirteen-entry bracket; 1-25 fits bingo-style draws and seating plans. Every value in the range carries an equal chance, including both endpoints, and the quick range buttons cover the most common spans.</p>
+        </details>
+      </section>
+    </main>
+
+</div>
+
+  <script>
+    var lastResult = [];
+    var genTimer = null;
+    var genBtn = document.getElementById('genBtn');
+
+    function flashNum(min, rangeSize) {
+      return '<span class="num">' + (Math.floor(cryptoRandom() * rangeSize) + min) + '</span>';
+    }
+
+    function generate() {
+      if (genTimer) { clearInterval(genTimer); genTimer = null; }
+      var min = parseInt(document.getElementById('min').value, 10);
+      var max = parseInt(document.getElementById('max').value, 10);
+      var count = parseInt(document.getElementById('count').value, 10);
+      var unique = document.getElementById('unique').checked;
+      var meta = document.getElementById('meta');
+      var box = document.getElementById('result');
+
+      if (isNaN(min) || isNaN(max)) { meta.textContent = 'Please enter valid numbers.'; return; }
+      if (min > max) { var t = min; min = max; max = t; }
+      if (!count || count < 1) count = 1;
+      if (count > 1000) count = 1000;
+
+      var rangeSize = max - min + 1;
+
+      if (unique && count > rangeSize) {
+        meta.textContent = 'No-repeat needs a bigger range (only ' + rangeSize + ' unique numbers available).';
+        box.innerHTML = '';
+        return;
+      }
+
+      if (unique) {
+        var pool = [];
+        for (var i = min; i <= max; i++) pool.push(i);
+        for (var j = pool.length - 1; j > 0; j--) { var k = Math.floor(cryptoRandom() * (j + 1)); var tmp = pool[j]; pool[j] = pool[k]; pool[k] = tmp; }
+        var result = pool.slice(0, count);
+      } else {
+        var result = [];
+        for (var n = 0; n < count; n++) {
+          result.push(Math.floor(cryptoRandom() * rangeSize) + min);
+        }
+      }
+
+      // rolling animation: flash random values, then settle on the real result
+      genBtn.disabled = true;
+      lastResult = result;
+      var previewCount = Math.min(result.length, 24);
+      var ticks = 0, maxTicks = 12;
+      var finalMeta = count + ' random number' + (count > 1 ? 's' : '') + ' between ' + min + ' and ' + max + (unique ? ' (no repeats)' : '') + '.';
+      meta.textContent = 'Rolling…';
+      genTimer = setInterval(function() {
+        ticks++;
+        var flash = [];
+        for (var f = 0; f < previewCount; f++) flash.push(flashNum(min, rangeSize));
+        box.innerHTML = flash.join('');
+        if (ticks >= maxTicks) {
+          clearInterval(genTimer);
+          genTimer = null;
+          box.innerHTML = result.map(function(v){ return '<span class="num">' + v + '</span>'; }).join('');
+          meta.textContent = finalMeta;
+          track('generate_numbers', { count: count, unique: unique });
+          genBtn.disabled = false;
+        }
+      }, 75);
+    }
+
+    function setRange(min, max) {
+      document.getElementById('min').value = min;
+      document.getElementById('max').value = max;
+      generate();
+    }
+
+    function copyResult() {
+      var text = lastResult.join(', ');
+      if (!text) { document.getElementById('meta').textContent = 'Nothing to copy — generate numbers first.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy'); }).catch(function(){ fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
+    }
+  </script>
+<footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">
+      <p class="slogan" style="margin:0 0 8px;">MySpinPick — free wheel spinner &amp; random decision tools.</p>
+      <p style="margin:0;">
+        <a href="/privacy-policy/" style="color:inherit;text-decoration:underline;">Privacy Policy</a> ·
+        <a href="/about/" style="color:inherit;text-decoration:underline;">About</a> ·
+        <a href="/contact/" style="color:inherit;text-decoration:underline;">Contact</a>
+      </p>
+    </footer>
+
+<style>
+  footer .slogan { white-space: nowrap; font-size: 14px; }
+  @media (max-width: 640px) { footer .slogan { font-size: 10.5px; } }
+</style>
+</body>
+</html>
