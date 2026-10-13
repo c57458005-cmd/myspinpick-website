@@ -299,6 +299,7 @@
           <button type="button" onclick="saveList(false)">💾 Save</button>
           <button type="button" onclick="clearOptions()">Clear</button>
           <button type="button" onclick="removeLast()">Remove</button>
+          <button type="button" onclick="shareList()">🔗 Share</button>
         </div>
         <div class="saved-head"><span class="label">Saved lists</span></div>
         <p class="saved-hint">Tip: save your frequently used lists for quick reuse.</p>
@@ -626,7 +627,7 @@
     function keyOf(text) {
       return itemsOf(text).map(function(s){ return s.toLowerCase(); }).sort().join('|');
     }
-    function loadSaved() {
+    function loadSaved(skipLastText) {
       try {
         var s = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
         if (Array.isArray(s)) {
@@ -638,7 +639,7 @@
       } catch (e) { savedLists = []; }
       var last = null;
       try { last = JSON.parse(localStorage.getItem(LAST_KEY) || 'null'); } catch (e) {}
-      if (last && typeof last.text === 'string') {
+      if (last && typeof last.text === 'string' && !skipLastText) {
         optionsEl.value = last.text;
         options = getOptions();
         if (typeof last.sel === 'number' && last.sel >= 0 && last.sel < savedLists.length) selectedSaved = last.sel;
@@ -813,6 +814,34 @@
         drawWheel(currentAngle);
       }
     });
+
+    function shareList() {
+      var meta = document.getElementById('meta');
+      var items = getOptions();
+      if (!items.length) { meta.textContent = 'Add some options first, then share the wheel.'; return; }
+      var url = location.origin + location.pathname + '#l=' + encodeURIComponent(items.join('\n'));
+      var done = function () {
+        meta.textContent = 'Share link copied — paste it anywhere.';
+        track('share', { tool: 'yes-no-wheel', options: items.length });
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, function () { fallbackCopy(url, function (ok) { if (ok) done(); else meta.textContent = 'Copy failed'; }); });
+      } else {
+        fallbackCopy(url, function (ok) { if (ok) done(); else meta.textContent = 'Copy failed'; });
+      }
+    }
+    function readShared() {
+      var m = /(?:^|[#&])l=([^&]+)/.exec(location.hash || '');
+      if (!m) return false;
+      var raw = '';
+      try { raw = decodeURIComponent(m[1]); } catch (e) { return false; }
+      var items = itemsOf(raw);
+      if (!items.length) return false;
+      optionsEl.value = items.join(',');
+      options = getOptions();
+      autoGrow();
+      return true;
+    }
 
     function showWinner(name) {
       if (!popupOn || !winModal) return;
@@ -1001,7 +1030,9 @@
     fitCanvas();
     drawWheel(0);
     autoGrow();
-    loadSaved();
+    var sharedLoaded = readShared();
+    loadSaved(sharedLoaded);
+    if (sharedLoaded) document.getElementById('meta').textContent = options.length + ' options loaded from a shared link — press Spin.';
 
     if (winModal) {
       var winCloseEl = document.getElementById('winClose');
@@ -1025,12 +1056,15 @@
       } else { fallbackCopy(text); }
     }
 
-    function fallbackCopy(text) {
+    function fallbackCopy(text, cb) {
       var ta = document.createElement('textarea');
       ta.value = text; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
-      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
       document.body.removeChild(ta);
+      if (cb) { cb(ok); return; }
+      document.getElementById('meta').textContent = ok ? 'Copied!' : 'Copy failed';
+      if (ok) track('copy');
     }
   </script>
 <footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">
