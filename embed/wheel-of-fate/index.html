@@ -95,6 +95,48 @@
     .saved-row button { flex: 0 0 20px; width: 20px; height: 20px; min-width: 20px; min-height: 20px; aspect-ratio: 1; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
     .saved-row button:hover { background: #fee2e2; border-color: #fca5a5; }
 
+    /* ===== v3.6：中心 Spin 按钮——SVG 一体成形（圆盘+指针同一条轮廓，无拼缝） ===== */
+    .wheel-box { position: relative; display: inline-block; line-height: 0; }
+    #centerSpin { position: absolute; left: calc(50% - 50px); top: calc(50% - 62px);
+      width: 100px; height: 112px; min-height: 0; padding: 0; border: 0; background: transparent;
+      color: #fff; font-size: 17px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+      text-shadow: 0 1px 3px rgba(15,23,42,.35);
+      cursor: pointer; filter: drop-shadow(0 4px 10px rgba(190,24,93,.38));
+      transition: transform .12s ease, filter .12s ease; transform-origin: 50% 62px; }
+    #centerSpin:hover:not(:disabled) { transform: scale(1.05); }
+    #centerSpin:active:not(:disabled) { transform: scale(.97); }
+    #centerSpin:disabled { filter: grayscale(.4) brightness(.96); cursor: wait; }
+    #centerSpin svg { display: block; width: 100%; height: 100%; pointer-events: none; }
+    #centerSpin .spin-txt { position: absolute; left: 0; top: 62px; width: 100%; transform: translateY(-50%); }
+    @media (max-width: 480px) { #centerSpin { left: calc(50% - 44px); top: calc(50% - 55px); width: 88px; height: 99px; transform-origin: 50% 55px; } #centerSpin .spin-txt { top: 55px; font-size: 15px; } }
+
+    /* ===== v3.1：轮盘样式选择（微缩预览，无文字，无字段标签） ===== */
+    .style-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .style-swatch { width: 30px; height: 30px; min-height: 0; padding: 0; border-radius: 50%;
+      border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border), 0 1px 3px rgba(15,23,42,.12);
+      cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
+    .style-swatch:hover { transform: scale(1.14); }
+    .style-swatch.active { box-shadow: 0 0 0 2px var(--accent), 0 1px 4px rgba(15,23,42,.18); transform: scale(1.08); }
+    @media (max-width: 480px) { .style-swatch { width: 34px; height: 34px; } }
+
+    /* ===== v3：选项表格编辑器 ===== */
+    #optTableWrap { max-height: 240px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--card); }
+    .opt-row { display: flex; align-items: center; gap: 8px; padding: 0 10px 0 6px; border-bottom: 1px solid #eef2f7; }
+    .opt-row:last-child { border-bottom: none; }
+    .opt-row .idx { flex: 0 0 28px; text-align: right; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .opt-row input[type="text"] { flex: 1; min-width: 0; border: 0; border-radius: 6px; padding: 9px 4px; font-size: 14.5px; background: transparent; box-shadow: none; }
+    .opt-row input[type="text"]:focus { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
+    .opt-row .del { flex: 0 0 22px; width: 22px; height: 22px; min-width: 22px; min-height: 22px; padding: 0; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+    .opt-row .del:hover { background: #fee2e2; border-color: #fca5a5; }
+    #addOptBtn { margin-top: 8px; border-style: dashed; background: #fff; color: var(--muted); padding: 8px 16px; min-height: 0; }
+    #addOptBtn:hover { color: var(--accent); border-color: var(--accent); background: #fdf2f8; }
+    .opt-empty { padding: 14px 12px; color: var(--muted); font-size: 13.5px; text-align: left; }
+    #pastePane { display: none; }
+    #editPane.paste #pastePane { display: block; }
+    #editPane.paste #tableView { display: none; }
+    #pastePane textarea { min-height: 150px; height: auto; resize: vertical; overflow: auto; }
+    #pastePane .saved-hint { margin-top: 6px; }
+
 
 
     /* ===================== /embed/ shell overrides ===================== */
@@ -114,20 +156,44 @@
 <body class="embed">
 <main class="embed-main">
 <h1 class="sr-only">Wheel of Fate — free embeddable spin wheel</h1>
-<div class="tool">
+      <div class="tool">
         <div class="wheel-wrap">
-          <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
+          <div class="style-row" id="styleRow">
+            <button type="button" class="style-swatch" data-style="classic" title="Classic" aria-label="Classic wheel style" style="background:radial-gradient(circle,#fff 0 32%,rgba(255,255,255,0) 33%),conic-gradient(#db2777 0 12.5%,#7c3aed 0 25%,#2563eb 0 37.5%,#059669 0 50%,#d97706 0 62.5%,#dc2626 0 75%,#0891b2 0 87.5%,#65a30d 0)"></button>
+            <button type="button" class="style-swatch" data-style="neon" title="Neon Night" aria-label="Neon Night wheel style" style="background:radial-gradient(circle,#fff 0 32%,rgba(255,255,255,0) 33%),conic-gradient(#0ea5e9 0 12.5%,#8b5cf6 0 25%,#ec4899 0 37.5%,#10b981 0 50%,#eab308 0 62.5%,#f97316 0 75%,#06b6d4 0 87.5%,#d946ef 0)"></button>
+            <button type="button" class="style-swatch" data-style="pastel" title="Pastel" aria-label="Pastel wheel style" style="background:radial-gradient(circle,#fff 0 32%,rgba(255,255,255,0) 33%),conic-gradient(#f9a8d4 0 12.5%,#c4b5fd 0 25%,#93c5fd 0 37.5%,#6ee7b7 0 50%,#fde68a 0 62.5%,#fca5a5 0 75%,#a5f3fc 0 87.5%,#d9f99d 0)"></button>
+            <button type="button" class="style-swatch" data-style="carnival" title="Carnival" aria-label="Carnival wheel style" style="background:radial-gradient(circle,#fff 0 32%,rgba(255,255,255,0) 33%),conic-gradient(#dc2626 0 12.5%,#ea580c 0 25%,#ca8a04 0 37.5%,#16a34a 0 50%,#0891b2 0 62.5%,#7c3aed 0 75%,#be123c 0 87.5%,#0d9488 0)"></button>
+            <button type="button" class="style-swatch" data-style="minimal" title="Minimal" aria-label="Minimal wheel style" style="background:radial-gradient(circle,#fff 0 32%,rgba(255,255,255,0) 33%),conic-gradient(#0f172a 0 12.5%,#334155 0 25%,#64748b 0 37.5%,#94a3b8 0 50%,#1e293b 0 62.5%,#475569 0 75%,#64748b 0 87.5%,#94a3b8 0)"></button>
+          </div>
+          <div class="wheel-box">
+            <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
+            <button type="button" id="centerSpin" aria-label="Spin the wheel" title="Spin the wheel"><svg viewBox="0 0 100 112" aria-hidden="true" focusable="false"><g stroke="#fff" stroke-width="5" fill="#db2777"><circle cx="50" cy="62" r="41"/><path d="M50 3 L67 36 L33 36 Z"/></g><g fill="#db2777"><circle cx="50" cy="62" r="41"/><path d="M50 3 L67 36 L33 36 Z"/></g></svg><span class="spin-txt">Spin</span></button>
+          </div>
         </div>
         <div class="btns nowrap">
           <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button>
-          <button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
           <button type="button" onclick="resetAll()">Reset</button>
         </div>
         <div class="result" id="result" aria-live="polite">Spin the wheel to see what fate says</div>
         <div class="history" id="history" aria-live="polite"></div>
-        <p class="meta">Separate options with commas or new lines.</p>
-        <textarea id="options" rows="1" aria-label="Wheel options" spellcheck="false">Yes,No,Maybe,Try again,Ask later,Signs point to yes,Outlook good,Don't count on it</textarea>
+        <p class="meta">Each row is one slice of the wheel.</p>
+        <div id="editPane">
+          <div id="tableView">
+            <div id="optTableWrap">
+              <div id="optTable" role="list" aria-label="Wheel options"></div>
+              <div class="opt-empty" id="optEmpty" hidden>No options yet — add one below or paste a list.</div>
+            </div>
+            <button type="button" id="addOptBtn" onclick="addRow()">+ Add option</button>
+          </div>
+          <div id="pastePane">
+            <textarea id="options" rows="4" aria-label="Wheel options" spellcheck="false">Yes,No,Maybe,Try again,Ask later,Signs point to yes,Outlook good,Don't count on it</textarea>
+            <p class="saved-hint">One option per line, or comma-separated. Changes apply as you type.</p>
+          </div>
+        </div>
         <div class="btns list-btns">
+          <button type="button" id="modeBtn" onclick="toggleEditMode()">📋 Paste</button>
+          <button type="button" onclick="importFile()">📥 Import</button>
+          <input type="file" id="fileImport" accept=".txt,.csv,text/plain,text/csv" hidden>
           <button type="button" onclick="saveList(false)">💾 Save</button>
           <button type="button" onclick="clearOptions()">Clear</button>
           <button type="button" onclick="removeLast()">Remove</button>
@@ -162,6 +228,28 @@
 <script>var canvas = document.getElementById('wheel');
     var ctx = canvas.getContext('2d');
     var colors = ['#db2777','#7c3aed','#2563eb','#059669','#d97706','#dc2626','#0891b2','#65a30d'];
+    /* ===== v3：轮盘样式预设（与主站 wheel-of-fate 保持一致） ===== */
+    var STYLES = {
+      classic: { seg: ['#db2777','#7c3aed','#2563eb','#059669','#d97706','#dc2626','#0891b2','#65a30d'],
+                 rim: ['#f43f5e','#f97316','#facc15','#22c55e','#3b82f6','#a855f7'], rimFallback: '#e2e8f0',
+                 label: '#ffffff', pointer: ['#fb923c','#f43f5e'] },
+      neon:    { seg: ['#0ea5e9','#8b5cf6','#ec4899','#10b981','#eab308','#f97316','#06b6d4','#d946ef'],
+                 rim: ['#22d3ee','#a78bfa','#f472b6','#34d399','#fde047','#fb923c'], rimFallback: '#164e63',
+                 label: '#ffffff', pointer: ['#22d3ee','#8b5cf6'] },
+      pastel:  { seg: ['#f9a8d4','#c4b5fd','#93c5fd','#6ee7b7','#fde68a','#fca5a5','#a5f3fc','#d9f99d'],
+                 rim: ['#f9a8d4','#c4b5fd','#93c5fd','#6ee7b7','#fde68a','#fca5a5'], rimFallback: '#e2e8f0',
+                 label: '#1e293b', pointer: ['#fb7185','#f59e0b'] },
+      carnival:{ seg: ['#dc2626','#ea580c','#ca8a04','#16a34a','#0891b2','#7c3aed','#be123c','#0d9488'],
+                 rim: ['#dc2626','#ea580c','#ca8a04','#16a34a','#0891b2','#7c3aed'], rimFallback: '#7c2d12',
+                 label: '#ffffff', pointer: ['#fbbf24','#dc2626'] },
+      minimal: { seg: ['#0f172a','#334155','#64748b','#94a3b8','#1e293b','#475569','#64748b','#94a3b8'],
+                 rim: ['#0f172a','#334155','#64748b','#94a3b8','#1e293b','#475569'], rimFallback: '#e2e8f0',
+                 label: '#ffffff', pointer: ['#0f172a','#64748b'] }
+    };
+    var STYLE_KEY = 'myspinpick.wheelOfFate.style';
+    var curStyle = 'classic';
+    try { var _sv = localStorage.getItem(STYLE_KEY); if (_sv && STYLES[_sv]) curStyle = _sv; } catch (e) {}
+    function curS() { return STYLES[curStyle] || STYLES.classic; }
     var RESULT_PREFIX = "Fate says: ";
     var RESULT_INIT = "Spin the wheel to see what fate says";
     var options = [];
@@ -177,6 +265,9 @@
     var selectedSaved = -1;
 
     var optionsEl = document.getElementById('options');
+    var centerSpin = document.getElementById('centerSpin');
+    var optTable = document.getElementById('optTable');
+    var editPane = document.getElementById('editPane');
 
     function recordResult(name, colorIdx) {
       if (selectedSaved>= 0 && selectedSaved < savedLists.length) {
@@ -218,6 +309,7 @@
         return;
       }
       var slice = (Math.PI * 2) / n;
+      var SEG = curS().seg, LBL = curS().label;
       for (var i = 0; i < n; i++) {
         var start = angle + i * slice;
         var end = start + slice;
@@ -225,7 +317,7 @@
         ctx.moveTo(cx, cy);
         ctx.arc(cx, cy, r, start, end);
         ctx.closePath();
-        ctx.fillStyle = colors[i % colors.length];
+        ctx.fillStyle = SEG[i % SEG.length];
         ctx.fill();
         ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
         ctx.stroke();
@@ -233,7 +325,7 @@
         ctx.translate(cx, cy);
         ctx.rotate(start + slice / 2);
         ctx.textAlign = 'right';
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = LBL;
         ctx.font = 'bold 14px sans-serif';
         var label = options[i];
         if (label.length> 14) label = label.slice(0, 13) + '…';
@@ -252,26 +344,172 @@
         ctx.strokeStyle = g; ctx.lineWidth = 4;
         ctx.stroke();
       }
+      /* v3.2：右侧指针已移除——判定角度与指针统一改到顶部，指针融合到中心 Spin 按钮上 */
+      var T = Math.PI * 2;
+      var RIMC = curS().rim, RIMF = curS().rimFallback;
+      var ringGrad = null;
+      if (ctx.createConicGradient) {
+        ringGrad = ctx.createConicGradient(angle, cx, cy);
+        for (var gi = 0; gi < RIMC.length; gi++) {
+          ringGrad.addColorStop(gi / (RIMC.length - 1), RIMC[gi]);
+        }
+      }
       ctx.beginPath();
-      ctx.moveTo(cx + r + 4, cy);
-      ctx.lineTo(cx + r - 18, cy - 12);
-      ctx.lineTo(cx + r - 18, cy + 12);
-      ctx.closePath();
-      var ag = ctx.createLinearGradient(cx + r - 18, cy, cx + r + 4, cy);
-      ag.addColorStop(0, '#ef4444'); ag.addColorStop(0.5, '#facc15'); ag.addColorStop(1, '#3b82f6');
-      ctx.fillStyle = ag;
-      ctx.fill();
+      ctx.arc(cx, cy, r + 1, 0, T);
+      ctx.strokeStyle = ringGrad || RIMF;
+      ctx.lineWidth = 5;
+      ctx.stroke();
     }
 
     function pickWinner() {
       var n = options.length;
       var slice = (Math.PI * 2) / n;
       var a = ((currentAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-      var idx = Math.floor(((Math.PI * 2 - a) % (Math.PI * 2)) / slice) % n;
+      /* v3.2：指针在顶部（与中心按钮指针一致），判定方向 = Math.PI * 1.5 */
+      var idx = Math.floor((((Math.PI * 1.5 - a) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / slice) % n;
       return idx;
     }
 
-    function setBtnsDisabled(d) { var b = document.querySelectorAll('.btns button'); for (var i = 0; i < b.length; i++) { b[i].disabled = d; } }
+    function setBtnsDisabled(d) { var b = document.querySelectorAll('.btns button'); for (var i = 0; i < b.length; i++) { b[i].disabled = d; } if (centerSpin) centerSpin.disabled = d; }
+
+    /* ===== v3：轮盘样式切换 ===== */
+    function renderStyleChips() {
+      var row = document.getElementById('styleRow');
+      if (!row) return;
+      var chips = row.querySelectorAll('.style-swatch');
+      for (var i = 0; i < chips.length; i++) {
+        chips[i].classList.toggle('active', chips[i].getAttribute('data-style') === curStyle);
+      }
+    }
+    function applyStyle(key) {
+      if (!STYLES[key]) return;
+      curStyle = key;
+      colors = curS().seg;
+      try { localStorage.setItem(STYLE_KEY, key); } catch (e) {}
+      renderStyleChips();
+      drawWheel(currentAngle);
+      track('wheel_style', { tool: 'wheel-of-fate-embed', style: key });
+    }
+
+    /* ===== v3：选项表格编辑器（embed 版：无 persistLast/LAST_KEY） ===== */
+    function rowsToText() {
+      var inputs = optTable.querySelectorAll('input.opt-input');
+      var vals = [];
+      for (var i = 0; i < inputs.length; i++) { var v = inputs[i].value.trim(); if (v) vals.push(v); }
+      return vals.join(',');
+    }
+    function updateEmpty() {
+      var e = document.getElementById('optEmpty');
+      if (e) e.hidden = optTable.children.length > 0;
+    }
+    function renumber() {
+      var rows = optTable.children;
+      for (var i = 0; i < rows.length; i++) { rows[i].querySelector('.idx').textContent = (i + 1) + '.'; }
+      updateEmpty();
+    }
+    function addRowNode(val) {
+      var row = document.createElement('div');
+      row.className = 'opt-row';
+      row.setAttribute('role', 'listitem');
+      var idx = document.createElement('span');
+      idx.className = 'idx';
+      var inp = document.createElement('input');
+      inp.type = 'text';
+      inp.className = 'opt-input';
+      inp.value = val || '';
+      inp.setAttribute('aria-label', 'Option ' + (optTable.children.length + 1));
+      inp.setAttribute('maxlength', '80');
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'del';
+      del.textContent = '✕';
+      del.setAttribute('aria-label', 'Remove this option');
+      del.title = 'Remove';
+      del.addEventListener('click', function () {
+        if (spinning) return;
+        row.parentNode.removeChild(row);
+        renumber();
+        rowChanged();
+      });
+      inp.addEventListener('input', function () { rowChanged(); });
+      inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (!spinning) { var nr = addRowNode(''); renumber(); nr.querySelector('input').focus(); }
+        }
+      });
+      idx.textContent = (optTable.children.length + 1) + '.';
+      row.appendChild(idx);
+      row.appendChild(inp);
+      row.appendChild(del);
+      optTable.appendChild(row);
+      return row;
+    }
+    function syncTable() { renderRowsFromText(optionsEl.value); }
+    function renderRowsFromText(text) {
+      var items = itemsOf(text);
+      optTable.innerHTML = '';
+      for (var i = 0; i < items.length; i++) addRowNode(items[i]);
+      updateEmpty();
+    }
+    function rowChanged() {
+      optionsEl.value = rowsToText();
+      options = getOptions();
+      winnerIdx = null;
+      drawWheel(currentAngle);
+    }
+    function addRow() {
+      if (spinning) return;
+      var r = addRowNode('');
+      renumber();
+      r.querySelector('input').focus();
+    }
+    function toggleEditMode() {
+      if (spinning) return;
+      var paste = editPane.classList.toggle('paste');
+      var btn = document.getElementById('modeBtn');
+      if (btn) btn.textContent = paste ? '🔢 Table mode' : '📋 Paste / Import';
+      if (!paste) {
+        options = getOptions();
+        winnerIdx = null;
+        syncTable();
+        drawWheel(currentAngle);
+      }
+      track('edit_mode', { tool: 'wheel-of-fate-embed', mode: paste ? 'paste' : 'table' });
+    }
+
+    /* ===== v3.4：文件导入（.txt / .csv，逗号或换行分隔） ===== */
+    function importFile() {
+      if (spinning) return;
+      var inp = document.getElementById('fileImport');
+      if (inp) inp.click();
+    }
+    (function () {
+      var inp = document.getElementById('fileImport');
+      if (!inp) return;
+      inp.addEventListener('change', function () {
+        var f = inp.files && inp.files[0];
+        if (!f) return;
+        var meta = document.getElementById('meta');
+        if (spinning) { inp.value = ''; return; }
+        if (f.size > 200 * 1024) { meta.textContent = 'File too large — keep it under 200 KB.'; inp.value = ''; return; }
+        var reader = new FileReader();
+        reader.onload = function () {
+          var items = itemsOf(String(reader.result));
+          if (!items.length) { meta.textContent = 'No options found in that file.'; inp.value = ''; return; }
+          optionsEl.value = items.join(',');
+          options = getOptions();
+          winnerIdx = null;
+          syncTable();
+          drawWheel(currentAngle);
+          meta.textContent = 'Imported ' + items.length + ' options from "' + f.name + '".';
+          track('import_file', { tool: 'wheel-of-fate-embed', count: items.length });
+          inp.value = '';
+        };
+        reader.onerror = function () { meta.textContent = 'Could not read that file.'; inp.value = ''; };
+        reader.readAsText(f);
+      });
+    })();
 
     /* ---------- sound ---------- */
     function ensureAudio() {
@@ -312,6 +550,8 @@
           savedLists = s.filter(function(x){ return x && typeof x.text === 'string'; }).slice(0, SAVED_MAX);
           for (var i = 0; i < savedLists.length; i++) {
             if (!Array.isArray(savedLists[i].res)) savedLists[i].res = [];
+            /* v3.6：兼容主页面 Lists 命名；legacy 行没有 name 时给临时名（主页面加载时会做正式迁移） */
+            if (typeof savedLists[i].name !== 'string' || !savedLists[i].name) savedLists[i].name = 'List ' + (i + 1);
           }
         }
       } catch (e) { savedLists = []; }
@@ -325,7 +565,7 @@
       var meta = document.getElementById('meta');
       if (!items.length) { if (!silent) meta.textContent = 'Nothing to save — the options box is empty.'; return; }
       if (selectedSaved>= 0 && selectedSaved < savedLists.length) {
-        savedLists[selectedSaved] = { text: items.join(','), n: items.length, res: savedLists[selectedSaved].res || [] };
+        savedLists[selectedSaved] = { name: savedLists[selectedSaved].name, text: items.join(','), n: items.length, res: savedLists[selectedSaved].res || [] };
         renderSaved();
         persistSaved();
         if (!silent) { meta.textContent = 'Saved list updated.'; track('save_list', { mode: 'update' }); }
@@ -338,7 +578,13 @@
           return;
         }
       }
-      savedLists.unshift({ text: items.join(','), n: items.length, res: [] });
+      /* v3.6：新列表沿用主页面 Lists 命名（取最大编号 +1），与主页面共享 localStorage 时名称不冲突 */
+      var maxN = 0;
+      for (var q = 0; q < savedLists.length; q++) {
+        var m = /^list\s+(\d+)$/i.exec(savedLists[q].name || '');
+        if (m) maxN = Math.max(maxN, parseInt(m[1], 10));
+      }
+      savedLists.unshift({ name: 'List ' + (maxN + 1), text: items.join(','), n: items.length, res: [] });
       if (savedLists.length> SAVED_MAX) savedLists.pop();
       if (!silent || autoSelect) selectedSaved = 0;
       renderSaved();
@@ -412,8 +658,9 @@
       persistSaved();
     }
     function autoGrow() {
-      optionsEl.style.height = 'auto';
-      optionsEl.style.height = Math.max(46, optionsEl.scrollHeight) + 'px';
+      /* v3：textarea 已降级为“粘贴/导入”视图；此函数在所有程序化写入 optionsEl.value 的路径上被调用，
+         现在的职责是把文本同步渲染进表格（保持原调用点不变） */
+      syncTable();
     }
 
     function animate(total, duration) {
@@ -429,7 +676,8 @@
         if (n> 0) {
           var slice = (Math.PI * 2) / n;
           var a = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-          var idx = Math.floor(((Math.PI * 2 - a) % (Math.PI * 2)) / slice) % n;
+          /* v3.2：tick 与 pickWinner 同步用顶部判定（Math.PI * 1.5） */
+          var idx = Math.floor((((Math.PI * 1.5 - a) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / slice) % n;
           if (idx !== lastTickIdx) { lastTickIdx = idx; tick(); }
         }
         if (t < 1) {
@@ -517,6 +765,20 @@
 
     try { muted = localStorage.getItem('myspinpick.wheelOfFate.sound') === 'off'; } catch (e) {}
     document.getElementById('muteBtn').textContent = muted ? '🔇' : '🔊';
+    /* v3：样式与中心按钮、表格初始化 */
+    colors = curS().seg;
+    renderStyleChips();
+    if (centerSpin) centerSpin.addEventListener('click', function () { if (!spinning) buildAndSpin(); });
+    (function () {
+      var row = document.getElementById('styleRow');
+      if (!row) return;
+      var chips = row.querySelectorAll('.style-swatch');
+      for (var i = 0; i < chips.length; i++) {
+        (function (chip) {
+          chip.addEventListener('click', function () { applyStyle(chip.getAttribute('data-style')); });
+        })(chips[i]);
+      }
+    })();
     options = getOptions();
     if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
     drawWheel(0);

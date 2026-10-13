@@ -101,12 +101,12 @@
       {
         "@type": "Question",
         "name": "Can I save my fate lists for later?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Click Save to store the current answers in the Saved lists section — they stay in your browser for next time." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Your lists save automatically in your browser as you edit — click + Add list to keep as many as you like and switch between them anytime." }
       },
       {
         "@type": "Question",
         "name": "Can I edit the possible answers?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Rewrite the list in the box — commas or new lines both work — and the wheel updates instantly." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Edit any row in the options table, add rows with the + Add option button, or switch to Paste mode to import a whole comma-separated list — the wheel updates instantly." }
       },
       {
         "@type": "Question",
@@ -218,15 +218,63 @@
     .icon-btn { width: 46px; padding-left: 0; padding-right: 0; font-size: 16px; }
     .btns.list-btns { justify-content: flex-start; margin: 8px 0 0; }
     #options { min-height: 46px; height: 46px; overflow: hidden; resize: none; }
-    .saved-head { margin-top: 18px; }
-    .saved-head .label { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
     .saved-hint { font-size: 13px; color: var(--muted); margin: 2px 0 8px; }
-    .saved-row { display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; margin-bottom: 6px; cursor: pointer; }
-    .saved-row.selected { background: #fbeaf0; border-color: #f4c0d1; }
-    .saved-row .preview { flex: 1; min-width: 0; font-size: 13px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .saved-row .n { font-size: 12px; color: var(--muted); flex-shrink: 0; }
-    .saved-row button { flex: 0 0 20px; width: 20px; height: 20px; min-width: 20px; min-height: 20px; aspect-ratio: 1; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
-    .saved-row button:hover { background: #fee2e2; border-color: #fca5a5; }
+    /* ===== v3.7：Lists 页签（置于 Options 面板顶部，点击切换） ===== */
+    #listTabs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 2px 0 10px; }
+    .list-tab { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; background: #f8fafc; border: 1px solid var(--border); border-radius: 999px; padding: 5px 8px 5px 12px; cursor: pointer; font-size: 13px; color: var(--ink); user-select: none; }
+    .list-tab:hover { border-color: #f4c0d1; background: #fdf2f8; }
+    .list-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+    .list-tab .n { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .list-tab.active .n { color: rgba(255,255,255,.85); }
+    .list-tab button { flex: 0 0 16px; width: 16px; height: 16px; min-width: 16px; min-height: 16px; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 10px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: transparent; border-color: transparent; color: var(--muted); }
+    .list-tab button:hover { background: #fee2e2; color: #dc2626; }
+    .list-tab.active button { color: rgba(255,255,255,.8); }
+    .list-tab.active button:hover { background: rgba(255,255,255,.25); color: #fff; }
+    .list-tab.add { min-height: 0; padding: 5px 12px; border-style: dashed; color: var(--muted); background: #fff; font-weight: 700; }
+    .list-tab.add:hover { color: var(--accent); border-color: var(--accent); background: #fdf2f8; }
+    @media (max-width: 480px) { .list-tab { padding: 4px 6px 4px 10px; font-size: 12.5px; } }
+
+    /* ===== v3.6：中心 Spin 按钮——SVG 一体成形（圆盘+指针同一条轮廓，无拼缝） ===== */
+    .wheel-box { position: relative; display: inline-block; line-height: 0; }
+    #centerSpin { position: absolute; left: calc(50% - 50px); top: calc(50% - 62px);
+      width: 100px; height: 112px; min-height: 0; padding: 0; border: 0; background: transparent;
+      color: #fff; font-size: 17px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+      text-shadow: 0 1px 3px rgba(15,23,42,.35);
+      cursor: pointer; filter: drop-shadow(0 4px 10px rgba(190,24,93,.38));
+      transition: transform .12s ease, filter .12s ease; transform-origin: 50% 62px; }
+    #centerSpin:hover:not(:disabled) { transform: scale(1.05); }
+    #centerSpin:active:not(:disabled) { transform: scale(.97); }
+    #centerSpin:disabled { filter: grayscale(.4) brightness(.96); cursor: wait; }
+    #centerSpin svg { display: block; width: 100%; height: 100%; pointer-events: none; }
+    #centerSpin .spin-txt { position: absolute; left: 0; top: 62px; width: 100%; transform: translateY(-50%); }
+    @media (max-width: 480px) { #centerSpin { left: calc(50% - 44px); top: calc(50% - 55px); width: 88px; height: 99px; transform-origin: 50% 55px; } #centerSpin .spin-txt { top: 55px; font-size: 15px; } }
+
+    /* ===== v3.1：轮盘样式选择（微缩预览，无文字，无字段标签） ===== */
+    .style-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .style-swatch { width: 30px; height: 30px; min-height: 0; padding: 0; border-radius: 50%;
+      border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border), 0 1px 3px rgba(15,23,42,.12);
+      cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
+    .style-swatch:hover { transform: scale(1.14); }
+    .style-swatch.active { box-shadow: 0 0 0 2px var(--accent), 0 1px 4px rgba(15,23,42,.18); transform: scale(1.08); }
+    @media (max-width: 480px) { .style-swatch { width: 34px; height: 34px; } }
+
+    /* ===== v3：选项表格编辑器 ===== */
+    #optTableWrap { max-height: 300px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--card); }
+    .opt-row { display: flex; align-items: center; gap: 8px; padding: 0 10px 0 6px; border-bottom: 1px solid #eef2f7; }
+    .opt-row:last-child { border-bottom: none; }
+    .opt-row .idx { flex: 0 0 28px; text-align: right; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .opt-row input[type="text"] { flex: 1; min-width: 0; border: 0; border-radius: 6px; padding: 9px 4px; font-size: 14.5px; background: transparent; box-shadow: none; }
+    .opt-row input[type="text"]:focus { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
+    .opt-row .del { flex: 0 0 22px; width: 22px; height: 22px; min-width: 22px; min-height: 22px; padding: 0; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+    .opt-row .del:hover { background: #fee2e2; border-color: #fca5a5; }
+    #addOptBtn { margin-top: 8px; border-style: dashed; background: #fff; color: var(--muted); padding: 8px 16px; min-height: 0; }
+    #addOptBtn:hover { color: var(--accent); border-color: var(--accent); background: #fdf2f8; }
+    .opt-empty { padding: 14px 12px; color: var(--muted); font-size: 13.5px; text-align: left; }
+    #pastePane { display: none; }
+    #editPane.paste #pastePane { display: block; }
+    #editPane.paste #tableView { display: none; }
+    #pastePane textarea { min-height: 170px; height: auto; resize: vertical; overflow: auto; }
+    #pastePane .saved-hint { margin-top: 6px; }
 
     /* /embed/ 嵌入板块 */
     #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -246,8 +294,6 @@
     @media (max-width: 480px) { .btns.nowrap button.primary { padding: 11px 18px; font-size: 15px; } }
     @media (max-width: 420px) { .btns.nowrap { flex-wrap: wrap; } }
 
-    .meta-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
-    .meta-row .meta { margin-bottom: 0; }
     .tool-opt { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; white-space: nowrap; user-select: none; }
 
     .win-modal { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(15,23,42,.55); }
@@ -261,13 +307,33 @@
     .win-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
     @media (max-width: 480px) { .win-name { font-size: 26px; } .win-card { padding: 22px 22px 18px; } }
 
+    /* ===== v3.4：PC 左中右三栏（结果 | 轮盘 | 列表维护） ===== */
+    .tool-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .panel { background: #f8fafc; border: 1px solid #e8eef5; border-radius: 12px; padding: 14px; min-width: 0; }
+    .panel-wheel { display: flex; flex-direction: column; align-items: center; order: 1; }
+    .panel-result { order: 2; display: flex; flex-direction: column; }
+    .panel-result .btns { margin-top: auto; flex-direction: column; gap: 8px; }
+    .panel-result .btns button { width: 100%; }
+    .panel-list { order: 3; }
+    .panel-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 10px; text-align: left; }
+    .panel-result .history { grid-template-columns: 1fr; }
+    @media (min-width: 1024px) {
+      .wrap { max-width: 1180px; }
+      .tool-grid { grid-template-columns: 215px minmax(0, 1fr) 300px; gap: 20px; }
+      .panel-result { order: 1; }
+      .panel-wheel { order: 2; }
+      .panel-list { order: 3; }
+    }
+
     body.fs { background: #f6f8fb; }
     body.fs .wrap { max-width: none; padding: 0; }
-    body.fs header, body.fs section, body.fs footer, body.fs .saved-head, body.fs .saved-hint,
-    body.fs #savedLists, body.fs .list-btns, body.fs #options, body.fs .meta-row,
-    body.fs .history { display: none !important; }
+    body.fs header, body.fs section, body.fs footer,
+    body.fs .panel-list { display: none !important; }
     body.fs .tool { border: 0; box-shadow: none; border-radius: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
-    body.fs .wheel-wrap { margin-bottom: 0; }
+    body.fs .tool-grid { display: block; }
+    body.fs .panel { background: none; border: 0; padding: 0; }
+    body.fs .panel-result .panel-label, body.fs .panel-result .history, body.fs .panel-result .btns,
+    body.fs .style-row { display: none !important; }
     body.fs .result { font-size: 26px; }
 </style>
 </head>
@@ -295,45 +361,87 @@
 
     <main>
       <div class="tool">
-        <div class="wheel-wrap">
-          <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
+        <div class="tool-grid">
+
+          <div class="panel panel-result">
+            <div class="panel-label">Result</div>
+            <div class="result" id="result" aria-live="polite">Spin the wheel to see what fate says</div>
+            <div class="history" id="history" aria-live="polite"></div>
+            <div class="btns">
+              <button type="button" onclick="copyResult()">📋 Copy Result</button>
+              <button type="button" onclick="shareList()">🔗 Share</button>
+            </div>
+          </div>
+
+          <div class="panel panel-wheel">
+            <div class="style-row" id="styleRow">
+              <button type="button" class="style-swatch" data-style="classic" title="Classic" aria-label="Classic wheel style" style="background:radial-gradient(circle,#fff 0 32%,rgba(255,255,255,0) 33%),conic-gradient(#db2777 0 12.5%,#7c3aed 0 25%,#2563eb 0 37.5%,#059669 0 50%,#d97706 0 62.5%,#dc2626 0 75%,#0891b2 0 87.5%,#65a30d 0)"></button>
+              <button type="button" class="style-swatch" data-style="neon" title="Neon Night" aria-label="Neon Night wheel style" style="background:radial-gradient(circle,#fff 0 32%,rgba(255,255,255,0) 33%),conic-gradient(#0ea5e9 0 12.5%,#8b5cf6 0 25%,#ec4899 0 37.5%,#10b981 0 50%,#eab308 0 62.5%,#f97316 0 75%,#06b6d4 0 87.5%,#d946ef 0)"></button>
+              <button type="button" class="style-swatch" data-style="pastel" title="Pastel" aria-label="Pastel wheel style" style="background:radial-gradient(circle,#fff 0 32%,rgba(255,255,255,0) 33%),conic-gradient(#f9a8d4 0 12.5%,#c4b5fd 0 25%,#93c5fd 0 37.5%,#6ee7b7 0 50%,#fde68a 0 62.5%,#fca5a5 0 75%,#a5f3fc 0 87.5%,#d9f99d 0)"></button>
+              <button type="button" class="style-swatch" data-style="carnival" title="Carnival" aria-label="Carnival wheel style" style="background:radial-gradient(circle,#fff 0 32%,rgba(255,255,255,0) 33%),conic-gradient(#dc2626 0 12.5%,#ea580c 0 25%,#ca8a04 0 37.5%,#16a34a 0 50%,#0891b2 0 62.5%,#7c3aed 0 75%,#be123c 0 87.5%,#0d9488 0)"></button>
+              <button type="button" class="style-swatch" data-style="minimal" title="Minimal" aria-label="Minimal wheel style" style="background:radial-gradient(circle,#fff 0 32%,rgba(255,255,255,0) 33%),conic-gradient(#0f172a 0 12.5%,#334155 0 25%,#64748b 0 37.5%,#94a3b8 0 50%,#1e293b 0 62.5%,#475569 0 75%,#64748b 0 87.5%,#94a3b8 0)"></button>
+            </div>
+            <div class="wheel-box">
+              <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
+              <button type="button" id="centerSpin" aria-label="Spin the wheel" title="Spin the wheel"><svg viewBox="0 0 100 112" aria-hidden="true" focusable="false"><g stroke="#fff" stroke-width="5" fill="#db2777"><circle cx="50" cy="62" r="41"/><path d="M50 3 L67 36 L33 36 Z"/></g><g fill="#db2777"><circle cx="50" cy="62" r="41"/><path d="M50 3 L67 36 L33 36 Z"/></g></svg><span class="spin-txt">Spin</span></button>
+            </div>
+            <div class="btns nowrap">
+              <button type="button" class="icon-btn" id="fsBtn" onclick="toggleFullscreen()" aria-label="Fullscreen presentation mode" title="Fullscreen presentation mode">⛶</button>
+              <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button>
+              <button type="button" onclick="resetAll()">Reset</button>
+            </div>
+          </div>
+
+          <div class="panel panel-list">
+            <div class="panel-label">Options</div>
+            <div id="listTabs" role="tablist" aria-label="Saved lists"></div>
+            <p class="meta">Each row is one slice of the wheel.</p>
+            <div id="editPane">
+              <div id="tableView">
+                <div id="optTableWrap">
+                  <div id="optTable" role="list" aria-label="Wheel options"></div>
+                  <div class="opt-empty" id="optEmpty" hidden>No options yet — add one below or import a list.</div>
+                </div>
+                <button type="button" id="addOptBtn" onclick="addRow()">+ Add option</button>
+              </div>
+              <div id="pastePane">
+                <textarea id="options" rows="4" aria-label="Wheel options" spellcheck="false">Yes,No,Maybe,Try again,Ask later,Signs point to yes,Outlook good,Don't count on it</textarea>
+                <p class="saved-hint">One option per line, or comma-separated. Changes apply as you type.</p>
+              </div>
+            </div>
+            <div class="btns list-btns">
+              <button type="button" id="modeBtn" onclick="toggleEditMode()">📋 Paste</button>
+              <button type="button" onclick="importFile()">📥 Import</button>
+              <input type="file" id="fileImport" accept=".txt,.csv,text/plain,text/csv" hidden>
+            </div>
+            <div class="meta" id="meta"></div>
+          </div>
+
         </div>
-        <div class="btns nowrap">
-          <button type="button" class="icon-btn" id="fsBtn" onclick="toggleFullscreen()" aria-label="Fullscreen presentation mode" title="Fullscreen presentation mode">⛶</button>
-          <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button>
-          <button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
-          <button type="button" onclick="resetAll()">Reset</button>
-          <button type="button" onclick="copyResult()">Copy Result</button>
-        </div>
-        <div class="result" id="result" aria-live="polite">Spin the wheel to see what fate says</div>
-        <div class="history" id="history" aria-live="polite"></div>
-        <div class="meta-row">
-          <p class="meta">Separate options with commas or new lines.</p>
-          <label class="tool-opt" for="popupChk"><input type="checkbox" id="popupChk" checked /> 🎉 Winner popup</label>
-        </div>
-        <textarea id="options" rows="1" aria-label="Wheel options" spellcheck="false">Yes,No,Maybe,Try again,Ask later,Signs point to yes,Outlook good,Don't count on it</textarea>
-        <div class="btns list-btns">
-          <button type="button" onclick="saveList(false)">💾 Save</button>
-          <button type="button" onclick="clearOptions()">Clear</button>
-          <button type="button" onclick="removeWinner()">Remove Winner</button>
-          <button type="button" onclick="shareList()">🔗 Share</button>
-        </div>
-        <div class="saved-head"><span class="label">Saved lists</span></div>
-        <p class="saved-hint">Tip: save your frequently used lists for quick reuse.</p>
-        <div id="savedLists"></div>
-        <div class="meta" id="meta"></div>
       </div>
+
+      <section id="related">
+        <h2>More Wheels to Try</h2>
+        <div class="related">
+          <a href="../wheel-spinner/">Name Wheel Picker <span>Pick names</span></a>
+          <a href="../wheel-of-colors/">Wheel of Colors <span>Pick a random color</span></a>
+          <a href="../decision-wheel-spinner/">Decision Wheel Spinner <span>Spin to decide</span></a>
+          <a href="../what-to-eat-wheel/">What to Eat Wheel <span>Pick dinner</span></a>
+          <a href="../yes-no-wheel/">Yes No Wheel <span>Quick choice</span></a>
+          <a href="../random-group-generator/">Random Group Generator <span>Split into groups</span></a>
+        </div>
+      </section>
 
             <section id="about">
         <h2>How to Use the Wheel of Fate</h2>
-        <p>Think of a question, press Spin, and read the answer fate lands on. The wheel starts with playful outcomes like Yes, No, Maybe, Try again and Signs point to yes.</p>
-        <p>Prefer a different kind of decision tool? The Related Tools below link to a name wheel picker, a wheel of colors and other random wheels.</p>
+        <p>Think of a question, hit the big Spin button in the centre of the wheel, and read the answer fate lands on. The wheel starts with playful outcomes like Yes, No, Maybe, Try again and Signs point to yes.</p>
+        <p>Prefer a different kind of decision tool? The More Wheels panel right under the wheel links to a name wheel picker, a wheel of colors and other random wheels.</p>
       </section>
 
             <section id="editing">
               <h2>Editing the Fate Outcomes</h2>
               <p>The wheel opens with a set of playful replies — yes, no, maybe, try again and a few signs-point-to-yes style answers. Replace them with your own and the tool becomes a verdict machine for whatever question you have in mind.</p>
-              <p>Type the new entries into the box, separated by commas, and the wheel redraws straight away. Some people keep the playful defaults; others load serious answers for a workplace question.</p>
+              <p>Each row in the options table is one slice of the wheel. Edit a row, delete it with the ✕ button, or add new ones — the wheel redraws straight away. For longer lists, switch to Paste / Import mode and drop in comma-separated or line-by-line text.</p>
             </section>
             <section id="vs-eightball">
               <h2>Wheel of Fate vs a Magic 8-Ball</h2>
@@ -357,7 +465,7 @@
             </section>
             <section id="saved-lists">
               <h2>Save Your Favourite Fate Lists</h2>
-              <p>Press Save to keep the current set of answers in your browser, then reload it whenever the same group plays again. You can hold one list of playful replies for parties and another of straight yes or no answers for real decisions, and switch between them in a click.</p>
+              <p>Every list saves automatically in your browser as you edit. Press + Add list to keep as many as you like — one list of playful replies for parties, another of straight yes or no answers for real decisions — and switch between them in a click.</p>
             </section>
             <section id="questions">
               <h2>Questions to Ask the Wheel of Fate</h2>
@@ -375,7 +483,7 @@
         <h2>Embed the Wheel of Fate on Your Site</h2>
         <p>Teachers, streamers and event hosts can put this exact wheel on their own page. Copy the snippet below into any HTML block — it loads the same free wheel of fate from myspinpick.com, stretches to the width of your container, and needs no account or download.</p>
         <p>The embed is free to use. A small "Wheel of Fate by MySpinPick" credit link sits under the wheel; please leave it in place so people who land on your page can find the tool again.</p>
-        <pre class="embed-code" id="embed-code" aria-label="Embed code for Wheel of Fate">&lt;iframe src="https://myspinpick.com/embed/wheel-of-fate/" width="100%" height="957" style="border:0;max-width:100%" title="Wheel of Fate by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Wheel of Fate">&lt;iframe src="https://myspinpick.com/embed/wheel-of-fate/" width="100%" height="1240" style="border:0;max-width:100%" title="Wheel of Fate by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
         <p class="embed-actions">
           <button type="button" id="embed-copy">Copy embed code</button>
           <a class="embed-preview" href="https://myspinpick.com/embed/wheel-of-fate/" target="_blank" rel="noopener">Preview the widget</a>
@@ -403,19 +511,7 @@
 </script>
       </section>
 
-      <section id="related">
-        <h2>Related Tools</h2>
-        <div class="related">
-          <a href="../wheel-spinner/">Name Wheel Picker <span>Pick names</span></a>
-          <a href="../wheel-of-colors/">Wheel of Colors <span>Pick a random color</span></a>
-          <a href="../decision-wheel-spinner/">Decision Wheel Spinner <span>Spin to decide</span></a>
-          <a href="../what-to-eat-wheel/">What to Eat Wheel <span>Pick dinner</span></a>
-          <a href="../yes-no-wheel/">Yes No Wheel <span>Quick choice</span></a>
-          <a href="../random-group-generator/">Random Group Generator <span>Split into groups</span></a>
-        </div>
-      </section>
-
-            <section id="faq">
+      <section id="faq">
         <h2>Frequently Asked Questions</h2>
         <details>
           <summary>How do I use the wheel of fate?</summary>
@@ -431,11 +527,11 @@
         </details>
         <details>
           <summary>Can I save my fate lists for later?</summary>
-          <p>Yes. Click Save to store the current answers in the Saved lists section — they stay in your browser for next time.</p>
+          <p>Yes. Your lists save automatically in your browser as you edit — click + Add list to keep as many as you like and switch between them anytime.</p>
         </details>
         <details>
           <summary>Can I edit the possible answers?</summary>
-          <p>Yes. Rewrite the list in the box — commas or new lines both work — and the wheel updates instantly.</p>
+          <p>Yes. Edit any row in the options table, add rows with the + Add option button, or switch to Paste mode to import a whole comma-separated list — the wheel updates instantly.</p>
         </details>
         <details>
           <summary>Is it different from a yes or no wheel?</summary>
@@ -485,6 +581,28 @@
     var canvas = document.getElementById('wheel');
     var ctx = canvas.getContext('2d');
     var colors = ['#db2777','#7c3aed','#2563eb','#059669','#d97706','#dc2626','#0891b2','#65a30d'];
+    /* ===== v3：轮盘样式预设 ===== */
+    var STYLES = {
+      classic: { seg: ['#db2777','#7c3aed','#2563eb','#059669','#d97706','#dc2626','#0891b2','#65a30d'],
+                 rim: ['#f43f5e','#f97316','#facc15','#22c55e','#3b82f6','#a855f7'], rimFallback: '#e2e8f0',
+                 label: '#ffffff', pointer: ['#fb923c','#f43f5e'] },
+      neon:    { seg: ['#0ea5e9','#8b5cf6','#ec4899','#10b981','#eab308','#f97316','#06b6d4','#d946ef'],
+                 rim: ['#22d3ee','#a78bfa','#f472b6','#34d399','#fde047','#fb923c'], rimFallback: '#164e63',
+                 label: '#ffffff', pointer: ['#22d3ee','#8b5cf6'] },
+      pastel:  { seg: ['#f9a8d4','#c4b5fd','#93c5fd','#6ee7b7','#fde68a','#fca5a5','#a5f3fc','#d9f99d'],
+                 rim: ['#f9a8d4','#c4b5fd','#93c5fd','#6ee7b7','#fde68a','#fca5a5'], rimFallback: '#e2e8f0',
+                 label: '#1e293b', pointer: ['#fb7185','#f59e0b'] },
+      carnival:{ seg: ['#dc2626','#ea580c','#ca8a04','#16a34a','#0891b2','#7c3aed','#be123c','#0d9488'],
+                 rim: ['#dc2626','#ea580c','#ca8a04','#16a34a','#0891b2','#7c3aed'], rimFallback: '#7c2d12',
+                 label: '#ffffff', pointer: ['#fbbf24','#dc2626'] },
+      minimal: { seg: ['#0f172a','#334155','#64748b','#94a3b8','#1e293b','#475569','#64748b','#94a3b8'],
+                 rim: ['#0f172a','#334155','#64748b','#94a3b8','#1e293b','#475569'], rimFallback: '#e2e8f0',
+                 label: '#ffffff', pointer: ['#0f172a','#64748b'] }
+    };
+    var STYLE_KEY = 'myspinpick.wheelOfFate.style';
+    var curStyle = 'classic';
+    try { var _sv = localStorage.getItem(STYLE_KEY); if (_sv && STYLES[_sv]) curStyle = _sv; } catch (e) {}
+    function curS() { return STYLES[curStyle] || STYLES.classic; }
     var RESULT_PREFIX = "Fate says: ";
     var RESULT_INIT = "Spin the wheel to see what fate says";
     var options = [];
@@ -502,10 +620,11 @@
     var selectedSaved = -1;
 
     var optionsEl = document.getElementById('options');
+    var centerSpin = document.getElementById('centerSpin');
+    var optTable = document.getElementById('optTable');
+    var editPane = document.getElementById('editPane');
 
     var VIEW = 440, DPR = 1;
-    var POPUP_KEY = 'myspinpick.wheelOfFate.popup';
-    var popupOn = true;
     var winModal = document.getElementById('winModal');
     var confCanvas = document.getElementById('confetti');
     var confCtx = (confCanvas && confCanvas.getContext) ? confCanvas.getContext('2d') : null;
@@ -551,6 +670,7 @@
         return;
       }
       var slice = (Math.PI * 2) / n;
+      var SEG = curS().seg, LBL = curS().label;
       for (var i = 0; i < n; i++) {
         var start = angle + i * slice;
         var end = start + slice;
@@ -558,7 +678,7 @@
         ctx.moveTo(cx, cy);
         ctx.arc(cx, cy, rr, start, end);
         ctx.closePath();
-        ctx.fillStyle = colors[i % colors.length];
+        ctx.fillStyle = SEG[i % SEG.length];
         ctx.fill();
         ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
         ctx.stroke();
@@ -566,7 +686,7 @@
         ctx.translate(cx, cy);
         ctx.rotate(start + slice / 2);
         ctx.textAlign = 'right';
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = LBL;
         ctx.font = 'bold 14px sans-serif';
         var label = options[i];
         if (label.length> 14) label = label.slice(0, 13) + '…';
@@ -586,40 +706,30 @@
         ctx.stroke();
       }
       var T = Math.PI * 2;
+      var RIMC = curS().rim, RIMF = curS().rimFallback;
       var ringGrad = null, hubGrad = null;
       if (ctx.createConicGradient) {
         ringGrad = ctx.createConicGradient(angle, cx, cy);
         hubGrad = ctx.createConicGradient(angle + Math.PI / 6, cx, cy);
-        var RCOLS = ['#f43f5e', '#f97316', '#facc15', '#22c55e', '#3b82f6', '#a855f7', '#f43f5e'];
-        for (var gi = 0; gi < RCOLS.length; gi++) {
-          ringGrad.addColorStop(gi / 6, RCOLS[gi]);
-          hubGrad.addColorStop(gi / 6, RCOLS[gi]);
+        for (var gi = 0; gi < RIMC.length; gi++) {
+          ringGrad.addColorStop(gi / (RIMC.length - 1), RIMC[gi]);
+          hubGrad.addColorStop(gi / (RIMC.length - 1), RIMC[gi]);
         }
       }
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, T);
-      ctx.strokeStyle = ringGrad || '#e2e8f0';
+      ctx.strokeStyle = ringGrad || RIMF;
       ctx.lineWidth = 9;
       ctx.stroke();
       ctx.beginPath();
       ctx.arc(cx, cy, 24, 0, T);
-      ctx.fillStyle = hubGrad || '#e2e8f0';
+      ctx.fillStyle = hubGrad || RIMF;
       ctx.fill();
       ctx.beginPath();
       ctx.arc(cx, cy, 10, 0, T);
       ctx.fillStyle = '#ffffff';
       ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(cx, cy - r - 20);
-      ctx.lineTo(cx + 10, cy - r);
-      ctx.lineTo(cx, cy - r + 20);
-      ctx.lineTo(cx - 10, cy - r);
-      ctx.closePath();
-      var pg = ctx.createLinearGradient(cx, cy - r - 20, cx, cy - r + 20);
-      pg.addColorStop(0, '#fb923c');
-      pg.addColorStop(1, '#f43f5e');
-      ctx.fillStyle = pg;
-      ctx.fill();
+      /* v3.2：顶部指针已移除——指针融合到中心 Spin 按钮上（CSS ::before/::after，指向上方） */
     }
 
     function pickWinner() {
@@ -630,7 +740,151 @@
       return idx;
     }
 
-    function setBtnsDisabled(d) { var b = document.querySelectorAll('.btns button'); for (var i = 0; i < b.length; i++) { b[i].disabled = d; } }
+    function setBtnsDisabled(d) { var b = document.querySelectorAll('.btns button'); for (var i = 0; i < b.length; i++) { b[i].disabled = d; } if (centerSpin) centerSpin.disabled = d; }
+
+    /* ===== v3：轮盘样式切换 ===== */
+    function renderStyleChips() {
+      var row = document.getElementById('styleRow');
+      if (!row) return;
+      var chips = row.querySelectorAll('.style-swatch');
+      for (var i = 0; i < chips.length; i++) {
+        chips[i].classList.toggle('active', chips[i].getAttribute('data-style') === curStyle);
+      }
+    }
+    function applyStyle(key) {
+      if (!STYLES[key]) return;
+      curStyle = key;
+      colors = curS().seg;
+      try { localStorage.setItem(STYLE_KEY, key); } catch (e) {}
+      renderStyleChips();
+      drawWheel(currentAngle);
+      track('wheel_style', { tool: 'wheel-of-fate', style: key });
+    }
+
+    /* ===== v3：选项表格编辑器 ===== */
+    function rowsToText() {
+      var inputs = optTable.querySelectorAll('input.opt-input');
+      var vals = [];
+      for (var i = 0; i < inputs.length; i++) { var v = inputs[i].value.trim(); if (v) vals.push(v); }
+      return vals.join(',');
+    }
+    function updateEmpty() {
+      var e = document.getElementById('optEmpty');
+      if (e) e.hidden = optTable.children.length > 0;
+    }
+    function renumber() {
+      var rows = optTable.children;
+      for (var i = 0; i < rows.length; i++) { rows[i].querySelector('.idx').textContent = (i + 1) + '.'; }
+      updateEmpty();
+    }
+    function addRowNode(val) {
+      var row = document.createElement('div');
+      row.className = 'opt-row';
+      row.setAttribute('role', 'listitem');
+      var idx = document.createElement('span');
+      idx.className = 'idx';
+      var inp = document.createElement('input');
+      inp.type = 'text';
+      inp.className = 'opt-input';
+      inp.value = val || '';
+      inp.setAttribute('aria-label', 'Option ' + (optTable.children.length + 1));
+      inp.setAttribute('maxlength', '80');
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'del';
+      del.textContent = '✕';
+      del.setAttribute('aria-label', 'Remove this option');
+      del.title = 'Remove';
+      del.addEventListener('click', function () {
+        if (spinning) return;
+        row.parentNode.removeChild(row);
+        renumber();
+        rowChanged();
+      });
+      inp.addEventListener('input', function () { rowChanged(); });
+      inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (!spinning) { var nr = addRowNode(''); renumber(); nr.querySelector('input').focus(); }
+        }
+      });
+      idx.textContent = (optTable.children.length + 1) + '.';
+      row.appendChild(idx);
+      row.appendChild(inp);
+      row.appendChild(del);
+      optTable.appendChild(row);
+      return row;
+    }
+    function syncTable() { renderRowsFromText(optionsEl.value); }
+    function renderRowsFromText(text) {
+      var items = itemsOf(text);
+      optTable.innerHTML = '';
+      for (var i = 0; i < items.length; i++) addRowNode(items[i]);
+      updateEmpty();
+    }
+    function rowChanged() {
+      optionsEl.value = rowsToText();
+      options = getOptions();
+      winnerIdx = null;
+      drawWheel(currentAngle);
+      persistLast();
+      updateSelectedList();
+    }
+    function addRow() {
+      if (spinning) return;
+      var r = addRowNode('');
+      renumber();
+      r.querySelector('input').focus();
+    }
+    function toggleEditMode() {
+      if (spinning) return;
+      var paste = editPane.classList.toggle('paste');
+      var btn = document.getElementById('modeBtn');
+      if (btn) btn.textContent = paste ? '🔢 Table mode' : '📋 Paste / Import';
+      if (!paste) {
+        options = getOptions();
+        winnerIdx = null;
+        syncTable();
+        drawWheel(currentAngle);
+        persistLast();
+      }
+      track('edit_mode', { tool: 'wheel-of-fate', mode: paste ? 'paste' : 'table' });
+    }
+
+    /* ===== v3.4：文件导入（.txt / .csv，逗号或换行分隔） ===== */
+    function importFile() {
+      if (spinning) return;
+      var inp = document.getElementById('fileImport');
+      if (inp) inp.click();
+    }
+    (function () {
+      var inp = document.getElementById('fileImport');
+      if (!inp) return;
+      inp.addEventListener('change', function () {
+        var f = inp.files && inp.files[0];
+        if (!f) return;
+        var meta = document.getElementById('meta');
+        if (spinning) { inp.value = ''; return; }
+        if (f.size > 200 * 1024) { meta.textContent = 'File too large — keep it under 200 KB.'; inp.value = ''; return; }
+        var reader = new FileReader();
+        reader.onload = function () {
+          var items = itemsOf(String(reader.result));
+          if (!items.length) { meta.textContent = 'No options found in that file.'; inp.value = ''; return; }
+          optionsEl.value = items.join(',');
+          options = getOptions();
+          winnerIdx = null;
+          syncTable();
+          drawWheel(currentAngle);
+          persistLast();
+          meta.textContent = 'Imported ' + items.length + ' options from "' + f.name + '".';
+          track('import_file', { tool: 'wheel-of-fate', count: items.length });
+          updateSelectedList();
+          inp.value = '';
+        };
+        reader.onerror = function () { meta.textContent = 'Could not read that file.'; inp.value = ''; };
+        reader.readAsText(f);
+      });
+    })();
 
     /* ---------- sound ---------- */
     function ensureAudio() {
@@ -682,23 +936,52 @@
         var s = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
         if (Array.isArray(s)) {
           savedLists = s.filter(function(x){ return x && typeof x.text === 'string'; }).slice(0, SAVED_MAX);
-          for (var i = 0; i < savedLists.length; i++) {
-            if (!Array.isArray(savedLists[i].res)) savedLists[i].res = [];
-          }
         }
       } catch (e) { savedLists = []; }
+      var i;
+      for (i = 0; i < savedLists.length; i++) {
+        if (!savedLists[i].name) savedLists[i].name = 'List ' + (i + 1);
+        if (!Array.isArray(savedLists[i].res)) savedLists[i].res = [];
+        savedLists[i].n = itemsOf(savedLists[i].text).length;
+      }
       var last = null;
       try { last = JSON.parse(localStorage.getItem(LAST_KEY) || 'null'); } catch (e) {}
       if (last && typeof last.text === 'string' && !skipLastText) {
         optionsEl.value = last.text;
         options = getOptions();
         if (typeof last.sel === 'number' && last.sel >= 0 && last.sel < savedLists.length) selectedSaved = last.sel;
-        if (options.length) document.getElementById('meta').textContent = options.length + ' options on the wheel.';
+      }
+      if (!savedLists.length) {
+        var items0 = itemsOf(optionsEl.value);
+        savedLists = [{ name: 'List 1', text: items0.join(','), n: items0.length, res: [] }];
+        selectedSaved = 0;
+        persistSaved();
+      } else if (selectedSaved < 0 || selectedSaved >= savedLists.length) {
+        selectedSaved = 0;
+      }
+      /* 双向兜底同步：编辑器与选中列表不一致时，非空的一方为准（兼容旧版数据） */
+      var curText = itemsOf(optionsEl.value).join(',');
+      var selText = savedLists[selectedSaved].text;
+      if (curText !== selText) {
+        if (curText) {
+          savedLists[selectedSaved].text = curText;
+          savedLists[selectedSaved].n = options.length;
+          persistSaved();
+        } else {
+          optionsEl.value = selText;
+          options = getOptions();
+          persistLast();
+        }
       }
       renderSaved();
       renderHistoryFor(selectedSaved);
       drawWheel(currentAngle);
       autoGrow();
+      var res = savedLists[selectedSaved].res || [];
+      document.getElementById('result').textContent = res.length ? RESULT_PREFIX + res[res.length - 1].n : RESULT_INIT;
+      document.getElementById('meta').textContent = skipLastText
+        ? options.length + ' options loaded from a shared link — press Spin.'
+        : options.length + ' options on the wheel.';
     }
     function persistLast() {
       try { localStorage.setItem(LAST_KEY, JSON.stringify({ text: optionsEl.value, sel: selectedSaved })); } catch (e) {}
@@ -707,66 +990,83 @@
       try { localStorage.setItem(SAVED_KEY, JSON.stringify(savedLists)); } catch (e) {}
       persistLast();
     }
-    function saveList(silent, autoSelect) {
+    /* ===== v3.6：列表自动保存（编辑即写入选中列表，无 Save 按钮） ===== */
+    function updateSelectedList() {
+      if (spinning) return;
+      if (selectedSaved < 0 || selectedSaved >= savedLists.length) return;
       var items = itemsOf(optionsEl.value);
-      var meta = document.getElementById('meta');
-      if (!items.length) { if (!silent) meta.textContent = 'Nothing to save — the options box is empty.'; return; }
-      if (selectedSaved>= 0 && selectedSaved < savedLists.length) {
-        savedLists[selectedSaved] = { text: items.join(','), n: items.length, res: savedLists[selectedSaved].res || [] };
-        renderSaved();
-        persistSaved();
-        if (!silent) { meta.textContent = 'Saved list updated.'; track('save_list', { mode: 'update' }); }
-        return;
-      }
-      var k = keyOf(optionsEl.value);
+      var t = items.join(',');
+      if (savedLists[selectedSaved].text === t) return;
+      savedLists[selectedSaved].text = t;
+      savedLists[selectedSaved].n = items.length;
+      persistSaved();
+      renderSaved();
+    }
+    function nextListName() {
+      var mx = 0;
       for (var i = 0; i < savedLists.length; i++) {
-        if (keyOf(savedLists[i].text) === k) {
-          if (!silent || autoSelect) { selectedSaved = i; renderSaved(); persistLast(); }
-          return;
-        }
+        var m = /^list\s+(\d+)$/i.exec(savedLists[i].name || '');
+        if (m) { var v = parseInt(m[1], 10); if (v > mx) mx = v; }
       }
-      savedLists.unshift({ text: items.join(','), n: items.length, res: [] });
-      if (savedLists.length> SAVED_MAX) savedLists.pop();
-      if (!silent || autoSelect) selectedSaved = 0;
+      return 'List ' + (mx + 1);
+    }
+    function addNewList() {
+      if (spinning) return;
+      updateSelectedList();
+      savedLists.push({ name: nextListName(), text: '', n: 0, res: [] });
+      selectedSaved = savedLists.length - 1;
       renderSaved();
       persistSaved();
-      if (!silent) track('save_list', { mode: 'new' });
+      applySavedRow(selectedSaved);
+      document.getElementById('meta').textContent = 'Created ' + savedLists[selectedSaved].name + ' — add options and spin.';
+      track('add_list', { tool: 'wheel-of-fate' });
     }
     function renderSaved() {
-      var box = document.getElementById('savedLists');
+      /* v3.7：Lists 以页签形式渲染在 Options 面板顶部，点击即切换 */
+      var box = document.getElementById('listTabs');
       box.innerHTML = '';
       for (var i = 0; i < savedLists.length; i++) {
         (function(idx) {
-          var row = document.createElement('div');
-          row.className = 'saved-row' + (idx === selectedSaved ? ' selected' : '');
-          row.setAttribute('role', 'button');
-          row.setAttribute('tabindex', '0');
-          row.addEventListener('click', function(e) {
+          var tab = document.createElement('div');
+          tab.className = 'list-tab' + (idx === selectedSaved ? ' active' : '');
+          tab.setAttribute('role', 'tab');
+          tab.setAttribute('tabindex', '0');
+          tab.setAttribute('aria-selected', idx === selectedSaved ? 'true' : 'false');
+          tab.addEventListener('click', function(e) {
             if (e.target.closest && e.target.closest('button')) return;
             selectSaved(idx);
           });
-          row.addEventListener('keydown', function(e) {
+          tab.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectSaved(idx); }
           });
-          var preview = document.createElement('span');
-          preview.className = 'preview';
-          preview.title = savedLists[idx].text;
-          preview.textContent = savedLists[idx].text;
+          var name = document.createElement('span');
+          name.className = 'tname';
+          name.title = savedLists[idx].name + ' — ' + savedLists[idx].text;
+          name.textContent = savedLists[idx].name;
           var n = document.createElement('span');
           n.className = 'n';
-          n.textContent = savedLists[idx].n + ' items';
+          n.textContent = savedLists[idx].n;
           var del = document.createElement('button');
           del.type = 'button';
           del.textContent = '✕';
-          del.setAttribute('aria-label', 'Delete this saved list');
-          del.title = 'Delete this saved list';
+          del.setAttribute('aria-label', 'Delete ' + savedLists[idx].name);
+          del.title = 'Delete ' + savedLists[idx].name;
           del.addEventListener('click', function() { deleteSaved(idx); });
-          row.appendChild(preview);
-          row.appendChild(n);
-          row.appendChild(del);
-          box.appendChild(row);
+          tab.appendChild(name);
+          tab.appendChild(n);
+          tab.appendChild(del);
+          box.appendChild(tab);
         })(i);
       }
+      var add = document.createElement('button');
+      add.type = 'button';
+      add.className = 'list-tab add';
+      add.id = 'addListBtn';
+      add.setAttribute('aria-label', 'Add a new list');
+      add.title = 'Add a new list';
+      add.textContent = '+';
+      add.addEventListener('click', addNewList);
+      box.appendChild(add);
     }
     function applySavedRow(idx) {
       optionsEl.value = savedLists[idx].text;
@@ -785,23 +1085,29 @@
     function selectSaved(idx) {
       if (spinning) { renderSaved(); return; }
       if (idx === selectedSaved) return;
-      if (optionsEl.value.trim()) saveList(true);
+      updateSelectedList();
       applySavedRow(idx);
     }
     function deleteSaved(idx) {
       savedLists.splice(idx, 1);
       if (selectedSaved === idx) {
-        selectedSaved = -1;
-        document.getElementById('result').textContent = RESULT_INIT;
-        renderHistoryFor(-1);
+        /* v3.7：删除当前页签后自动切到第一个列表（页签 UI 下不应出现“无选中”空档） */
+        if (savedLists.length) {
+          applySavedRow(0);
+        } else {
+          selectedSaved = -1;
+          document.getElementById('result').textContent = RESULT_INIT;
+          renderHistoryFor(-1);
+        }
       }
       else if (selectedSaved> idx) selectedSaved--;
       renderSaved();
       persistSaved();
     }
     function autoGrow() {
-      optionsEl.style.height = 'auto';
-      optionsEl.style.height = Math.max(46, optionsEl.scrollHeight) + 'px';
+      /* v3：textarea 已降级为“粘贴/导入”视图；此函数在所有程序化写入 optionsEl.value 的路径上被调用，
+         现在的职责是把文本同步渲染进表格（保持原调用点不变） */
+      syncTable();
     }
 
     /* ===== 优化 v2：高分屏适配 / 全屏投影 / 分享链接 / 中奖弹窗与彩带 ===== */
@@ -866,7 +1172,8 @@
     });
 
     function showWinner(name) {
-      if (!popupOn || !winModal) return;
+      /* v3.7：Winner popup 开关已移除，弹窗恒开 */
+      if (!winModal) return;
       var nameEl = document.getElementById('winName');
       if (nameEl) nameEl.textContent = name;
       winModal.hidden = false;
@@ -958,7 +1265,7 @@
           spinning = false;
           setBtnsDisabled(false);
           showWinner(options[idx]);
-          track('spin', { options: options.length, winner: options[idx], popup: popupOn });
+          track('spin', { options: options.length, winner: options[idx] });
         }
       }
       requestAnimationFrame(step);
@@ -969,7 +1276,7 @@
       if (options.length === 0) { document.getElementById('meta').textContent = 'Please add at least one option.'; return; }
       if (spinning) return;
       hideWinner();
-      saveList(true, true);
+      updateSelectedList();
       spinning = true;
       winnerIdx = null;
       setBtnsDisabled(true);
@@ -1046,7 +1353,15 @@
       options = getOptions();
       winnerIdx = null;
       lastWinnerText = null;
-      selectedSaved = -1;
+      /* v3.6：预设写入选中列表（无选中列表则新建），自动保存 */
+      if (selectedSaved < 0 || selectedSaved >= savedLists.length) {
+        savedLists.push({ name: nextListName(), text: p.list.join(','), n: p.list.length, res: [] });
+        selectedSaved = savedLists.length - 1;
+      } else {
+        savedLists[selectedSaved].text = p.list.join(',');
+        savedLists[selectedSaved].n = p.list.length;
+      }
+      persistSaved();
       renderSaved();
       renderHistoryFor(-1);
       drawWheel(currentAngle);
@@ -1096,21 +1411,26 @@
       drawWheel(currentAngle);
       autoGrow();
       persistLast();
+      updateSelectedList();
     });
 
     try { muted = localStorage.getItem('myspinpick.wheelOfFate.sound') === 'off'; } catch (e) {}
     document.getElementById('muteBtn').textContent = muted ? '🔇' : '🔊';
-    try { if (localStorage.getItem(POPUP_KEY) === 'off') popupOn = false; } catch (e) {}
-    var popupChk = document.getElementById('popupChk');
-    if (popupChk) {
-      popupChk.checked = popupOn;
-      popupChk.addEventListener('change', function () {
-        popupOn = !!popupChk.checked;
-        try { localStorage.setItem(POPUP_KEY, popupOn ? 'on' : 'off'); } catch (e) {}
-        if (!popupOn) hideWinner();
-      });
-    }
     setFsBtn();
+    /* v3：样式与中心按钮、表格初始化 */
+    colors = curS().seg;
+    renderStyleChips();
+    if (centerSpin) centerSpin.addEventListener('click', function () { if (!spinning) buildAndSpin(); });
+    (function () {
+      var row = document.getElementById('styleRow');
+      if (!row) return;
+      var chips = row.querySelectorAll('.style-swatch');
+      for (var i = 0; i < chips.length; i++) {
+        (function (chip) {
+          chip.addEventListener('click', function () { applyStyle(chip.getAttribute('data-style')); });
+        })(chips[i]);
+      }
+    })();
     options = getOptions();
     if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
     fitCanvas();
