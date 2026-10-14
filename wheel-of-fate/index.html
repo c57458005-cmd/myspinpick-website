@@ -106,7 +106,7 @@
       {
         "@type": "Question",
         "name": "Can I edit the possible answers?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Edit any row in the options table, add rows with the + Add option button, or switch to Paste mode to import a whole comma-separated list — the wheel updates instantly." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Edit any row in the options table, add rows with the + Add button, or switch to Text mode to import a whole comma-separated list — the wheel updates instantly." }
       },
       {
         "@type": "Question",
@@ -217,6 +217,7 @@
     button:hover { background: var(--btn-bg-hover); border-color: var(--btn-border-hover); }
     button:disabled { background: var(--btn-disabled-bg); border-color: var(--btn-disabled-border); color: var(--btn-disabled-ink); cursor: not-allowed; }
     .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: left; }
+    #meta:empty { display: none; margin: 0; }
     .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
     .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
     .history:empty { display: none; }
@@ -240,20 +241,29 @@
     .btns.nowrap { flex-wrap: nowrap; }
     @media (max-width: 480px) { .btns.nowrap { gap: 6px; } .btns.nowrap button { padding: 9px 10px; font-size: 13px; } }
     .icon-btn { width: 46px; padding-left: 0; padding-right: 0; font-size: 16px; }
-    .btns.list-btns { justify-content: flex-start; margin: 8px 0 0; }
+    .btns.list-btns { justify-content: flex-start; margin: 8px 0 0; flex-wrap: nowrap; gap: 10px; }
+    .btns.list-btns button { min-height: 40px; flex: 1 1 0; min-width: 0; padding: 9px 4px; font-size: 12.5px; white-space: nowrap; }
     #options { min-height: 46px; height: 46px; overflow: hidden; resize: none; }
     .saved-hint { font-size: 13px; color: var(--muted); margin: 2px 0 8px; }
     /* ===== v3.7：Lists 页签（置于 Options 面板顶部，点击切换） ===== */
-    #listTabs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 2px 0 10px; }
+    #listTabs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 10px; }
+    /* v3.11：Options 标题行 = 标题 + 加号（加号不再占页签行空间）；页签仅选中项显示删除 */
+    .panel-label-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .panel-label-row .panel-label { margin-bottom: 0; }
+    /* v3.13：Text/Table 分段控件（标题行内，取代来回切的 modeBtn） */
+    .seg { display: inline-flex; margin-left: auto; }
+    .seg-btn { min-height: 0; padding: 4px 10px; font-size: 11.5px; border-radius: 999px 0 0 999px; }
+    .seg-btn + .seg-btn { border-radius: 0 999px 999px 0; margin-left: -1px; }
+    .seg-btn.active { background: var(--accent); border-color: var(--accent-dark); color: #fff; }
+    #addListBtn { flex: 0 0 auto; width: 24px; height: 24px; min-width: 24px; min-height: 0; padding: 0; border-radius: 50%; border-style: dashed; background: transparent; color: var(--muted); font-size: 15px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
+    #addListBtn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
     .list-tab { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; background: var(--chip); border: 1px solid var(--border); border-radius: 999px; padding: 5px 8px 5px 12px; cursor: pointer; font-size: 13px; color: var(--ink); user-select: none; }
     .list-tab:hover { border-color: var(--accent-soft-border); background: var(--accent-soft); }
     .list-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
     .list-tab .n { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
     .list-tab.active .n { color: rgba(255,255,255,.85); }
-    .list-tab button { flex: 0 0 16px; width: 16px; height: 16px; min-width: 16px; min-height: 16px; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 10px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: transparent; border-color: transparent; color: var(--muted); }
-    .list-tab button:hover { background: var(--danger-bg-hover); color: var(--danger-ink); }
-    .list-tab.active button { color: rgba(255,255,255,.8); }
-    .list-tab.active button:hover { background: rgba(255,255,255,.25); color: #fff; }
+    .list-tab button { display: none; }
+    /* v3.12：页签不再带删除按钮——删除入口移至按钮行（Paste/Import/Delete 并排），避免切换列表时误删 */
     .list-tab.add { min-height: 0; padding: 5px 12px; border-style: dashed; color: var(--muted); background: var(--card); font-weight: 700; }
     .list-tab.add:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
     @media (max-width: 480px) { .list-tab { padding: 4px 6px 4px 10px; font-size: 12.5px; } }
@@ -291,14 +301,16 @@
     .opt-row input[type="text"]:focus { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
     .opt-row .del { flex: 0 0 22px; width: 22px; height: 22px; min-width: 22px; min-height: 22px; padding: 0; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-ink); }
     .opt-row .del:hover { background: var(--danger-bg-hover); border-color: var(--danger-border-hover); }
-    #addOptBtn { margin-top: 8px; border-style: dashed; background: var(--card); color: var(--muted); padding: 8px 16px; min-height: 0; }
-    #addOptBtn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+    /* v3.13：addOptBtn 移入底部按钮行（Table 模式显示，Text 模式隐藏） */
+    #editPane.paste ~ .btns.list-btns #addOptBtn { display: none; }
     .opt-empty { padding: 14px 12px; color: var(--muted); font-size: 13.5px; text-align: left; }
     #pastePane { display: none; }
     #editPane.paste #pastePane { display: block; }
     #editPane.paste #tableView { display: none; }
-    #pastePane textarea { min-height: 170px; height: auto; resize: vertical; overflow: auto; }
-    #pastePane .saved-hint { margin-top: 6px; }
+    /* v3.11：Paste 模式 textarea 铺满面板剩余高度，内容超出在文本域内滚动 */
+    #editPane.paste #pastePane { display: flex; flex-direction: column; }
+    #editPane.paste #pastePane textarea { flex: 1 1 auto; min-height: 170px; height: auto; resize: none; overflow: auto; }
+    #pastePane .saved-hint { margin-top: 6px; flex: 0 0 auto; }
 
     /* /embed/ 嵌入板块 */
     #embed .embed-code { margin: 0; padding: 12px; background: var(--chip); border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: var(--code-ink); white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -336,9 +348,9 @@
     .panel { background: var(--chip); border: 1px solid var(--panel-border); border-radius: 12px; padding: 14px; min-width: 0; }
     .panel-wheel { display: flex; flex-direction: column; align-items: center; order: 1; }
     .panel-result { order: 2; display: flex; flex-direction: column; }
-    /* v3.9：Reset 移入结果面板，Copy/Share/Reset 三按钮并列不换行 */
-    .panel-result .btns { margin-top: auto; flex-direction: row; flex-wrap: nowrap; gap: 6px; }
-    .panel-result .btns button { flex: 1 1 0; width: auto; min-width: 0; padding: 9px 4px; font-size: 12.5px; white-space: nowrap; }
+    /* v3.9：Reset 移入结果面板，Copy/Share/Reset 三按钮并列不换行；v3.11 间距 10px */
+    .panel-result .btns { margin-top: auto; flex-direction: row; flex-wrap: nowrap; gap: 10px; }
+    .panel-result .btns button { flex: 1 1 0; width: auto; min-width: 0; min-height: 40px; padding: 9px 4px; font-size: 12.5px; white-space: nowrap; }
     @media (max-width: 480px) { .panel-result .btns button { padding: 9px 2px; font-size: 12px; } }
     .panel-list { order: 3; }
     .panel-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 10px; text-align: left; }
@@ -360,6 +372,10 @@
     body.fs .panel { background: none; border: 0; padding: 0; }
     body.fs .panel-result .panel-label, body.fs .panel-result .history,
     body.fs .style-row { display: none !important; }
+    /* v3.11：普通视图隐藏 "Fate says:" 大字（最新结果在滚动列表末尾高亮呈现）；全屏投影恢复大字 */
+    .panel-result .result { display: none; }
+    body.fs .panel-result .result { display: block; }
+    .panel-result .history .chip.latest { box-shadow: 0 0 0 2px var(--accent), 0 2px 10px rgba(219,39,119,.35); font-weight: 700; }
     /* v3.9：全屏投影下保留 Reset（仅显示 Reset 一个按钮） */
     body.fs .panel-result .btns { display: flex !important; flex-direction: row !important; justify-content: center; margin-top: 0; }
     body.fs .panel-result .btns button { flex: 0 1 auto; padding: 9px 22px; font-size: 14px; }
@@ -449,16 +465,22 @@
           </div>
 
           <div class="panel panel-list">
-            <div class="panel-label">Options</div>
+            <div class="panel-label-row">
+              <div class="panel-label">Options</div>
+              <div class="seg" role="group" aria-label="Edit mode">
+                <button type="button" class="seg-btn" id="segText" onclick="setEditMode('text')">Text</button>
+                <button type="button" class="seg-btn active" id="segTable" onclick="setEditMode('table')">Table</button>
+              </div>
+              <button type="button" id="addListBtn" onclick="addNewList()" aria-label="Add a new list" title="Add a new list">+</button>
+            </div>
             <div id="listTabs" role="tablist" aria-label="Saved lists"></div>
-            <p class="meta">Each row is one slice of the wheel.</p>
             <div id="editPane">
               <div id="tableView">
                 <div id="optTableWrap">
                   <div id="optTable" role="list" aria-label="Wheel options"></div>
                   <div class="opt-empty" id="optEmpty" hidden>No options yet — add one below or import a list.</div>
                 </div>
-                <button type="button" id="addOptBtn" onclick="addRow()">+ Add option</button>
+                <p class="saved-hint">Each row is one slice of the wheel.</p>
               </div>
               <div id="pastePane">
                 <textarea id="options" rows="4" aria-label="Wheel options" spellcheck="false">Yes,No,Maybe,Try again,Ask later,Signs point to yes,Outlook good,Don't count on it</textarea>
@@ -466,8 +488,9 @@
               </div>
             </div>
             <div class="btns list-btns">
-              <button type="button" id="modeBtn" onclick="toggleEditMode()">📋 Paste</button>
+              <button type="button" id="addOptBtn" onclick="addRow()" title="Add a new option row">+ Add</button>
               <button type="button" onclick="importFile()">📥 Import</button>
+              <button type="button" id="deleteListBtn" onclick="deleteSelected()" title="Delete the selected list">🗑 Delete</button>
               <input type="file" id="fileImport" accept=".txt,.csv,text/plain,text/csv" hidden>
             </div>
             <div class="meta" id="meta"></div>
@@ -497,7 +520,7 @@
             <section id="editing">
               <h2>Editing the Fate Outcomes</h2>
               <p>The wheel opens with a set of playful replies — yes, no, maybe, try again and a few signs-point-to-yes style answers. Replace them with your own and the tool becomes a verdict machine for whatever question you have in mind.</p>
-              <p>Each row in the options table is one slice of the wheel. Edit a row, delete it with the ✕ button, or add new ones — the wheel redraws straight away. For longer lists, switch to Paste / Import mode and drop in comma-separated or line-by-line text.</p>
+              <p>Each row in the options table is one slice of the wheel. Edit a row, delete it with the ✕ button, or add new ones — the wheel redraws straight away. For longer lists, switch to Text mode and drop in comma-separated or line-by-line text.</p>
             </section>
             <section id="vs-eightball">
               <h2>Wheel of Fate vs a Magic 8-Ball</h2>
@@ -539,7 +562,7 @@
         <h2>Embed the Wheel of Fate on Your Site</h2>
         <p>Teachers, streamers and event hosts can put this exact wheel on their own page. Copy the snippet below into any HTML block — it loads the same free wheel of fate from myspinpick.com, stretches to the width of your container, and needs no account or download.</p>
         <p>The embed is free to use. A small "Wheel of Fate by MySpinPick" credit link sits under the wheel; please leave it in place so people who land on your page can find the tool again.</p>
-        <pre class="embed-code" id="embed-code" aria-label="Embed code for Wheel of Fate">&lt;iframe src="https://myspinpick.com/embed/wheel-of-fate/" width="100%" height="1240" style="border:0;max-width:100%" title="Wheel of Fate by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Wheel of Fate">&lt;iframe src="https://myspinpick.com/embed/wheel-of-fate/" width="100%" height="1200" style="border:0;max-width:100%" title="Wheel of Fate by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
         <p class="embed-actions">
           <button type="button" id="embed-copy">Copy embed code</button>
           <a class="embed-preview" href="https://myspinpick.com/embed/wheel-of-fate/" target="_blank" rel="noopener">Preview the widget</a>
@@ -587,7 +610,7 @@
         </details>
         <details>
           <summary>Can I edit the possible answers?</summary>
-          <p>Yes. Edit any row in the options table, add rows with the + Add option button, or switch to Paste mode to import a whole comma-separated list — the wheel updates instantly.</p>
+          <p>Yes. Edit any row in the options table, add rows with the + Add button, or switch to Text mode to import a whole comma-separated list — the wheel updates instantly.</p>
         </details>
         <details>
           <summary>Is it different from a yes or no wheel?</summary>
@@ -701,7 +724,7 @@
       var res = (idx>= 0 && idx < savedLists.length && savedLists[idx].res) ? savedLists[idx].res : [];
       for (var j = 0; j < res.length; j++) {
         var chip = document.createElement('div');
-        chip.className = 'chip';
+        chip.className = 'chip' + (j === res.length - 1 ? ' latest' : '');
         chip.style.background = colors[(res[j].c || j) % colors.length];
         chip.title = res[j].n;
         chip.textContent = (j + 1) + '. ' + res[j].n;
@@ -893,12 +916,18 @@
       var r = addRowNode('');
       renumber();
       r.querySelector('input').focus();
+      /* v3.13：按钮在底部，新行加在表格末尾——滚动到新行保证可见 */
+      var ep = document.getElementById('editPane');
+      if (ep && ep.scrollHeight > ep.clientHeight) ep.scrollTop = ep.scrollHeight;
     }
-    function toggleEditMode() {
+    function setEditMode(mode) {
       if (spinning) return;
-      var paste = editPane.classList.toggle('paste');
-      var btn = document.getElementById('modeBtn');
-      if (btn) btn.textContent = paste ? '🔢 Table mode' : '📋 Paste / Import';
+      var paste = mode === 'text';
+      if (editPane.classList.contains('paste') === paste) return;
+      editPane.classList.toggle('paste', paste);
+      var t = document.getElementById('segText'), b = document.getElementById('segTable');
+      if (t) t.classList.toggle('active', paste);
+      if (b) b.classList.toggle('active', !paste);
       if (!paste) {
         options = getOptions();
         winnerIdx = null;
@@ -906,7 +935,7 @@
         drawWheel(currentAngle);
         persistLast();
       }
-      track('edit_mode', { tool: 'wheel-of-fate', mode: paste ? 'paste' : 'table' });
+      track('edit_mode', { tool: 'wheel-of-fate', mode: paste ? 'text' : 'table' });
     }
 
     /* ===== v3.4：文件导入（.txt / .csv，逗号或换行分隔） ===== */
@@ -1037,9 +1066,8 @@
       autoGrow();
       var res = savedLists[selectedSaved].res || [];
       document.getElementById('result').textContent = res.length ? RESULT_PREFIX + res[res.length - 1].n : RESULT_INIT;
-      document.getElementById('meta').textContent = skipLastText
-        ? options.length + ' options loaded from a shared link — press Spin.'
-        : options.length + ' options on the wheel.';
+      /* v3.11：常态统计文案移除；共享链接提示保留 */
+      if (skipLastText) document.getElementById('meta').textContent = 'Loaded from a shared link — press Spin.';
     }
     function persistLast() {
       try { localStorage.setItem(LAST_KEY, JSON.stringify({ text: optionsEl.value, sel: selectedSaved })); } catch (e) {}
@@ -1115,27 +1143,12 @@
           var n = document.createElement('span');
           n.className = 'n';
           n.textContent = savedLists[idx].n;
-          var del = document.createElement('button');
-          del.type = 'button';
-          del.textContent = '✕';
-          del.setAttribute('aria-label', 'Delete ' + savedLists[idx].name);
-          del.title = 'Delete ' + savedLists[idx].name;
-          del.addEventListener('click', function() { deleteSaved(idx); });
           tab.appendChild(name);
           tab.appendChild(n);
-          tab.appendChild(del);
           box.appendChild(tab);
         })(i);
       }
-      var add = document.createElement('button');
-      add.type = 'button';
-      add.className = 'list-tab add';
-      add.id = 'addListBtn';
-      add.setAttribute('aria-label', 'Add a new list');
-      add.title = 'Add a new list';
-      add.textContent = '+';
-      add.addEventListener('click', addNewList);
-      box.appendChild(add);
+      /* v3.11：加号在 Options 标题行；v3.12：页签不带删除按钮（入口在按钮行 Delete） */
     }
     function applySavedRow(idx) {
       optionsEl.value = savedLists[idx].text;
@@ -1147,7 +1160,6 @@
       var res = savedLists[idx].res || [];
       document.getElementById('result').textContent = res.length ? RESULT_PREFIX + res[res.length - 1].n : RESULT_INIT;
       renderHistoryFor(idx);
-      document.getElementById('meta').textContent = options.length + ' options on the wheel.';
       renderSaved();
       persistLast();
     }
@@ -1177,6 +1189,12 @@
       persistSaved();
       showUndoToast(row.name || 'List');
     }
+    /* v3.12：删除当前选中的列表（按钮行 Delete 入口） */
+    function deleteSelected() {
+      if (spinning) return;
+      if (selectedSaved < 0 || selectedSaved >= savedLists.length) return;
+      deleteSaved(selectedSaved);
+    }
 
     /* ===== v3.8：删除撤销（6 秒内可 Undo） ===== */
     var pendingUndo = null, undoTimer = null;
@@ -1202,7 +1220,7 @@
       savedLists.splice(at, 0, row);
       persistSaved();
       applySavedRow(at);
-      document.getElementById('meta').textContent = 'Restored ' + (row.name || 'list') + '.';
+      /* v3.12：恢复成功不再写 meta 提示（toast 消失即恢复完成） */
     }
     function autoGrow() {
       /* v3：textarea 已降级为“粘贴/导入”视图；此函数在所有程序化写入 optionsEl.value 的路径上被调用，
@@ -1361,7 +1379,6 @@
           document.getElementById('result').textContent = RESULT_PREFIX + options[idx];
           recordResult(options[idx], idx);
           ding();
-          document.getElementById('meta').textContent = options.length + ' options on the wheel.';
           spinning = false;
           setBtnsDisabled(false);
           showWinner(options[idx]);
@@ -1502,7 +1519,6 @@
       document.getElementById('result').textContent = RESULT_INIT;
       renderHistoryFor(selectedSaved);
       drawWheel(currentAngle);
-      document.getElementById('meta').textContent = options.length + ' options on the wheel.';
     }
 
     optionsEl.addEventListener('input', function() {
@@ -1535,7 +1551,6 @@
       }
     })();
     options = getOptions();
-    if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
     fitCanvas();
     drawWheel(0);
     autoGrow();

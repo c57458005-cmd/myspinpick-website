@@ -134,6 +134,13 @@
     #pastePane { display: none; }
     #editPane.paste #pastePane { display: block; }
     #editPane.paste #tableView { display: none; }
+    /* v3.13：Text/Table 分段控件；addOptBtn 移入按钮行（Text 模式隐藏） */
+    .seg-row { display: flex; justify-content: center; margin: 0 0 8px; }
+    .seg { display: inline-flex; }
+    .seg-btn { min-height: 0; padding: 4px 12px; font-size: 12px; border-radius: 999px 0 0 999px; }
+    .seg-btn + .seg-btn { border-radius: 0 999px 999px 0; margin-left: -1px; }
+    .seg-btn.active { background: var(--accent); border-color: var(--accent-dark); color: #fff; }
+    #editPane.paste ~ .btns.list-btns #addOptBtn { display: none; }
     #pastePane textarea { min-height: 150px; height: auto; resize: vertical; overflow: auto; }
     #pastePane .saved-hint { margin-top: 6px; }
 
@@ -176,14 +183,19 @@
         </div>
         <div class="result" id="result" aria-live="polite">Spin the wheel to see what fate says</div>
         <div class="history" id="history" aria-live="polite"></div>
-        <p class="meta">Each row is one slice of the wheel.</p>
+        <div class="seg-row">
+          <div class="seg" role="group" aria-label="Edit mode">
+            <button type="button" class="seg-btn" id="segText" onclick="setEditMode('text')">Text</button>
+            <button type="button" class="seg-btn active" id="segTable" onclick="setEditMode('table')">Table</button>
+          </div>
+        </div>
         <div id="editPane">
           <div id="tableView">
             <div id="optTableWrap">
               <div id="optTable" role="list" aria-label="Wheel options"></div>
               <div class="opt-empty" id="optEmpty" hidden>No options yet — add one below or paste a list.</div>
             </div>
-            <button type="button" id="addOptBtn" onclick="addRow()">+ Add option</button>
+            <p class="saved-hint">Each row is one slice of the wheel.</p>
           </div>
           <div id="pastePane">
             <textarea id="options" rows="4" aria-label="Wheel options" spellcheck="false">Yes,No,Maybe,Try again,Ask later,Signs point to yes,Outlook good,Don't count on it</textarea>
@@ -191,7 +203,7 @@
           </div>
         </div>
         <div class="btns list-btns">
-          <button type="button" id="modeBtn" onclick="toggleEditMode()">📋 Paste</button>
+          <button type="button" id="addOptBtn" onclick="addRow()" title="Add a new option row">+ Add</button>
           <button type="button" onclick="importFile()">📥 Import</button>
           <input type="file" id="fileImport" accept=".txt,.csv,text/plain,text/csv" hidden>
           <button type="button" onclick="saveList(false)">💾 Save</button>
@@ -463,19 +475,25 @@
       var r = addRowNode('');
       renumber();
       r.querySelector('input').focus();
+      /* v3.13：按钮在底部，新行加在表格末尾——滚动到新行保证可见 */
+      var ep = document.getElementById('editPane');
+      if (ep && ep.scrollHeight > ep.clientHeight) ep.scrollTop = ep.scrollHeight;
     }
-    function toggleEditMode() {
+    function setEditMode(mode) {
       if (spinning) return;
-      var paste = editPane.classList.toggle('paste');
-      var btn = document.getElementById('modeBtn');
-      if (btn) btn.textContent = paste ? '🔢 Table mode' : '📋 Paste / Import';
+      var paste = mode === 'text';
+      if (editPane.classList.contains('paste') === paste) return;
+      editPane.classList.toggle('paste', paste);
+      var t = document.getElementById('segText'), b = document.getElementById('segTable');
+      if (t) t.classList.toggle('active', paste);
+      if (b) b.classList.toggle('active', !paste);
       if (!paste) {
         options = getOptions();
         winnerIdx = null;
         syncTable();
         drawWheel(currentAngle);
       }
-      track('edit_mode', { tool: 'wheel-of-fate-embed', mode: paste ? 'paste' : 'table' });
+      track('edit_mode', { tool: 'wheel-of-fate-embed', mode: paste ? 'text' : 'table' });
     }
 
     /* ===== v3.4：文件导入（.txt / .csv，逗号或换行分隔） ===== */
