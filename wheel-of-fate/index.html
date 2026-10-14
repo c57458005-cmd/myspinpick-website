@@ -376,10 +376,9 @@
     .panel-result .result { display: none; }
     body.fs .panel-result .result { display: block; }
     .panel-result .history .chip.latest { box-shadow: 0 0 0 2px var(--accent), 0 2px 10px rgba(219,39,119,.35); font-weight: 700; }
-    /* v3.9：全屏投影下保留 Reset（仅显示 Reset 一个按钮） */
-    body.fs .panel-result .btns { display: flex !important; flex-direction: row !important; justify-content: center; margin-top: 0; }
-    body.fs .panel-result .btns button { flex: 0 1 auto; padding: 9px 22px; font-size: 14px; }
-    body.fs .panel-result .btns button:not([onclick="resetAll()"]) { display: none !important; }
+    /* v3.15：全屏投影隐藏整个按钮行（Reset 也不显示），并解除定高（v3.14 的 height:620px 会把轮盘顶出屏幕） */
+    body.fs .panel-result { height: auto; }
+    body.fs .panel-result .btns { display: none !important; }
     body.fs .result { font-size: 26px; }
 
     /* ===== v3.14：PC 三栏定高对称（恒 620px：结果再多不撑高轮盘/右栏，内容各自内滚，底部按钮对齐） ===== */
@@ -1593,7 +1592,7 @@
       if (!items.length) { meta.textContent = 'Nothing to copy — spin the wheel first.'; return; }
       var text = items.join('\n');
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function(){ meta.textContent = 'Copied!'; track('copy', { tool: 'wheel-of-fate' }); }).catch(function(){ fallbackCopy(text); });
+        navigator.clipboard.writeText(text).then(function(){ track('copy', { tool: 'wheel-of-fate' }); }).catch(function(){ fallbackCopy(text); });
       } else { fallbackCopy(text); }
     }
 
@@ -1604,7 +1603,8 @@
       try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
       document.body.removeChild(ta);
       if (cb) { cb(ok); return; }
-      document.getElementById('meta').textContent = ok ? 'Copied!' : 'Copy failed';
+      /* v3.15：成功不再弹 "Copied!" 提示，仅在失败时给出反馈 */
+      if (!ok) document.getElementById('meta').textContent = 'Copy failed';
       if (ok) track('copy');
     }
   </script>
