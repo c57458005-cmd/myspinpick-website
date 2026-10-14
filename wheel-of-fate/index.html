@@ -166,6 +166,30 @@
     :root {
       --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
       --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+      /* v3.8：可主题化 token（暗色跟随 prefers-color-scheme） */
+      --btn-bg: #dbeafe; --btn-border: #93c5fd; --btn-ink: #1e40af;
+      --btn-bg-hover: #bfdbfe; --btn-border-hover: #60a5fa;
+      --btn-disabled-bg: #eff6ff; --btn-disabled-border: #dbeafe; --btn-disabled-ink: #93c5fd;
+      --chip: #f8fafc; --panel-border: #e8eef5; --rowline: #eef2f7;
+      --accent-soft: #fdf2f8; --accent-soft-border: #f4c0d1; --accent-sel: #fbeaf0;
+      --danger-bg: #fef2f2; --danger-border: #fecaca; --danger-ink: #dc2626;
+      --danger-bg-hover: #fee2e2; --danger-border-hover: #fca5a5;
+      --section-ink: #334155; --details-ink: #475569; --code-ink: #334155;
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1220; --card: #16213a; --ink: #e7eef9; --muted: #92a3ba;
+        --accent: #ec4899; --accent-dark: #db2777; --border: #2c3b55;
+        --btn-bg: rgba(59,130,246,.16); --btn-border: rgba(96,165,250,.45); --btn-ink: #9ec5fe;
+        --btn-bg-hover: rgba(59,130,246,.3); --btn-border-hover: rgba(96,165,250,.75);
+        --btn-disabled-bg: rgba(59,130,246,.08); --btn-disabled-border: rgba(96,165,250,.22); --btn-disabled-ink: rgba(158,197,254,.55);
+        --chip: #1c2942; --panel-border: #26344d; --rowline: #223049;
+        --accent-soft: rgba(236,72,153,.14); --accent-soft-border: rgba(236,72,153,.4); --accent-sel: rgba(236,72,153,.18);
+        --danger-bg: rgba(248,113,113,.12); --danger-border: rgba(248,113,113,.35); --danger-ink: #f87171;
+        --danger-bg-hover: rgba(248,113,113,.22); --danger-border-hover: rgba(248,113,113,.6);
+        --section-ink: #c3cede; --details-ink: #aab8cc; --code-ink: #c3cede;
+      }
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
@@ -184,14 +208,14 @@
     .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
     .wheel-wrap { text-align: center; margin-bottom: 16px; }
     canvas { max-width: 100%; }
-    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
-    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); background: var(--card); }
+    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); background: var(--card); }
     textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
     input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
     .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
-    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
-    button:hover { background: #bfdbfe; border-color: #60a5fa; }
-    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
+    button { border: 1px solid var(--btn-border); background: var(--btn-bg); color: var(--btn-ink); padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: var(--btn-bg-hover); border-color: var(--btn-border-hover); }
+    button:disabled { background: var(--btn-disabled-bg); border-color: var(--btn-disabled-border); color: var(--btn-disabled-ink); cursor: not-allowed; }
     .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: left; }
     .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
     .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
@@ -199,7 +223,7 @@
     .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
     section { margin-top: 26px; }
     h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
-    section p, section li { color: #334155; font-size: 15px; }
+    section p, section li { color: var(--section-ink); font-size: 15px; }
     ul, ol { padding-left: 20px; }
     .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
     .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
@@ -207,7 +231,7 @@
     .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
     details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
     summary { cursor: pointer; font-weight: 600; font-size: 15px; }
-    details p { margin-top: 8px; color: #475569; }
+    details p { margin-top: 8px; color: var(--details-ink); }
     footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
     @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 640px) { h1 { font-size: 21px; } .brand-mini span { display: none; } }
@@ -221,17 +245,17 @@
     .saved-hint { font-size: 13px; color: var(--muted); margin: 2px 0 8px; }
     /* ===== v3.7：Lists 页签（置于 Options 面板顶部，点击切换） ===== */
     #listTabs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 2px 0 10px; }
-    .list-tab { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; background: #f8fafc; border: 1px solid var(--border); border-radius: 999px; padding: 5px 8px 5px 12px; cursor: pointer; font-size: 13px; color: var(--ink); user-select: none; }
-    .list-tab:hover { border-color: #f4c0d1; background: #fdf2f8; }
+    .list-tab { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; background: var(--chip); border: 1px solid var(--border); border-radius: 999px; padding: 5px 8px 5px 12px; cursor: pointer; font-size: 13px; color: var(--ink); user-select: none; }
+    .list-tab:hover { border-color: var(--accent-soft-border); background: var(--accent-soft); }
     .list-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
     .list-tab .n { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
     .list-tab.active .n { color: rgba(255,255,255,.85); }
     .list-tab button { flex: 0 0 16px; width: 16px; height: 16px; min-width: 16px; min-height: 16px; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 10px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: transparent; border-color: transparent; color: var(--muted); }
-    .list-tab button:hover { background: #fee2e2; color: #dc2626; }
+    .list-tab button:hover { background: var(--danger-bg-hover); color: var(--danger-ink); }
     .list-tab.active button { color: rgba(255,255,255,.8); }
     .list-tab.active button:hover { background: rgba(255,255,255,.25); color: #fff; }
-    .list-tab.add { min-height: 0; padding: 5px 12px; border-style: dashed; color: var(--muted); background: #fff; font-weight: 700; }
-    .list-tab.add:hover { color: var(--accent); border-color: var(--accent); background: #fdf2f8; }
+    .list-tab.add { min-height: 0; padding: 5px 12px; border-style: dashed; color: var(--muted); background: var(--card); font-weight: 700; }
+    .list-tab.add:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
     @media (max-width: 480px) { .list-tab { padding: 4px 6px 4px 10px; font-size: 12.5px; } }
 
     /* ===== v3.6：中心 Spin 按钮——SVG 一体成形（圆盘+指针同一条轮廓，无拼缝） ===== */
@@ -260,15 +284,15 @@
 
     /* ===== v3：选项表格编辑器 ===== */
     #optTableWrap { max-height: 300px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--card); }
-    .opt-row { display: flex; align-items: center; gap: 8px; padding: 0 10px 0 6px; border-bottom: 1px solid #eef2f7; }
+    .opt-row { display: flex; align-items: center; gap: 8px; padding: 0 10px 0 6px; border-bottom: 1px solid var(--rowline); }
     .opt-row:last-child { border-bottom: none; }
     .opt-row .idx { flex: 0 0 28px; text-align: right; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
     .opt-row input[type="text"] { flex: 1; min-width: 0; border: 0; border-radius: 6px; padding: 9px 4px; font-size: 14.5px; background: transparent; box-shadow: none; }
     .opt-row input[type="text"]:focus { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
-    .opt-row .del { flex: 0 0 22px; width: 22px; height: 22px; min-width: 22px; min-height: 22px; padding: 0; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
-    .opt-row .del:hover { background: #fee2e2; border-color: #fca5a5; }
-    #addOptBtn { margin-top: 8px; border-style: dashed; background: #fff; color: var(--muted); padding: 8px 16px; min-height: 0; }
-    #addOptBtn:hover { color: var(--accent); border-color: var(--accent); background: #fdf2f8; }
+    .opt-row .del { flex: 0 0 22px; width: 22px; height: 22px; min-width: 22px; min-height: 22px; padding: 0; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-ink); }
+    .opt-row .del:hover { background: var(--danger-bg-hover); border-color: var(--danger-border-hover); }
+    #addOptBtn { margin-top: 8px; border-style: dashed; background: var(--card); color: var(--muted); padding: 8px 16px; min-height: 0; }
+    #addOptBtn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
     .opt-empty { padding: 14px 12px; color: var(--muted); font-size: 13.5px; text-align: left; }
     #pastePane { display: none; }
     #editPane.paste #pastePane { display: block; }
@@ -277,7 +301,7 @@
     #pastePane .saved-hint { margin-top: 6px; }
 
     /* /embed/ 嵌入板块 */
-    #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #embed .embed-code { margin: 0; padding: 12px; background: var(--chip); border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: var(--code-ink); white-space: pre-wrap; overflow-wrap: anywhere; }
     #embed .embed-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 10px 0 0; }
     #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
     #embed .embed-preview:hover { text-decoration: underline; }
@@ -299,7 +323,7 @@
     .win-modal { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(15,23,42,.55); }
     .win-modal[hidden] { display: none; }
     .win-confetti { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-    .win-card { position: relative; background: #fff; border-radius: 18px; padding: 26px 34px 22px; text-align: center; max-width: 92vw; box-shadow: 0 24px 60px rgba(15,23,42,.28); animation: winPop .28s cubic-bezier(.2,1.3,.4,1) both; }
+    .win-card { position: relative; background: var(--card); border-radius: 18px; padding: 26px 34px 22px; text-align: center; max-width: 92vw; box-shadow: 0 24px 60px rgba(15,23,42,.28); animation: winPop .28s cubic-bezier(.2,1.3,.4,1) both; }
     @keyframes winPop { from { transform: scale(.86); opacity: 0 } to { transform: scale(1); opacity: 1 } }
     @media (prefers-reduced-motion: reduce) { .win-card { animation: none } }
     .win-kicker { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
@@ -309,7 +333,7 @@
 
     /* ===== v3.4：PC 左中右三栏（结果 | 轮盘 | 列表维护） ===== */
     .tool-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-    .panel { background: #f8fafc; border: 1px solid #e8eef5; border-radius: 12px; padding: 14px; min-width: 0; }
+    .panel { background: var(--chip); border: 1px solid var(--panel-border); border-radius: 12px; padding: 14px; min-width: 0; }
     .panel-wheel { display: flex; flex-direction: column; align-items: center; order: 1; }
     .panel-result { order: 2; display: flex; flex-direction: column; }
     .panel-result .btns { margin-top: auto; flex-direction: column; gap: 8px; }
@@ -325,7 +349,7 @@
       .panel-list { order: 3; }
     }
 
-    body.fs { background: #f6f8fb; }
+    body.fs { background: var(--bg); }
     body.fs .wrap { max-width: none; padding: 0; }
     body.fs header, body.fs section, body.fs footer,
     body.fs .panel-list { display: none !important; }
@@ -335,6 +359,26 @@
     body.fs .panel-result .panel-label, body.fs .panel-result .history, body.fs .panel-result .btns,
     body.fs .style-row { display: none !important; }
     body.fs .result { font-size: 26px; }
+
+    /* ===== v3.8：PC 限高 + 面板内滚动（结果/列表超出时不撑高轮盘栏） ===== */
+    .panel-result .history { min-height: 0; }
+    @media (min-width: 1024px) {
+      .panel-result, .panel-list { max-height: 620px; display: flex; flex-direction: column; }
+      .panel-result .history { flex: 1 1 auto; overflow-y: auto; }
+      .panel-list #editPane { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+      #optTableWrap { max-height: none; }
+    }
+    /* 细滚动条（Firefox + WebKit） */
+    .panel-result .history, .panel-list #editPane, #optTableWrap { scrollbar-width: thin; scrollbar-color: rgba(148,163,184,.55) transparent; }
+    .panel-result .history::-webkit-scrollbar, .panel-list #editPane::-webkit-scrollbar, #optTableWrap::-webkit-scrollbar { width: 6px; }
+    .panel-result .history::-webkit-scrollbar-thumb, .panel-list #editPane::-webkit-scrollbar-thumb, #optTableWrap::-webkit-scrollbar-thumb { background: rgba(148,163,184,.55); border-radius: 3px; }
+    .panel-result .history::-webkit-scrollbar-track, .panel-list #editPane::-webkit-scrollbar-track, #optTableWrap::-webkit-scrollbar-track { background: transparent; }
+
+    /* ===== v3.8：删除撤销 toast ===== */
+    .toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 16px); display: flex; align-items: center; gap: 12px; background: var(--ink); color: var(--bg); border-radius: 999px; padding: 10px 12px 10px 18px; font-size: 14px; font-weight: 600; box-shadow: 0 10px 30px rgba(15,23,42,.25); opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .18s ease; z-index: 70; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+    .toast button { background: var(--accent); border-color: var(--accent-dark); color: #fff; padding: 6px 14px; border-radius: 999px; font-size: 13px; }
+    .toast button:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #fff; }
 </style>
 </head>
 <body>
@@ -345,10 +389,13 @@
       <p class="win-name" id="winName"></p>
       <div class="win-actions">
         <button type="button" class="primary" id="winAgain">Spin again</button>
+        <button type="button" id="winRemoveSpin" title="Remove the winner from the list, then spin again">Remove &amp; spin again</button>
         <button type="button" id="winClose">Close</button>
       </div>
     </div>
   </div>
+
+  <div class="toast" id="undoToast" role="status" aria-live="polite"><span id="undoMsg"></span><button type="button" id="undoBtn">Undo</button></div>
 
   <div class="wrap">
     <header>
@@ -1038,6 +1085,17 @@
           });
           tab.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectSaved(idx); }
+            else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+              /* v3.8：tablist 键盘惯例——左右方向键切换页签 */
+              e.preventDefault();
+              var n = savedLists.length;
+              if (n < 2) return;
+              var ni = (idx + (e.key === 'ArrowRight' ? 1 : -1) + n) % n;
+              selectSaved(ni);
+              var tabs = box.querySelectorAll('.list-tab:not(.add)');
+              if (tabs[ni]) tabs[ni].focus();
+            }
+            else if (e.key === 'Delete') { e.preventDefault(); deleteSaved(idx); }
           });
           var name = document.createElement('span');
           name.className = 'tname';
@@ -1089,8 +1147,11 @@
       applySavedRow(idx);
     }
     function deleteSaved(idx) {
+      var row = savedLists[idx];
+      var wasSelected = selectedSaved === idx;
+      pendingUndo = { idx: idx, row: row };
       savedLists.splice(idx, 1);
-      if (selectedSaved === idx) {
+      if (wasSelected) {
         /* v3.7：删除当前页签后自动切到第一个列表（页签 UI 下不应出现“无选中”空档） */
         if (savedLists.length) {
           applySavedRow(0);
@@ -1103,6 +1164,34 @@
       else if (selectedSaved> idx) selectedSaved--;
       renderSaved();
       persistSaved();
+      showUndoToast(row.name || 'List');
+    }
+
+    /* ===== v3.8：删除撤销（6 秒内可 Undo） ===== */
+    var pendingUndo = null, undoTimer = null;
+    function hideUndoToast() {
+      var t = document.getElementById('undoToast');
+      if (t) t.classList.remove('show');
+      if (undoTimer) { clearTimeout(undoTimer); undoTimer = null; }
+    }
+    function showUndoToast(name) {
+      var t = document.getElementById('undoToast');
+      if (!t) return;
+      document.getElementById('undoMsg').textContent = name + ' deleted.';
+      t.classList.add('show');
+      if (undoTimer) clearTimeout(undoTimer);
+      undoTimer = setTimeout(function () { pendingUndo = null; hideUndoToast(); }, 6000);
+    }
+    function undoDelete() {
+      if (!pendingUndo) return;
+      var at = Math.min(pendingUndo.idx, savedLists.length);
+      var row = pendingUndo.row;
+      pendingUndo = null;
+      hideUndoToast();
+      savedLists.splice(at, 0, row);
+      persistSaved();
+      applySavedRow(at);
+      document.getElementById('meta').textContent = 'Restored ' + (row.name || 'list') + '.';
     }
     function autoGrow() {
       /* v3：textarea 已降级为“粘贴/导入”视图；此函数在所有程序化写入 optionsEl.value 的路径上被调用，
@@ -1421,6 +1510,9 @@
     colors = curS().seg;
     renderStyleChips();
     if (centerSpin) centerSpin.addEventListener('click', function () { if (!spinning) buildAndSpin(); });
+    /* v3.8：撤销删除 */
+    var undoBtnEl = document.getElementById('undoBtn');
+    if (undoBtnEl) undoBtnEl.addEventListener('click', undoDelete);
     (function () {
       var row = document.getElementById('styleRow');
       if (!row) return;
@@ -1443,8 +1535,23 @@
     if (winModal) {
       var winCloseEl = document.getElementById('winClose');
       var winAgainEl = document.getElementById('winAgain');
+      var winRemoveEl = document.getElementById('winRemoveSpin');
       if (winCloseEl) winCloseEl.addEventListener('click', hideWinner);
       if (winAgainEl) winAgainEl.addEventListener('click', function () { hideWinner(); buildAndSpin(); });
+      /* v3.8：Remove & spin again——把中奖项从列表移除后自动再转 */
+      if (winRemoveEl) winRemoveEl.addEventListener('click', function () {
+        if (spinning) return;
+        if (typeof winnerIdx !== 'number' || winnerIdx < 0 || winnerIdx >= options.length) { hideWinner(); return; }
+        var items = itemsOf(optionsEl.value);
+        if (winnerIdx < items.length) items.splice(winnerIdx, 1);
+        optionsEl.value = items.join(',');
+        winnerIdx = null;
+        hideWinner();
+        autoGrow();
+        options = getOptions();
+        drawWheel(currentAngle);
+        buildAndSpin();
+      });
       winModal.addEventListener('click', function (e) { if (e.target === winModal) hideWinner(); });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !winModal.hidden) hideWinner(); });
     }
