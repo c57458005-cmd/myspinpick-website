@@ -219,7 +219,7 @@
     .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: left; }
     #meta:empty { display: none; margin: 0; }
     .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
-    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
     .history:empty { display: none; }
     .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
     section { margin-top: 26px; }
@@ -241,14 +241,14 @@
     .btns.nowrap { flex-wrap: nowrap; }
     @media (max-width: 480px) { .btns.nowrap { gap: 6px; } .btns.nowrap button { padding: 9px 10px; font-size: 13px; } }
     .icon-btn { width: 46px; padding-left: 0; padding-right: 0; font-size: 16px; }
-    .btns.list-btns { justify-content: flex-start; margin: 8px 0 0; flex-wrap: nowrap; gap: 10px; }
+    .btns.list-btns { justify-content: flex-start; margin: 0; flex-wrap: nowrap; gap: 10px; }
     .btns.list-btns button { min-height: 40px; flex: 1 1 0; min-width: 0; padding: 9px 4px; font-size: 12.5px; white-space: nowrap; }
     #options { min-height: 46px; height: 46px; overflow: hidden; resize: none; }
     .saved-hint { font-size: 13px; color: var(--muted); margin: 2px 0 8px; }
     /* ===== v3.7：Lists 页签（置于 Options 面板顶部，点击切换） ===== */
-    #listTabs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 10px; }
+    #listTabs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; }
     /* v3.11：Options 标题行 = 标题 + 加号（加号不再占页签行空间）；页签仅选中项显示删除 */
-    .panel-label-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .panel-label-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 0; }
     .panel-label-row .panel-label { margin-bottom: 0; }
     /* v3.13：Text/Table 分段控件（标题行内，取代来回切的 modeBtn） */
     .seg { display: inline-flex; margin-left: auto; }
@@ -347,13 +347,13 @@
     .tool-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
     .panel { background: var(--chip); border: 1px solid var(--panel-border); border-radius: 12px; padding: 14px; min-width: 0; }
     .panel-wheel { display: flex; flex-direction: column; align-items: center; order: 1; }
-    .panel-result { order: 2; display: flex; flex-direction: column; }
-    /* v3.9：Reset 移入结果面板，Copy/Share/Reset 三按钮并列不换行；v3.11 间距 10px */
-    .panel-result .btns { margin-top: auto; flex-direction: row; flex-wrap: nowrap; gap: 10px; }
+    .panel-result { order: 2; display: flex; flex-direction: column; gap: 10px; }
+    /* v3.9：Reset 移入结果面板，Copy/Share/Reset 三按钮并列不换行；v3.11 间距 10px；v3.14 面板内统一 10px 间距 */
+    .panel-result .btns { margin: auto 0 0; flex-direction: row; flex-wrap: nowrap; gap: 10px; }
     .panel-result .btns button { flex: 1 1 0; width: auto; min-width: 0; min-height: 40px; padding: 9px 4px; font-size: 12.5px; white-space: nowrap; }
     @media (max-width: 480px) { .panel-result .btns button { padding: 9px 2px; font-size: 12px; } }
-    .panel-list { order: 3; }
-    .panel-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 10px; text-align: left; }
+    .panel-list { order: 3; display: flex; flex-direction: column; gap: 10px; }
+    .panel-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 0; text-align: left; }
     .panel-result .history { grid-template-columns: 1fr; }
     @media (min-width: 1024px) {
       .wrap { max-width: 1180px; }
@@ -372,7 +372,7 @@
     body.fs .panel { background: none; border: 0; padding: 0; }
     body.fs .panel-result .panel-label, body.fs .panel-result .history,
     body.fs .style-row { display: none !important; }
-    /* v3.11：普通视图隐藏 "Fate says:" 大字（最新结果在滚动列表末尾高亮呈现）；全屏投影恢复大字 */
+    /* v3.11：普通视图隐藏 "Fate says:" 大字（最新结果在列表顶部高亮呈现，v3.14）；全屏投影恢复大字 */
     .panel-result .result { display: none; }
     body.fs .panel-result .result { display: block; }
     .panel-result .history .chip.latest { box-shadow: 0 0 0 2px var(--accent), 0 2px 10px rgba(219,39,119,.35); font-weight: 700; }
@@ -382,15 +382,17 @@
     body.fs .panel-result .btns button:not([onclick="resetAll()"]) { display: none !important; }
     body.fs .result { font-size: 26px; }
 
-    /* ===== v3.8：PC 限高 + 面板内滚动（结果/列表超出时不撑高轮盘栏） ===== */
+    /* ===== v3.14：PC 三栏定高对称（恒 620px：结果再多不撑高轮盘/右栏，内容各自内滚，底部按钮对齐） ===== */
     .panel-result .history { min-height: 0; }
     @media (min-width: 1024px) {
-      .panel-result, .panel-list { max-height: 620px; display: flex; flex-direction: column; }
-      /* v3.10：结果列表改 flex column——grid 行在 flex 压缩下会被压扁（chip 33px→14px），
+      .tool-grid { grid-template-rows: 620px; }
+      .panel-result, .panel-list { height: 620px; display: flex; flex-direction: column; gap: 10px; }
+      /* 结果列表 flex column——grid 行在 flex 压缩下会被压扁（chip 33px→14px），
          flex + flex-shrink:0 保证结果条永不压缩，超出部分出滚动条 */
       .panel-result .history { flex: 1 1 auto; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
       .panel-result .history .chip { flex: 0 0 auto; width: auto; }
       .panel-list #editPane { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+      .panel-list .btns.list-btns { margin-top: auto; }
       #optTableWrap { max-height: none; }
     }
     /* 细滚动条（Firefox + WebKit） */
@@ -487,13 +489,13 @@
                 <p class="saved-hint">One option per line, or comma-separated. Changes apply as you type.</p>
               </div>
             </div>
+            <div class="meta" id="meta"></div>
             <div class="btns list-btns">
               <button type="button" id="addOptBtn" onclick="addRow()" title="Add a new option row">+ Add</button>
               <button type="button" onclick="importFile()">📥 Import</button>
               <button type="button" id="deleteListBtn" onclick="deleteSelected()" title="Delete the selected list">🗑 Delete</button>
               <input type="file" id="fileImport" accept=".txt,.csv,text/plain,text/csv" hidden>
             </div>
-            <div class="meta" id="meta"></div>
           </div>
 
         </div>
@@ -722,7 +724,8 @@
       var box = document.getElementById('history');
       box.innerHTML = '';
       var res = (idx>= 0 && idx < savedLists.length && savedLists[idx].res) ? savedLists[idx].res : [];
-      for (var j = 0; j < res.length; j++) {
+      /* v3.14：最新结果置顶并高亮；编号保持时间序（1=最早），与 Copy 输出一致 */
+      for (var j = res.length - 1; j >= 0; j--) {
         var chip = document.createElement('div');
         chip.className = 'chip' + (j === res.length - 1 ? ' latest' : '');
         chip.style.background = colors[(res[j].c || j) % colors.length];
@@ -730,8 +733,7 @@
         chip.textContent = (j + 1) + '. ' + res[j].n;
         box.appendChild(chip);
       }
-      /* v3.10：结果超出可视高度时自动滚到最底，展示最新结果 */
-      if (box.scrollHeight > box.clientHeight) box.scrollTop = box.scrollHeight;
+      box.scrollTop = 0;
     }
 
     function getOptions() {
