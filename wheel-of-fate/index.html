@@ -106,7 +106,7 @@
       {
         "@type": "Question",
         "name": "Can I edit the possible answers?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Edit any row in the options table, add rows with the + Add button, or switch to Text mode to import a whole comma-separated list — the wheel updates instantly." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Options panel takes input two ways: Table mode for row-by-row editing with the + Add button, and Text mode for pasting a whole comma-separated or line-by-line list — the wheel updates instantly either way." }
       },
       {
         "@type": "Question",
@@ -230,6 +230,7 @@
     .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
     .related a:hover { border-color: var(--accent); color: var(--accent); }
     .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .related a .ic { font-style: normal; font-size: 19px; margin-right: 7px; }
     details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
     summary { cursor: pointer; font-weight: 600; font-size: 15px; }
     details p { margin-top: 8px; color: var(--details-ink); }
@@ -503,25 +504,25 @@
       <section id="related">
         <h2>More Wheels to Try</h2>
         <div class="related">
-          <a href="../wheel-spinner/">Name Wheel Picker <span>Pick names</span></a>
-          <a href="../wheel-of-colors/">Wheel of Colors <span>Pick a random color</span></a>
-          <a href="../decision-wheel-spinner/">Decision Wheel Spinner <span>Spin to decide</span></a>
-          <a href="../what-to-eat-wheel/">What to Eat Wheel <span>Pick dinner</span></a>
-          <a href="../yes-no-wheel/">Yes No Wheel <span>Quick choice</span></a>
-          <a href="../random-group-generator/">Random Group Generator <span>Split into groups</span></a>
+          <a href="../wheel-spinner/"><b class="ic">🎯</b>Name Wheel Picker <span>Pick names</span></a>
+          <a href="../wheel-of-colors/"><b class="ic">🎨</b>Wheel of Colors <span>Pick a random color</span></a>
+          <a href="../decision-wheel-spinner/"><b class="ic">🧭</b>Decision Wheel Spinner <span>Spin to decide</span></a>
+          <a href="../what-to-eat-wheel/"><b class="ic">🍔</b>What to Eat Wheel <span>Pick dinner</span></a>
+          <a href="../yes-no-wheel/"><b class="ic">✅</b>Yes No Wheel <span>Quick choice</span></a>
+          <a href="../random-group-generator/"><b class="ic">👥</b>Random Group Generator <span>Split into groups</span></a>
         </div>
       </section>
 
             <section id="about">
         <h2>How to Use the Wheel of Fate</h2>
-        <p>Think of a question, hit the big Spin button in the centre of the wheel, and read the answer fate lands on. The wheel starts with playful outcomes like Yes, No, Maybe, Try again and Signs point to yes.</p>
+        <p>Think of a question, hit the big Spin button in the centre of the wheel, and read the answer fate lands on. The wheel starts with playful outcomes like Yes, No, Maybe, Try again and Signs point to yes. Every spin lands in the Result panel — the latest answer stays highlighted at the top, the numbered history scrolls below, and Copy grabs the whole list.</p>
         <p>Prefer a different kind of decision tool? The More Wheels panel right under the wheel links to a name wheel picker, a wheel of colors and other random wheels.</p>
       </section>
 
             <section id="editing">
               <h2>Editing the Fate Outcomes</h2>
               <p>The wheel opens with a set of playful replies — yes, no, maybe, try again and a few signs-point-to-yes style answers. Replace them with your own and the tool becomes a verdict machine for whatever question you have in mind.</p>
-              <p>Each row in the options table is one slice of the wheel. Edit a row, delete it with the ✕ button, or add new ones — the wheel redraws straight away. For longer lists, switch to Text mode and drop in comma-separated or line-by-line text.</p>
+              <p>Options can be entered two ways, and the wheel redraws instantly in both. <b>Table mode</b> gives every option its own row — edit it, delete it with the ✕ button, or press + Add for another slice. <b>Text mode</b> is built for longer lists: drop in comma-separated or line-by-line text and import it in one go. Switch between the two with the toggle next to Options — no other spinner lets you edit this flexibly.</p>
             </section>
             <section id="vs-eightball">
               <h2>Wheel of Fate vs a Magic 8-Ball</h2>
@@ -545,7 +546,7 @@
             </section>
             <section id="saved-lists">
               <h2>Save Your Favourite Fate Lists</h2>
-              <p>Every list saves automatically in your browser as you edit. Press + Add list to keep as many as you like — one list of playful replies for parties, another of straight yes or no answers for real decisions — and switch between them in a click.</p>
+              <p>Every list saves automatically in your browser as you edit. Press the + button in the Options header to keep as many as you like — one list of playful replies for parties, another of straight yes or no answers for real decisions — and switch between them with the tabs. Deleting a list is a deliberate click on 🗑 Delete, and if you regret it, Undo brings it straight back.</p>
             </section>
             <section id="questions">
               <h2>Questions to Ask the Wheel of Fate</h2>
@@ -611,7 +612,7 @@
         </details>
         <details>
           <summary>Can I edit the possible answers?</summary>
-          <p>Yes. Edit any row in the options table, add rows with the + Add button, or switch to Text mode to import a whole comma-separated list — the wheel updates instantly.</p>
+          <p>Yes. The Options panel takes input two ways: Table mode for row-by-row editing with the + Add button, and Text mode for pasting a whole comma-separated or line-by-line list — the wheel updates instantly either way.</p>
         </details>
         <details>
           <summary>Is it different from a yes or no wheel?</summary>
