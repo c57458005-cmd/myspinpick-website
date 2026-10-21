@@ -56,8 +56,7 @@
     "description": "Free yes no wheel. Add Yes and No (or your own options), spin the wheel and let it answer. No sign-up, works in your browser."
   }
   </script>
-
-  <script type="application/ld+json">
+<script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -77,8 +76,7 @@
     ]
   }
   </script>
-
-  <script type="application/ld+json">{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
@@ -119,7 +117,7 @@
     {
       "@type": "Question",
       "name": "What should I do if I do not like the answer?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Spin again, or press Remove Winner to drop that option first. The wheel is a way to end a debate, not a rule — and if a result leaves you disappointed, that reaction is usually your real answer." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Spin again, or press Remove &amp; spin again to drop that option first. The wheel is a way to end a debate, not a rule — and if a result leaves you disappointed, that reaction is usually your real answer." }
     },
     {
       "@type": "Question",
@@ -154,6 +152,30 @@
     :root {
       --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
       --accent: #db2777; --accent-dark: #be185d; --border: #e2e8f0; --radius: 14px;
+      /* v3.8：可主题化 token（暗色跟随 prefers-color-scheme） */
+      --btn-bg: #dbeafe; --btn-border: #93c5fd; --btn-ink: #1e40af;
+      --btn-bg-hover: #bfdbfe; --btn-border-hover: #60a5fa;
+      --btn-disabled-bg: #eff6ff; --btn-disabled-border: #dbeafe; --btn-disabled-ink: #93c5fd;
+      --chip: #f8fafc; --panel-border: #e8eef5; --rowline: #eef2f7;
+      --accent-soft: #fdf2f8; --accent-soft-border: #f4c0d1; --accent-sel: #fbeaf0;
+      --danger-bg: #fef2f2; --danger-border: #fecaca; --danger-ink: #dc2626;
+      --danger-bg-hover: #fee2e2; --danger-border-hover: #fca5a5;
+      --section-ink: #334155; --details-ink: #475569; --code-ink: #334155;
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1220; --card: #16213a; --ink: #e7eef9; --muted: #92a3ba;
+        --accent: #ec4899; --accent-dark: #db2777; --border: #2c3b55;
+        --btn-bg: rgba(59,130,246,.16); --btn-border: rgba(96,165,250,.45); --btn-ink: #9ec5fe;
+        --btn-bg-hover: rgba(59,130,246,.3); --btn-border-hover: rgba(96,165,250,.75);
+        --btn-disabled-bg: rgba(59,130,246,.08); --btn-disabled-border: rgba(96,165,250,.22); --btn-disabled-ink: rgba(158,197,254,.55);
+        --chip: #1c2942; --panel-border: #26344d; --rowline: #223049;
+        --accent-soft: rgba(236,72,153,.14); --accent-soft-border: rgba(236,72,153,.4); --accent-sel: rgba(236,72,153,.18);
+        --danger-bg: rgba(248,113,113,.12); --danger-border: rgba(248,113,113,.35); --danger-ink: #f87171;
+        --danger-bg-hover: rgba(248,113,113,.22); --danger-border-hover: rgba(248,113,113,.6);
+        --section-ink: #c3cede; --details-ink: #aab8cc; --code-ink: #c3cede;
+      }
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
@@ -163,64 +185,130 @@
 .topbar h1 { flex: 1 1 auto; min-width: 0; }
     .topright { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
     .brand-mini { display: inline-flex; align-items: center; gap: 0; font-weight: 700; font-size: 14px; color: var(--accent); text-decoration: none; }
-    .brand-mini > svg { margin-right: 5px; }
+    .brand-mini> svg { margin-right: 5px; }
     h1 { font-size: 24px; line-height: 1.25; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: anywhere; }
     .sub { color: var(--muted); margin-top: 8px; font-size: 16px; }
-    
+
 
     input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
     .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
     .wheel-wrap { text-align: center; margin-bottom: 16px; }
     canvas { max-width: 100%; }
-    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
-    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); background: var(--card); }
+    input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); background: var(--card); }
     textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
     input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
     .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
-    button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
-    button:hover { background: #bfdbfe; border-color: #60a5fa; }
-    button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
-    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    button { border: 1px solid var(--btn-border); background: var(--btn-bg); color: var(--btn-ink); padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+    button:hover { background: var(--btn-bg-hover); border-color: var(--btn-border-hover); }
+    button:disabled { background: var(--btn-disabled-bg); border-color: var(--btn-disabled-border); color: var(--btn-disabled-ink); cursor: not-allowed; }
+    .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: left; }
+    #meta:empty { display: none; margin: 0; }
     .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
-    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
     .history:empty { display: none; }
-    .btns.list-btns { justify-content: flex-start; margin: 8px 0 0; }
-    .btns.nowrap { flex-wrap: nowrap; }
-    @media (max-width: 480px) { .btns.nowrap { gap: 6px; } .btns.nowrap button { padding: 9px 10px; font-size: 13px; } }
-    .icon-btn { width: 46px; padding-left: 0; padding-right: 0; font-size: 16px; }
-    #options { min-height: 46px; height: 46px; overflow: hidden; resize: none; }
-    .saved-head { margin-top: 18px; }
-    .saved-head .label { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-    .saved-hint { font-size: 13px; color: var(--muted); margin: 2px 0 8px; }
-    .saved-row { display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; margin-bottom: 6px; cursor: pointer; }
-    .saved-row.selected { background: #fbeaf0; border-color: #f4c0d1; }
-    .saved-row .preview { flex: 1; min-width: 0; font-size: 13px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .saved-row .n { font-size: 12px; color: var(--muted); flex-shrink: 0; }
-    .saved-row button { flex: 0 0 20px; width: 20px; height: 20px; min-width: 20px; min-height: 20px; aspect-ratio: 1; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
-    .saved-row button:hover { background: #fee2e2; border-color: #fca5a5; }
     .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
     section { margin-top: 26px; }
     h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
-    section p, section li { color: #334155; font-size: 15px; }
+    section p, section li { color: var(--section-ink); font-size: 15px; }
     ul, ol { padding-left: 20px; }
     .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
     .related a { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; }
     .related a:hover { border-color: var(--accent); color: var(--accent); }
     .related a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .related a .ic { font-style: normal; font-size: 19px; margin-right: 7px; }
     details { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
     summary { cursor: pointer; font-weight: 600; font-size: 15px; }
-    details p { margin-top: 8px; color: #475569; }
+    details p { margin-top: 8px; color: var(--details-ink); }
     footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
     @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 640px) { h1 { font-size: 21px; } .brand-mini span { display: none; } }
     @media (max-width: 480px) { h1 { font-size: 20px; } button { min-height: 44px; } }
 
+    .btns.nowrap { flex-wrap: nowrap; }
+    @media (max-width: 480px) { .btns.nowrap { gap: 6px; } .btns.nowrap button { padding: 9px 10px; font-size: 13px; } }
+    .icon-btn { width: 46px; padding-left: 0; padding-right: 0; font-size: 16px; }
+    .btns.list-btns { justify-content: flex-start; margin: 0; flex-wrap: nowrap; gap: 10px; }
+    .btns.list-btns button { min-height: 40px; flex: 1 1 0; min-width: 0; padding: 9px 4px; font-size: 12.5px; white-space: nowrap; }
+    #options { min-height: 46px; height: 46px; overflow: hidden; resize: none; }
+    .saved-hint { font-size: 13px; color: var(--muted); margin: 2px 0 8px; }
+    /* ===== v3.7：Lists 页签（置于 Options 面板顶部，点击切换） ===== */
+    #listTabs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; }
+    /* v3.11：Options 标题行 = 标题 + 加号（加号不再占页签行空间）；页签仅选中项显示删除 */
+    .panel-label-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 0; }
+    .panel-label-row .panel-label { margin-bottom: 0; }
+    /* v3.13：Text/Table 分段控件（标题行内，取代来回切的 modeBtn） */
+    .seg { display: inline-flex; margin-left: auto; }
+    .seg-btn { min-height: 0; padding: 4px 10px; font-size: 11.5px; border-radius: 999px 0 0 999px; }
+    .seg-btn + .seg-btn { border-radius: 0 999px 999px 0; margin-left: -1px; }
+    .seg-btn.active { background: var(--accent); border-color: var(--accent-dark); color: #fff; }
+    #addListBtn { flex: 0 0 auto; width: 24px; height: 24px; min-width: 24px; min-height: 0; padding: 0; border-radius: 50%; border-style: dashed; background: transparent; color: var(--muted); font-size: 15px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
+    #addListBtn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+    .list-tab { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; background: var(--chip); border: 1px solid var(--border); border-radius: 999px; padding: 5px 8px 5px 12px; cursor: pointer; font-size: 13px; color: var(--ink); user-select: none; }
+    .list-tab:hover { border-color: var(--accent-soft-border); background: var(--accent-soft); }
+    .list-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+    .list-tab .n { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .list-tab.active .n { color: rgba(255,255,255,.85); }
+    .list-tab button { display: none; }
+    /* v3.12：页签不再带删除按钮——删除入口移至按钮行（Paste/Import/Delete 并排），避免切换列表时误删 */
+    .list-tab.add { min-height: 0; padding: 5px 12px; border-style: dashed; color: var(--muted); background: var(--card); font-weight: 700; }
+    .list-tab.add:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+    @media (max-width: 480px) { .list-tab { padding: 4px 6px 4px 10px; font-size: 12.5px; } }
+
+    /* ===== v3.6：中心 Spin 按钮——SVG 一体成形（圆盘+指针同一条轮廓，无拼缝） ===== */
+    .wheel-box { position: relative; display: inline-block; line-height: 0; }
+    #centerSpin { position: absolute; left: calc(50% - 50px); top: calc(50% - 62px);
+      width: 100px; height: 112px; min-height: 0; padding: 0; border: 0; background: transparent;
+      color: #fff; font-size: 17px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+      text-shadow: 0 1px 3px rgba(15,23,42,.35);
+      cursor: pointer; filter: drop-shadow(0 4px 10px rgba(190,24,93,.38));
+      transition: transform .12s ease, filter .12s ease; transform-origin: 50% 62px; }
+    #centerSpin:hover:not(:disabled) { transform: scale(1.05); }
+    #centerSpin:active:not(:disabled) { transform: scale(.97); }
+    #centerSpin:disabled { filter: grayscale(.4) brightness(.96); cursor: wait; }
+    #centerSpin svg { display: block; width: 100%; height: 100%; pointer-events: none; }
+    #centerSpin .spin-txt { position: absolute; left: 0; top: 62px; width: 100%; transform: translateY(-50%); }
+    /* 中心按钮尺寸已改为随轮盘等比（见 extra.css），480px 特例移除 */
+
+    /* ===== v3.1：轮盘样式选择（微缩预览，无文字，无字段标签） ===== */
+    .style-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .style-swatch { width: 30px; height: 30px; min-height: 0; padding: 0; border-radius: 50%;
+      border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border), 0 1px 3px rgba(15,23,42,.12);
+      cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
+    .style-swatch:hover { transform: scale(1.14); }
+    .style-swatch.active { box-shadow: 0 0 0 2px var(--accent), 0 1px 4px rgba(15,23,42,.18); transform: scale(1.08); }
+    @media (max-width: 480px) { .style-swatch { width: 34px; height: 34px; } }
+
+    /* ===== v3：选项表格编辑器 ===== */
+    #optTableWrap { max-height: 300px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--card); }
+    .opt-row { display: flex; align-items: center; gap: 8px; padding: 0 10px 0 6px; border-bottom: 1px solid var(--rowline); }
+    .opt-row:last-child { border-bottom: none; }
+    .opt-row .idx { flex: 0 0 28px; text-align: right; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .opt-row input[type="text"] { flex: 1; min-width: 0; border: 0; border-radius: 6px; padding: 9px 4px; font-size: 14.5px; background: transparent; box-shadow: none; }
+    .opt-row input[type="text"]:focus { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
+    .opt-row .del { flex: 0 0 22px; width: 22px; height: 22px; min-width: 22px; min-height: 22px; padding: 0; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-ink); }
+    .opt-row .del:hover { background: var(--danger-bg-hover); border-color: var(--danger-border-hover); }
+    /* v3.13：addOptBtn 移入底部按钮行（Table 模式显示，Text 模式隐藏） */
+    #editPane.paste ~ .btns.list-btns #addOptBtn { display: none; }
+    .opt-empty { padding: 14px 12px; color: var(--muted); font-size: 13.5px; text-align: left; }
+    #pastePane { display: none; }
+    #editPane.paste #pastePane { display: block; }
+    #editPane.paste #tableView { display: none; }
+    /* v3.11：Paste 模式 textarea 铺满面板剩余高度，内容超出在文本域内滚动 */
+    #editPane.paste #pastePane { display: flex; flex-direction: column; }
+    #editPane.paste #pastePane textarea { flex: 1 1 auto; min-height: 170px; height: auto; resize: none; overflow: auto; }
+    #pastePane .saved-hint { margin-top: 6px; flex: 0 0 auto; }
+
     /* /embed/ 嵌入板块 */
-    #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #embed .embed-code { margin: 0; padding: 12px; background: var(--chip); border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: var(--code-ink); white-space: pre-wrap; overflow-wrap: anywhere; }
     #embed .embed-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 10px 0 0; }
     #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
     #embed .embed-preview:hover { text-decoration: underline; }
     #embed .embed-hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+
+    /* 万圣节预设列表 */
+    .preset-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+
     /* ===== 优化 v2：主 CTA / 选项行 / 中奖弹窗 / 全屏投影 ===== */
     button.primary { background: var(--accent); border-color: var(--accent-dark); color: #fff; }
     .btns button.primary { font-size: 16px; padding: 12px 30px; box-shadow: 0 2px 8px rgba(219,39,119,.28); }
@@ -229,14 +317,12 @@
     @media (max-width: 480px) { .btns.nowrap button.primary { padding: 11px 18px; font-size: 15px; } }
     @media (max-width: 420px) { .btns.nowrap { flex-wrap: wrap; } }
 
-    .meta-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
-    .meta-row .meta { margin-bottom: 0; }
     .tool-opt { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; white-space: nowrap; user-select: none; }
 
     .win-modal { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(15,23,42,.55); }
     .win-modal[hidden] { display: none; }
     .win-confetti { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-    .win-card { position: relative; background: #fff; border-radius: 18px; padding: 26px 34px 22px; text-align: center; max-width: 92vw; box-shadow: 0 24px 60px rgba(15,23,42,.28); animation: winPop .28s cubic-bezier(.2,1.3,.4,1) both; }
+    .win-card { position: relative; background: var(--card); border-radius: 18px; padding: 26px 34px 22px; text-align: center; max-width: 92vw; box-shadow: 0 24px 60px rgba(15,23,42,.28); animation: winPop .28s cubic-bezier(.2,1.3,.4,1) both; }
     @keyframes winPop { from { transform: scale(.86); opacity: 0 } to { transform: scale(1); opacity: 1 } }
     @media (prefers-reduced-motion: reduce) { .win-card { animation: none } }
     .win-kicker { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
@@ -244,28 +330,250 @@
     .win-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
     @media (max-width: 480px) { .win-name { font-size: 26px; } .win-card { padding: 22px 22px 18px; } }
 
-    body.fs { background: #f6f8fb; }
+    /* ===== v3.4：PC 左中右三栏（结果 | 轮盘 | 列表维护） ===== */
+    .tool-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .panel { background: var(--chip); border: 1px solid var(--panel-border); border-radius: 12px; padding: 14px; min-width: 0; }
+    .panel-wheel { display: flex; flex-direction: column; align-items: center; order: 1; }
+    .panel-result { order: 2; display: flex; flex-direction: column; gap: 10px; }
+    /* v3.9：Reset 移入结果面板，Copy/Share/Reset 三按钮并列不换行；v3.11 间距 10px；v3.14 面板内统一 10px 间距 */
+    .panel-result .btns { margin: auto 0 0; flex-direction: row; flex-wrap: nowrap; gap: 10px; }
+    .panel-result .btns button { flex: 1 1 0; width: auto; min-width: 0; min-height: 40px; padding: 9px 4px; font-size: 12.5px; white-space: nowrap; }
+    @media (max-width: 480px) { .panel-result .btns button { padding: 9px 2px; font-size: 12px; } }
+    .panel-list { order: 3; display: flex; flex-direction: column; gap: 10px; }
+    .panel-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 0; text-align: left; }
+    .panel-result .history { grid-template-columns: 1fr; }
+    @media (min-width: 1180px) {
+      .wrap { max-width: 1180px; }
+      .tool-grid { grid-template-columns: 240px minmax(0, 1fr) 300px; gap: 20px; }
+      .panel-result { order: 1; }
+      .panel-wheel { order: 2; }
+      .panel-list { order: 3; }
+    }
+
+    body.fs { background: var(--bg); }
     body.fs .wrap { max-width: none; padding: 0; }
-    body.fs header, body.fs section, body.fs footer, body.fs .saved-head, body.fs .saved-hint,
-    body.fs #savedLists, body.fs .list-btns, body.fs #options, body.fs .meta-row,
-    body.fs .history { display: none !important; }
+    body.fs header, body.fs section, body.fs footer,
+    body.fs .panel-list { display: none !important; }
     body.fs .tool { border: 0; box-shadow: none; border-radius: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
-    body.fs .wheel-wrap { margin-bottom: 0; }
+    body.fs .tool-grid { display: block; }
+    body.fs .panel { background: none; border: 0; padding: 0; }
+    body.fs .panel-result .panel-label, body.fs .panel-result .history,
+    body.fs .style-row { display: none !important; }
+    /* v3.11：普通视图隐藏 "Fate says:" 大字（最新结果在列表顶部高亮呈现，v3.14）；全屏投影恢复大字 */
+    .panel-result .result { display: none; }
+    body.fs .panel-result .result { display: block; }
+    /* 最新结果高亮已迁移到 extra.css（红黄蓝渐变描边），此处不再留粉色描边 */
+    /* v3.15：全屏投影隐藏整个按钮行（Reset 也不显示），并解除定高（v3.14 的 height:620px 会把轮盘顶出屏幕） */
+    body.fs .panel-result { height: auto; }
+    body.fs .panel-result .btns { display: none !important; }
     body.fs .result { font-size: 26px; }
-</style>
+
+    /* ===== v3.14：PC 三栏定高对称（恒 620px：结果再多不撑高轮盘/右栏，内容各自内滚，底部按钮对齐） ===== */
+    .panel-result .history { min-height: 0; }
+    @media (min-width: 1180px) {
+      .tool-grid { grid-template-rows: 620px; }
+      .panel-result, .panel-list { height: 620px; display: flex; flex-direction: column; gap: 10px; }
+      /* 结果列表 flex column——grid 行在 flex 压缩下会被压扁（chip 33px→14px），
+         flex + flex-shrink:0 保证结果条永不压缩，超出部分出滚动条 */
+      .panel-result .history { flex: 1 1 auto; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+      .panel-result .history .chip { flex: 0 0 auto; width: auto; }
+      .panel-list #editPane { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+      .panel-list .btns.list-btns { margin-top: auto; }
+      #optTableWrap { max-height: none; }
+    }
+    /* 细滚动条（Firefox + WebKit） */
+    .panel-result .history, .panel-list #editPane, #optTableWrap { scrollbar-width: thin; scrollbar-color: rgba(148,163,184,.55) transparent; }
+    .panel-result .history::-webkit-scrollbar, .panel-list #editPane::-webkit-scrollbar, #optTableWrap::-webkit-scrollbar { width: 6px; }
+    .panel-result .history::-webkit-scrollbar-thumb, .panel-list #editPane::-webkit-scrollbar-thumb, #optTableWrap::-webkit-scrollbar-thumb { background: rgba(148,163,184,.55); border-radius: 3px; }
+    .panel-result .history::-webkit-scrollbar-track, .panel-list #editPane::-webkit-scrollbar-track, #optTableWrap::-webkit-scrollbar-track { background: transparent; }
+
+    /* ===== v3.8：删除撤销 toast ===== */
+    .toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 16px); display: flex; align-items: center; gap: 12px; background: var(--ink); color: var(--bg); border-radius: 999px; padding: 10px 12px 10px 18px; font-size: 14px; font-weight: 600; box-shadow: 0 10px 30px rgba(15,23,42,.25); opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .18s ease; z-index: 70; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+    .toast button { background: var(--accent); border-color: var(--accent-dark); color: #fff; padding: 6px 14px; border-radius: 999px; font-size: 13px; }
+    .toast button:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #fff; }
+/* extra.css — 构建期注入到样式块末尾（模板重生成不影响这里）
+   hub 空态：fate 版式把 .result 在常规视图隐藏，改为在结果栏给一句提示，避免首屏空白
+   注意：注释里不要出现 style 的闭合标签字面量，HTML 解析器会提前结束样式块 */
+
+/* 空态提示文案走变量：默认值给「winner」类页面；二元问答等页面可在配置里覆盖 */
+:root { --result-hint: "Spin the wheel — the answer appears here."; }
+
+body:not(.fs) .panel-result .history:empty { display: block; }
+body:not(.fs) .panel-result .history:empty::before {
+  content: var(--result-hint);
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ===== 中心 Spin 按钮：尺寸改为随轮盘直径等比 =====
+   --wheel 由 fitCanvas() 写在 .wheel-box 上；80px 下限保证手机端文字不小于 13px */
+#centerSpin {
+  --s: max(80px, calc(var(--wheel, 440px) * 0.2));
+  width: var(--s);
+  height: calc(var(--s) * 1.12);
+  left: calc(50% - var(--s) / 2);
+  top: calc(50% - var(--s) * 0.62);
+  font-size: max(13px, calc(var(--s) * 0.17));
+  transform-origin: 50% calc(var(--s) * 0.62);
+  outline: none;
+}
+#centerSpin .spin-txt { top: calc(var(--s) * 0.62); }
+
+/* 焦点环：默认 outline 是套在整块盒子上的矩形。指针尖在圆心上方 0.59s 处，
+   环半径取 0.63s 才能整个包住「圆盘 + 指针」而不穿过指针 */
+#centerSpin::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(var(--s) * 0.62);
+  width: calc(var(--s) * 1.26);
+  height: calc(var(--s) * 1.26);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px var(--accent-dark);
+  transition: opacity .12s ease;
+}
+#centerSpin:focus-visible::after { opacity: 1; }
+
+/* 旋转中不再整块变灰（观感像按钮坏了），只轻微降透明并保持可读 */
+#centerSpin:disabled {
+  filter: drop-shadow(0 4px 10px rgba(190, 24, 93, .38));
+  opacity: .82;
+  cursor: progress;
+}
+
+/* ===== 结果气泡：底色改走变量；最新一条用红黄蓝渐变描边 + 外扩光晕 ===== */
+.panel-result .history .chip { background-color: var(--chipc, #94a3b8); }
+
+.panel-result .history .chip.latest {
+  border: 3px solid transparent;
+  padding: 3px 1px;                     /* 抵消 3px 边框，与其它气泡同尺寸 */
+  background:
+    linear-gradient(var(--chipc, #fff), var(--chipc, #fff)) padding-box,
+    linear-gradient(to right, #ef4444 0%, #facc15 50%, #3b82f6 100%) border-box;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .92),   /* 白缝：避免描边与同色底粘连 */
+    0 0 6px 1px rgba(239, 68, 68, .42),
+    0 0 11px 3px rgba(250, 204, 21, .20),
+    0 0 16px 5px rgba(59, 130, 246, .18);
+  font-weight: 700;
+}
+
+/* 新结果出现时，光晕由内向外扩散一次后停在常态 */
+@media (prefers-reduced-motion: no-preference) {
+  .panel-result .history .chip.latest { animation: chipSpread 1.1s cubic-bezier(.22, .61, .36, 1) 1; }
+  @keyframes chipSpread {
+    0% {
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .92),
+        0 0 0 0 rgba(239, 68, 68, .55),
+        0 0 0 0 rgba(250, 204, 21, .40),
+        0 0 0 0 rgba(59, 130, 246, .35);
+    }
+    45% {
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .92),
+        0 0 10px 3px rgba(239, 68, 68, .52),
+        0 0 16px 7px rgba(250, 204, 21, .30),
+        0 0 24px 12px rgba(59, 130, 246, .26);
+    }
+    100% {
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .92),
+        0 0 6px 1px rgba(239, 68, 68, .42),
+        0 0 11px 3px rgba(250, 204, 21, .20),
+        0 0 16px 5px rgba(59, 130, 246, .18);
+    }
+  }
+}
+
+/* ===== 颜色页（wheel-of-colors）：每行一枚原生色盘，点开即选色 =====
+   行结构：[序号] [色盘] [名称/色号] [删除] —— 色盘由 src/colors.js 插在文本框之前 */
+.opt-row input.sw {
+  flex: 0 0 28px; width: 28px; height: 28px; min-width: 28px; min-height: 28px;
+  padding: 0; border: 1px solid rgba(15, 23, 42, .16); border-radius: 8px;
+  background: var(--card); cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .06);
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+.opt-row input.sw::-webkit-color-swatch-wrapper { padding: 2px; }
+.opt-row input.sw::-webkit-color-swatch { border: 0; border-radius: 6px; }
+.opt-row input.sw::-moz-color-swatch { border: 0; border-radius: 6px; }
+.opt-row input.sw:hover { border-color: var(--accent); }
+.opt-row input.sw:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 认不出的名称/色号：色盘镀一圈琥珀 —— 这一片暂时用的是调色板颜色 */
+.opt-row.unresolved input.sw { box-shadow: 0 0 0 2px #f59e0b; border-color: #b45309; }
+.opt-row.unresolved input.opt-input { color: var(--muted); }
+
+/* 结果气泡：浅色（White / Yellow）用深字，深色用白字；发丝描边让纯白气泡在白卡上仍有轮廓 */
+.panel-result .history .chip { color: var(--chipink, #fff); box-shadow: inset 0 0 0 1px rgba(15, 23, 42, .10); }
+
+/* 中奖弹窗里的颜色圆点（由 src/colors.js 注入，仅颜色页出现） */
+.win-dot {
+  display: block; width: 68px; height: 68px; border-radius: 50%;
+  margin: 0 auto 14px; background: #94a3b8;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, .14), 0 8px 22px rgba(15, 23, 42, .25);
+}
+@media (max-width: 480px) { .win-dot { width: 54px; height: 54px; margin-bottom: 10px; } }
+
+/* ===== 颜色页：结果区顶部的「色片 + HEX」一行 =====
+   模板在常规视图隐藏 #result 大字，色号必须自己占一行，点一下即复制 */
+.hex-out {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px;
+  padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px;
+  background: var(--card); color: var(--ink); font: inherit; text-align: left;
+  cursor: pointer; transition: border-color .12s ease, background .12s ease;
+}
+.hex-out[hidden] { display: none; }
+.hex-out .sw-dot {
+  flex: 0 0 24px; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--sw, #94a3b8); box-shadow: inset 0 0 0 1px rgba(15, 23, 42, .18);
+}
+.hex-out .hex-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 15px; font-weight: 700; letter-spacing: .04em;
+}
+.hex-out .hex-copy { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--accent); }
+.hex-out:hover { border-color: var(--accent); background: var(--accent-soft); }
+.hex-out:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 正文里的行内色号 / 颜色名（颜色页 sections 用了 <code>，模板本身没定义） */
+section code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .92em; font-weight: 600; color: var(--accent-dark);
+  white-space: nowrap;
+}
+
+/* 正文段落节奏：模板里 `* { margin: 0 }` 把所有段落压平了，长页面读起来像一堵墙。
+   只给"相邻段落/列表"加上呼吸，不碰已有布局 */
+section p + p,
+section ul + p,
+section ol + p,
+section p + ul { margin-top: 10px; }
+section li + li { margin-top: 6px; }
+  </style>
 </head>
 <body>
   <div class="win-modal" id="winModal" role="dialog" aria-modal="true" aria-labelledby="winName" hidden>
     <canvas class="win-confetti" id="confetti" aria-hidden="true"></canvas>
     <div class="win-card">
-      <p class="win-kicker">Winner</p>
+      <p class="win-kicker">Answer</p>
       <p class="win-name" id="winName"></p>
       <div class="win-actions">
         <button type="button" class="primary" id="winAgain">Spin again</button>
+        <button type="button" id="winRemoveSpin" title="Remove the winner from the list, then spin again">Remove &amp; spin again</button>
         <button type="button" id="winClose">Close</button>
       </div>
     </div>
   </div>
+
+  <div class="toast" id="undoToast" role="status" aria-live="polite"><span id="undoMsg"></span><button type="button" id="undoBtn">Undo</button></div>
 
   <div class="wrap">
     <header>
@@ -278,41 +586,71 @@
 
     <main>
       <div class="tool">
-        <div class="wheel-wrap">
-          <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
+        <div class="tool-grid">
+
+          <div class="panel panel-result">
+            <div class="panel-label">Result</div>
+            <div class="result" id="result" aria-live="polite">Spin to answer yes or no</div>
+            <div class="history" id="history" aria-live="polite"></div>
+            <div class="btns">
+              <button type="button" onclick="copyResult()" title="Copy the winner to clipboard">📋 Copy</button>
+              <button type="button" onclick="shareList()" title="Copy a share link of the current list">🔗 Share</button>
+              <button type="button" onclick="resetAll()" title="Clear the result and history, keeping your options">↺ Reset</button>
+            </div>
+          </div>
+
+          <div class="panel panel-wheel">
+            <div class="wheel-box">
+              <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
+<button type="button" id="centerSpin" aria-label="Spin the wheel" title="Spin the wheel"><svg viewBox="0 0 100 112" aria-hidden="true" focusable="false"><g stroke="#fff" stroke-width="5" fill="#db2777"><circle cx="50" cy="62" r="41"/><path d="M50 3 L67 36 L33 36 Z"/></g><g fill="#db2777"><circle cx="50" cy="62" r="41"/><path d="M50 3 L67 36 L33 36 Z"/></g></svg><span class="spin-txt">Spin</span></button>
+            </div>
+            <div class="btns nowrap">
+<button type="button" class="icon-btn" id="fsBtn" onclick="toggleFullscreen()" aria-label="Fullscreen presentation mode" title="Fullscreen presentation mode">⛶</button>
+              <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button>
+            </div>
+          </div>
+
+          <div class="panel panel-list">
+            <div class="panel-label-row">
+              <div class="panel-label">Options</div>
+<div class="seg" role="group" aria-label="Edit mode">
+                <button type="button" class="seg-btn" id="segText" onclick="setEditMode('text')">Text</button>
+                <button type="button" class="seg-btn active" id="segTable" onclick="setEditMode('table')">Table</button>
+              </div>
+<button type="button" id="addListBtn" onclick="addNewList()" aria-label="Add a new list" title="Add a new list">+</button>
+            </div>
+<div id="listTabs" role="tablist" aria-label="Saved lists"></div>
+            <div id="editPane">
+<div id="tableView">
+                <div id="optTableWrap">
+                  <div id="optTable" role="list" aria-label="Wheel options"></div>
+                  <div class="opt-empty" id="optEmpty" hidden>No options yet — add one below or import a list.</div>
+                </div>
+                <p class="saved-hint">Each row is one slice of the wheel.</p>
+              </div>
+              <div id="pastePane">
+                <textarea id="options" rows="4" aria-label="Wheel options" spellcheck="false">Yes,No,Maybe,Try later</textarea>
+                <p class="saved-hint">One option per line, or comma-separated. Changes apply as you type.</p>
+              </div>
+            </div>
+            <div class="meta" id="meta"></div>
+            <div class="btns list-btns">
+<button type="button" id="addOptBtn" onclick="addRow()" title="Add a new option row">+ Add</button>
+<button type="button" onclick="importFile()">📥 Import</button>
+<button type="button" id="deleteListBtn" onclick="deleteSelected()" title="Delete the selected list">🗑 Delete</button>
+<input type="file" id="fileImport" accept=".txt,.csv,text/plain,text/csv" hidden>
+            </div>
+          </div>
+
         </div>
-        <div class="btns nowrap">
-          <button type="button" class="icon-btn" id="fsBtn" onclick="toggleFullscreen()" aria-label="Fullscreen presentation mode" title="Fullscreen presentation mode">⛶</button>
-          <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button>
-          <button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
-          <button type="button" onclick="resetAll()">Reset</button>
-          <button type="button" onclick="copyResult()">Copy Result</button>
-        </div>
-        <div class="result" id="result" aria-live="polite">Spin to answer yes or no</div>
-        <div class="history" id="history" aria-live="polite"></div>
-        <div class="meta-row">
-          <p class="meta">Separate options with commas or new lines.</p>
-          <label class="tool-opt" for="popupChk"><input type="checkbox" id="popupChk" checked /> 🎉 Winner popup</label>
-        </div>
-        <textarea id="options" rows="1" aria-label="Wheel options" spellcheck="false">Yes,No,Maybe,Try later</textarea>
-        <div class="btns list-btns">
-          <button type="button" onclick="saveList(false)">💾 Save</button>
-          <button type="button" onclick="clearOptions()">Clear</button>
-          <button type="button" onclick="removeLast()">Remove</button>
-          <button type="button" onclick="shareList()">🔗 Share</button>
-        </div>
-        <div class="saved-head"><span class="label">Saved lists</span></div>
-        <p class="saved-hint">Tip: save your frequently used lists for quick reuse.</p>
-        <div id="savedLists"></div>
-        <div class="meta" id="meta"></div>
       </div>
 
             <section id="about">
         <h2>How to Use the Yes No Wheel</h2>
-        <p>Type your options into the box (comma separated) — usually just "Yes" and "No" — then click "Spin". The wheel stops on a random option and shows it as the answer. Use "Remove Winner" to drop an option and spin again.</p>
+        <p>Type your answers into the rows — usually just "Yes" and "No" — then click "Spin". The wheel stops on a random option and shows it as the answer. <strong>+ Add</strong> gives you another row, the <strong>Text</strong> tab takes a comma separated list in one go, and <strong>Import</strong> accepts a .txt or .csv. Press <strong>Remove &amp; spin again</strong> and the answer that just landed comes off the wheel before the next spin.</p>
       </section>
 
-      <section id="ideas">
+<section id="ideas">
         <h2>Yes or No Wheel Ideas Beyond the Obvious</h2>
         <p>The wheel is not only for straight yes or no calls. Load it with the pair that matches your situation and the same spinner handles all of them:</p>
         <ul>
@@ -323,31 +661,35 @@
         </ul>
         <p>Whichever pair you load, the spin keeps the answer out of your hands, which is the entire point when two choices feel equally good.</p>
       </section>
-      <section id="custom-answers">
+
+<section id="custom-answers">
         <h2>Custom Answers — More Than Two Options</h2>
         <p>Type as many entries as you like, separated by commas, and the wheel splits evenly between them. Some people keep it strictly binary; others load three or four answers such as yes, no, later and ask me again, which turns the spinner into a gentle way of postponing a decision instead of forcing it.</p>
-        <p>Press Remove Winner to take the landed option out of the wheel and spin again. That helps across a run of rounds, where seeing the same answer twice in a row feels unsatisfying.</p>
+        <p>Press <strong>Remove &amp; spin again</strong> to take the landed option out of the wheel. That helps across a run of rounds, where seeing the same answer twice in a row feels unsatisfying — the wheel shrinks with every round, and switching back to a saved list brings the full set back.</p>
       </section>
-      <section id="spinner-vs-vote">
+
+<section id="spinner-vs-vote">
         <h2>When a Spinner Beats a Straight Vote</h2>
         <p>Two people can debate a small choice for far longer than the choice deserves. A spin closes that loop in seconds, and both sides accept the result because neither side controlled it.</p>
         <p>The wheel also helps when the options are genuinely close. If any answer would work, picking at random is no worse than picking after another five minutes of discussion — and it is considerably faster.</p>
       </section>
-      <section id="controls">
-        <h2>Sound, History and the Remove Winner Control</h2>
-        <p>Three small controls sit under the wheel. The speaker button mutes the ticking sound as the wheel turns. The history strip keeps the most recent results in view so you can see the run of answers at a glance. Remove Winner drops whichever option just won and reshuffles, while Reset clears the wheel back to its starting state.</p>
-      </section>
-      <section id="quick-start">
-        <h2>One Tap, One Answer</h2>
-        <p>There is no setup to work through before the first spin. The wheel opens ready to answer with the two options already loaded, so a decision takes one press — no list to type, no setting to confirm, no account to create.</p>
-        <p>If you want different answers, edit the box once and the wheel keeps that change for the rest of the session.</p>
+
+<section id="controls">
+        <h2>Sound, History and Remove &amp; Spin Again</h2>
+        <p>A few small controls sit around the wheel. The speaker button mutes the ticking sound as the wheel turns, and <strong>⛶</strong> opens a fullscreen presentation view for a group watching one screen. The history strip keeps the most recent results in view, with the newest answer outlined. <strong>Remove &amp; spin again</strong> drops whichever option just won and reshuffles, while <strong>↺ Reset</strong> clears the current result and the history — your answers stay on the wheel. Deleting a saved list raises an <strong>Undo</strong> toast for six seconds in case you did it by mistake.</p>
       </section>
 
-      <section id="embed">
+<section id="quick-start">
+        <h2>One Tap, One Answer</h2>
+        <p>There is no setup to work through before the first spin. The wheel opens with the usual answers already loaded, so a decision takes one press — no list to type, no setting to confirm, no account to create.</p>
+        <p>If you want different answers, edit the rows once — the list is stored in your browser as you type, so the same answers are waiting the next time you open the page.</p>
+      </section>
+
+<section id="embed">
         <h2>Embed This Yes No Wheel on Your Site</h2>
-        <p>Streamers, teachers and quiz pages can put the same decision wheel on their own site. Copy the snippet into any HTML block — it loads the free spinner from myspinpick.com, adapts to the width of your container, and needs no sign-up.</p>
+        <p>Streamers, teachers and quiz pages can put a compact version of this wheel on their own site — just the wheel and a list box. Copy the snippet into any HTML block — it loads the free spinner from myspinpick.com, adapts to the width of your container, and needs no sign-up.</p>
         <p>The embed is free to use. A small "Yes No Wheel by MySpinPick" credit link sits under the wheel; please keep it so viewers can find the tool again.</p>
-        <pre class="embed-code" id="embed-code" aria-label="Embed code for Yes No Wheel">&lt;iframe src="https://myspinpick.com/embed/yes-no-wheel/" width="100%" height="827" style="border:0;max-width:100%" title="Yes No Wheel by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Yes No Wheel">&lt;iframe src="https://myspinpick.com/embed/yes-no-wheel/" width="100%" height="860" style="border:0;max-width:100%" title="Yes No Wheel by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
         <p class="embed-actions">
           <button type="button" id="embed-copy">Copy embed code</button>
           <a class="embed-preview" href="https://myspinpick.com/embed/yes-no-wheel/" target="_blank" rel="noopener">Preview the widget</a>
@@ -375,18 +717,20 @@
       </script>
       </section>
 
-      <section id="related">
+<section id="related">
         <h2>Related Tools</h2>
         <div class="related">
           <a href="../name-picker/">Random Name Picker <span>Pick from a list</span></a>
 <a href="../wheel-spinner/">Wheel Spinner <span>Spin names</span></a>
+          <a href="../coin-flip/">Coin Flip <span>Flip a coin instead</span></a>
+          <a href="../wheel-of-colors/">Wheel of Colors <span>Pick a random color</span></a>
           <a href="../decision-wheel-spinner/">Decision Wheel Spinner <span>Spin to decide</span></a>
           <a href="../what-to-eat-wheel/">What to Eat Wheel <span>Pick dinner</span></a>
           <a href="../random-group-generator/">Random Group Generator <span>Split into groups</span></a>
         </div>
       </section>
 
-      <section id="faq">
+<section id="faq">
         <h2>Frequently Asked Questions</h2>
         <details>
           <summary>How does the yes no wheel work?</summary>
@@ -410,7 +754,7 @@
         </details>
         <details>
           <summary>What should I do if I do not like the answer?</summary>
-          <p>Spin again, or press Remove Winner to drop that option first. The wheel is a way to end a debate, not a rule — and if a result leaves you disappointed, that reaction is usually your real answer.</p>
+          <p>Spin again, or press Remove &amp; spin again to drop that option first. The wheel is a way to end a debate, not a rule — and if a result leaves you disappointed, that reaction is usually your real answer.</p>
         </details>
         <details>
           <summary>Why does the wheel sometimes repeat the same answer?</summary>
@@ -431,17 +775,40 @@
       </section>
     </main>
 
-</div>
+    </div>
   <script>
     var canvas = document.getElementById('wheel');
     var ctx = canvas.getContext('2d');
     var colors = ['#db2777','#7c3aed','#2563eb','#059669','#d97706','#dc2626','#0891b2','#65a30d'];
+    /* ===== v3：轮盘样式预设 ===== */
+    var STYLES = {
+      classic: { seg: ['#db2777','#7c3aed','#2563eb','#059669','#d97706','#dc2626','#0891b2','#65a30d'],
+                 rim: ['#f43f5e','#f97316','#facc15','#22c55e','#3b82f6','#a855f7'], rimFallback: '#e2e8f0',
+                 label: '#ffffff', pointer: ['#fb923c','#f43f5e'] },
+      neon:    { seg: ['#0ea5e9','#8b5cf6','#ec4899','#10b981','#eab308','#f97316','#06b6d4','#d946ef'],
+                 rim: ['#22d3ee','#a78bfa','#f472b6','#34d399','#fde047','#fb923c'], rimFallback: '#164e63',
+                 label: '#ffffff', pointer: ['#22d3ee','#8b5cf6'] },
+      pastel:  { seg: ['#f9a8d4','#c4b5fd','#93c5fd','#6ee7b7','#fde68a','#fca5a5','#a5f3fc','#d9f99d'],
+                 rim: ['#f9a8d4','#c4b5fd','#93c5fd','#6ee7b7','#fde68a','#fca5a5'], rimFallback: '#e2e8f0',
+                 label: '#1e293b', pointer: ['#fb7185','#f59e0b'] },
+      carnival:{ seg: ['#dc2626','#ea580c','#ca8a04','#16a34a','#0891b2','#7c3aed','#be123c','#0d9488'],
+                 rim: ['#dc2626','#ea580c','#ca8a04','#16a34a','#0891b2','#7c3aed'], rimFallback: '#7c2d12',
+                 label: '#ffffff', pointer: ['#fbbf24','#dc2626'] },
+      minimal: { seg: ['#0f172a','#334155','#64748b','#94a3b8','#1e293b','#475569','#64748b','#94a3b8'],
+                 rim: ['#0f172a','#334155','#64748b','#94a3b8','#1e293b','#475569'], rimFallback: '#e2e8f0',
+                 label: '#ffffff', pointer: ['#0f172a','#64748b'] }
+    };
+    var STYLE_KEY = 'myspinpick.yesNoWheel.style';
+    var curStyle = 'classic';
+    try { var _sv = localStorage.getItem(STYLE_KEY); if (_sv && STYLES[_sv]) curStyle = _sv; } catch (e) {}
+    function curS() { return STYLES[curStyle] || STYLES.classic; }
     var RESULT_PREFIX = "Answer: ";
     var RESULT_INIT = "Spin to answer yes or no";
     var options = [];
     var currentAngle = 0;
     var spinning = false;
     var winnerIdx = null;
+    var lastWinnerText = null;
     var lastTickIdx = -1;
     var muted = false;
     var audioCtx = null;
@@ -452,10 +819,11 @@
     var selectedSaved = -1;
 
     var optionsEl = document.getElementById('options');
+    var centerSpin = document.getElementById('centerSpin');
+    var optTable = document.getElementById('optTable');
+    var editPane = document.getElementById('editPane');
 
     var VIEW = 440, DPR = 1;
-    var POPUP_KEY = 'myspinpick.yesNoWheel.popup';
-    var popupOn = true;
     var winModal = document.getElementById('winModal');
     var confCanvas = document.getElementById('confetti');
     var confCtx = (confCanvas && confCanvas.getContext) ? confCanvas.getContext('2d') : null;
@@ -474,14 +842,49 @@
       var box = document.getElementById('history');
       box.innerHTML = '';
       var res = (idx>= 0 && idx < savedLists.length && savedLists[idx].res) ? savedLists[idx].res : [];
-      for (var j = 0; j < res.length; j++) {
+      /* v3.14：最新结果置顶并高亮；编号保持时间序（1=最早），与 Copy 输出一致 */
+      for (var j = res.length - 1; j >= 0; j--) {
         var chip = document.createElement('div');
-        chip.className = 'chip';
-        chip.style.background = colors[(res[j].c || j) % colors.length];
+        chip.className = 'chip' + (j === res.length - 1 ? ' latest' : '');
+        var _ci = (typeof res[j].c === 'number') ? res[j].c : j; /* c=0 不能用 || 兜底 */
+        var _cc = colors[_ci % colors.length];
+        var _ink = chipInk(_cc);
+        chip.style.setProperty('--chipc', _ink.bg);
+        chip.style.setProperty('--chipink', _ink.fg);
         chip.title = res[j].n;
         chip.textContent = (j + 1) + '. ' + res[j].n;
         box.appendChild(chip);
       }
+      box.scrollTop = 0;
+    }
+
+    /* 结果气泡配色：中间调颜色（如 #059669）配白配深都不到 AA。
+       先在白 / 深之间择优，再按需把底色压暗或提亮，保持色相不变 */
+    function _srgb(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+    function _lum(c) { return 0.2126 * _srgb(c[0]) + 0.7152 * _srgb(c[1]) + 0.0722 * _srgb(c[2]); }
+    function _contrast(a, b) {
+      var x = _lum(a), y = _lum(b);
+      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+    }
+    function _hex(c) {
+      return '#' + c.map(function (v) {
+        var h = Math.round(Math.max(0, Math.min(255, v))).toString(16);
+        return h.length === 1 ? '0' + h : h;
+      }).join('');
+    }
+    function chipInk(hex) {
+      var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(String(hex || ''));
+      if (!m) return { bg: hex || '#64748b', fg: '#ffffff' };
+      var bg = [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)];
+      var white = [255, 255, 255], dark = [30, 41, 59];
+      var useWhite = _contrast(bg, white) >= _contrast(bg, dark);
+      var ink = useWhite ? white : dark;
+      for (var k = 0; k < 16 && _contrast(bg, ink) < 4.5; k++) {
+        for (var i = 0; i < 3; i++) {
+          bg[i] = useWhite ? bg[i] * 0.9 : bg[i] + (255 - bg[i]) * 0.18;
+        }
+      }
+      return { bg: _hex(bg), fg: _hex(ink) };
     }
 
     function getOptions() {
@@ -501,6 +904,7 @@
         return;
       }
       var slice = (Math.PI * 2) / n;
+      var SEG = curS().seg, LBL = curS().label;
       for (var i = 0; i < n; i++) {
         var start = angle + i * slice;
         var end = start + slice;
@@ -508,7 +912,7 @@
         ctx.moveTo(cx, cy);
         ctx.arc(cx, cy, rr, start, end);
         ctx.closePath();
-        ctx.fillStyle = colors[i % colors.length];
+        ctx.fillStyle = (typeof window.__segColor === 'function') ? window.__segColor(i, SEG) : SEG[i % SEG.length];
         ctx.fill();
         ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
         ctx.stroke();
@@ -516,7 +920,7 @@
         ctx.translate(cx, cy);
         ctx.rotate(start + slice / 2);
         ctx.textAlign = 'right';
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = (typeof window.__lblColor === 'function') ? window.__lblColor(i, LBL) : LBL;
         ctx.font = 'bold 14px sans-serif';
         var label = options[i];
         if (label.length> 14) label = label.slice(0, 13) + '…';
@@ -527,49 +931,42 @@
         var wStart = angle + winnerIdx * slice;
         var wEnd = wStart + slice;
         ctx.beginPath();
-        ctx.moveTo(cx, cy);
         ctx.arc(cx, cy, rr, wStart, wEnd);
-        ctx.closePath();
         var g = ctx.createLinearGradient(cx + Math.cos(wStart) * rr, cy + Math.sin(wStart) * rr, cx + Math.cos(wEnd) * rr, cy + Math.sin(wEnd) * rr);
         g.addColorStop(0, '#ef4444'); g.addColorStop(0.5, '#facc15'); g.addColorStop(1, '#3b82f6');
         ctx.strokeStyle = g; ctx.lineWidth = 4;
         ctx.stroke();
       }
       var T = Math.PI * 2;
+      var RIMC = curS().rim, RIMF = curS().rimFallback;
       var ringGrad = null, hubGrad = null;
       if (ctx.createConicGradient) {
         ringGrad = ctx.createConicGradient(angle, cx, cy);
         hubGrad = ctx.createConicGradient(angle + Math.PI / 6, cx, cy);
-        var RCOLS = ['#f43f5e', '#f97316', '#facc15', '#22c55e', '#3b82f6', '#a855f7', '#f43f5e'];
-        for (var gi = 0; gi < RCOLS.length; gi++) {
-          ringGrad.addColorStop(gi / 6, RCOLS[gi]);
-          hubGrad.addColorStop(gi / 6, RCOLS[gi]);
+        var rimN = RIMC.length;
+        for (var gi = 0; gi < rimN; gi++) {
+          var gstop = gi / rimN;
+          ringGrad.addColorStop(gstop, RIMC[gi]);
+          hubGrad.addColorStop(gstop, RIMC[gi]);
         }
+        /* 闭合色环：1.0 回填首色，消除 12 点方向的硬接口 */
+        ringGrad.addColorStop(1, RIMC[0]);
+        hubGrad.addColorStop(1, RIMC[0]);
       }
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, T);
-      ctx.strokeStyle = ringGrad || '#e2e8f0';
+      ctx.strokeStyle = ringGrad || RIMF;
       ctx.lineWidth = 9;
       ctx.stroke();
       ctx.beginPath();
       ctx.arc(cx, cy, 24, 0, T);
-      ctx.fillStyle = hubGrad || '#e2e8f0';
+      ctx.fillStyle = hubGrad || RIMF;
       ctx.fill();
       ctx.beginPath();
       ctx.arc(cx, cy, 10, 0, T);
       ctx.fillStyle = '#ffffff';
       ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(cx, cy - r - 20);
-      ctx.lineTo(cx + 10, cy - r);
-      ctx.lineTo(cx, cy - r + 20);
-      ctx.lineTo(cx - 10, cy - r);
-      ctx.closePath();
-      var pg = ctx.createLinearGradient(cx, cy - r - 20, cx, cy - r + 20);
-      pg.addColorStop(0, '#fb923c');
-      pg.addColorStop(1, '#f43f5e');
-      ctx.fillStyle = pg;
-      ctx.fill();
+      /* v3.2：顶部指针已移除——指针融合到中心 Spin 按钮上（CSS ::before/::after，指向上方） */
     }
 
     function pickWinner() {
@@ -580,7 +977,157 @@
       return idx;
     }
 
-    function setBtnsDisabled(d) { var b = document.querySelectorAll('.btns button'); for (var i = 0; i < b.length; i++) { b[i].disabled = d; } }
+    function setBtnsDisabled(d) { var b = document.querySelectorAll('.btns button'); for (var i = 0; i < b.length; i++) { b[i].disabled = d; } if (centerSpin) centerSpin.disabled = d; }
+
+    /* ===== v3：轮盘样式切换 ===== */
+    function renderStyleChips() {
+      var row = document.getElementById('styleRow');
+      if (!row) return;
+      var chips = row.querySelectorAll('.style-swatch');
+      for (var i = 0; i < chips.length; i++) {
+        chips[i].classList.toggle('active', chips[i].getAttribute('data-style') === curStyle);
+      }
+    }
+    function applyStyle(key) {
+      if (!STYLES[key]) return;
+      curStyle = key;
+      colors = curS().seg;
+      try { localStorage.setItem(STYLE_KEY, key); } catch (e) {}
+      renderStyleChips();
+      drawWheel(currentAngle);
+      track('wheel_style', { tool: 'yes-no-wheel', style: key });
+    }
+
+    /* ===== v3：选项表格编辑器 ===== */
+    function rowsToText() {
+      var inputs = optTable.querySelectorAll('input.opt-input');
+      var vals = [];
+      for (var i = 0; i < inputs.length; i++) { var v = inputs[i].value.trim(); if (v) vals.push(v); }
+      return vals.join(',');
+    }
+    function updateEmpty() {
+      var e = document.getElementById('optEmpty');
+      if (e) e.hidden = optTable.children.length > 0;
+    }
+    function renumber() {
+      var rows = optTable.children;
+      for (var i = 0; i < rows.length; i++) { rows[i].querySelector('.idx').textContent = (i + 1) + '.'; }
+      updateEmpty();
+    }
+    function addRowNode(val) {
+      var row = document.createElement('div');
+      row.className = 'opt-row';
+      row.setAttribute('role', 'listitem');
+      var idx = document.createElement('span');
+      idx.className = 'idx';
+      var inp = document.createElement('input');
+      inp.type = 'text';
+      inp.className = 'opt-input';
+      inp.value = val || '';
+      inp.setAttribute('aria-label', 'Option ' + (optTable.children.length + 1));
+      inp.setAttribute('maxlength', '80');
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'del';
+      del.textContent = '✕';
+      del.setAttribute('aria-label', 'Remove this option');
+      del.title = 'Remove';
+      del.addEventListener('click', function () {
+        if (spinning) return;
+        row.parentNode.removeChild(row);
+        renumber();
+        rowChanged();
+      });
+      inp.addEventListener('input', function () { rowChanged(); });
+      inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (!spinning) { var nr = addRowNode(''); renumber(); nr.querySelector('input.opt-input').focus(); }
+        }
+      });
+      idx.textContent = (optTable.children.length + 1) + '.';
+      row.appendChild(idx);
+      row.appendChild(inp);
+      row.appendChild(del);
+      optTable.appendChild(row);
+      return row;
+    }
+    function syncTable() { renderRowsFromText(optionsEl.value); }
+    function renderRowsFromText(text) {
+      var items = itemsOf(text);
+      optTable.innerHTML = '';
+      for (var i = 0; i < items.length; i++) addRowNode(items[i]);
+      updateEmpty();
+    }
+    function rowChanged() {
+      optionsEl.value = rowsToText();
+      options = getOptions();
+      winnerIdx = null;
+      drawWheel(currentAngle);
+      persistLast();
+      updateSelectedList();
+    }
+    function addRow() {
+      if (spinning) return;
+      var r = addRowNode('');
+      renumber();
+      r.querySelector('input.opt-input').focus();
+      /* v3.13：按钮在底部，新行加在表格末尾——滚动到新行保证可见 */
+      var ep = document.getElementById('editPane');
+      if (ep && ep.scrollHeight > ep.clientHeight) ep.scrollTop = ep.scrollHeight;
+    }
+    function setEditMode(mode) {
+      if (spinning) return;
+      var paste = mode === 'text';
+      if (editPane.classList.contains('paste') === paste) return;
+      editPane.classList.toggle('paste', paste);
+      var t = document.getElementById('segText'), b = document.getElementById('segTable');
+      if (t) t.classList.toggle('active', paste);
+      if (b) b.classList.toggle('active', !paste);
+      if (!paste) {
+        options = getOptions();
+        winnerIdx = null;
+        syncTable();
+        drawWheel(currentAngle);
+        persistLast();
+      }
+      track('edit_mode', { tool: 'yes-no-wheel', mode: paste ? 'text' : 'table' });
+    }
+
+    /* ===== v3.4：文件导入（.txt / .csv，逗号或换行分隔） ===== */
+    function importFile() {
+      if (spinning) return;
+      var inp = document.getElementById('fileImport');
+      if (inp) inp.click();
+    }
+    (function () {
+      var inp = document.getElementById('fileImport');
+      if (!inp) return;
+      inp.addEventListener('change', function () {
+        var f = inp.files && inp.files[0];
+        if (!f) return;
+        var meta = document.getElementById('meta');
+        if (spinning) { inp.value = ''; return; }
+        if (f.size > 200 * 1024) { meta.textContent = 'File too large — keep it under 200 KB.'; inp.value = ''; return; }
+        var reader = new FileReader();
+        reader.onload = function () {
+          var items = itemsOf(String(reader.result));
+          if (!items.length) { meta.textContent = 'No options found in that file.'; inp.value = ''; return; }
+          optionsEl.value = items.join(',');
+          options = getOptions();
+          winnerIdx = null;
+          syncTable();
+          drawWheel(currentAngle);
+          persistLast();
+          meta.textContent = 'Imported ' + items.length + ' options from "' + f.name + '".';
+          track('import_file', { tool: 'yes-no-wheel', count: items.length });
+          updateSelectedList();
+          inp.value = '';
+        };
+        reader.onerror = function () { meta.textContent = 'Could not read that file.'; inp.value = ''; };
+        reader.readAsText(f);
+      });
+    })();
 
     /* ---------- sound ---------- */
     function ensureAudio() {
@@ -632,23 +1179,51 @@
         var s = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
         if (Array.isArray(s)) {
           savedLists = s.filter(function(x){ return x && typeof x.text === 'string'; }).slice(0, SAVED_MAX);
-          for (var i = 0; i < savedLists.length; i++) {
-            if (!Array.isArray(savedLists[i].res)) savedLists[i].res = [];
-          }
         }
       } catch (e) { savedLists = []; }
+      var i;
+      for (i = 0; i < savedLists.length; i++) {
+        if (!savedLists[i].name) savedLists[i].name = 'List ' + (i + 1);
+        if (!Array.isArray(savedLists[i].res)) savedLists[i].res = [];
+        savedLists[i].n = itemsOf(savedLists[i].text).length;
+      }
       var last = null;
       try { last = JSON.parse(localStorage.getItem(LAST_KEY) || 'null'); } catch (e) {}
       if (last && typeof last.text === 'string' && !skipLastText) {
         optionsEl.value = last.text;
         options = getOptions();
         if (typeof last.sel === 'number' && last.sel >= 0 && last.sel < savedLists.length) selectedSaved = last.sel;
-        if (options.length) document.getElementById('meta').textContent = options.length + ' options on the wheel.';
+      }
+      if (!savedLists.length) {
+        var items0 = itemsOf(optionsEl.value);
+        savedLists = [{ name: 'List 1', text: items0.join(','), n: items0.length, res: [] }];
+        selectedSaved = 0;
+        persistSaved();
+      } else if (selectedSaved < 0 || selectedSaved >= savedLists.length) {
+        selectedSaved = 0;
+      }
+      /* 双向兜底同步：编辑器与选中列表不一致时，非空的一方为准（兼容旧版数据） */
+      var curText = itemsOf(optionsEl.value).join(',');
+      var selText = savedLists[selectedSaved].text;
+      if (curText !== selText) {
+        if (curText) {
+          savedLists[selectedSaved].text = curText;
+          savedLists[selectedSaved].n = options.length;
+          persistSaved();
+        } else {
+          optionsEl.value = selText;
+          options = getOptions();
+          persistLast();
+        }
       }
       renderSaved();
       renderHistoryFor(selectedSaved);
       drawWheel(currentAngle);
       autoGrow();
+      var res = savedLists[selectedSaved].res || [];
+      document.getElementById('result').textContent = res.length ? RESULT_PREFIX + res[res.length - 1].n : RESULT_INIT;
+      /* v3.11：常态统计文案移除；共享链接提示保留 */
+      if (skipLastText) document.getElementById('meta').textContent = 'Loaded from a shared link — press Spin.';
     }
     function persistLast() {
       try { localStorage.setItem(LAST_KEY, JSON.stringify({ text: optionsEl.value, sel: selectedSaved })); } catch (e) {}
@@ -657,66 +1232,79 @@
       try { localStorage.setItem(SAVED_KEY, JSON.stringify(savedLists)); } catch (e) {}
       persistLast();
     }
-    function saveList(silent, autoSelect) {
+    /* ===== v3.6：列表自动保存（编辑即写入选中列表，无 Save 按钮） ===== */
+    function updateSelectedList() {
+      if (spinning) return;
+      if (selectedSaved < 0 || selectedSaved >= savedLists.length) return;
       var items = itemsOf(optionsEl.value);
-      var meta = document.getElementById('meta');
-      if (!items.length) { if (!silent) meta.textContent = 'Nothing to save — the options box is empty.'; return; }
-      if (selectedSaved>= 0 && selectedSaved < savedLists.length) {
-        savedLists[selectedSaved] = { text: items.join(','), n: items.length, res: savedLists[selectedSaved].res || [] };
-        renderSaved();
-        persistSaved();
-        if (!silent) { meta.textContent = 'Saved list updated.'; track('save_list', { mode: 'update' }); }
-        return;
-      }
-      var k = keyOf(optionsEl.value);
+      var t = items.join(',');
+      if (savedLists[selectedSaved].text === t) return;
+      savedLists[selectedSaved].text = t;
+      savedLists[selectedSaved].n = items.length;
+      persistSaved();
+      renderSaved();
+    }
+    function nextListName() {
+      var mx = 0;
       for (var i = 0; i < savedLists.length; i++) {
-        if (keyOf(savedLists[i].text) === k) {
-          if (!silent || autoSelect) { selectedSaved = i; renderSaved(); persistLast(); }
-          return;
-        }
+        var m = /^list\s+(\d+)$/i.exec(savedLists[i].name || '');
+        if (m) { var v = parseInt(m[1], 10); if (v > mx) mx = v; }
       }
-      savedLists.unshift({ text: items.join(','), n: items.length, res: [] });
-      if (savedLists.length> SAVED_MAX) savedLists.pop();
-      if (!silent || autoSelect) selectedSaved = 0;
+      return 'List ' + (mx + 1);
+    }
+    function addNewList() {
+      if (spinning) return;
+      updateSelectedList();
+      savedLists.push({ name: nextListName(), text: '', n: 0, res: [] });
+      selectedSaved = savedLists.length - 1;
       renderSaved();
       persistSaved();
-      if (!silent) track('save_list', { mode: 'new' });
+      applySavedRow(selectedSaved);
+      document.getElementById('meta').textContent = 'Created ' + savedLists[selectedSaved].name + ' — add options and spin.';
+      track('add_list', { tool: 'yes-no-wheel' });
     }
     function renderSaved() {
-      var box = document.getElementById('savedLists');
+      /* v3.7：Lists 以页签形式渲染在 Options 面板顶部，点击即切换 */
+      var box = document.getElementById('listTabs');
       box.innerHTML = '';
       for (var i = 0; i < savedLists.length; i++) {
         (function(idx) {
-          var row = document.createElement('div');
-          row.className = 'saved-row' + (idx === selectedSaved ? ' selected' : '');
-          row.setAttribute('role', 'button');
-          row.setAttribute('tabindex', '0');
-          row.addEventListener('click', function(e) {
+          var tab = document.createElement('div');
+          tab.className = 'list-tab' + (idx === selectedSaved ? ' active' : '');
+          tab.setAttribute('role', 'tab');
+          tab.setAttribute('tabindex', '0');
+          tab.setAttribute('aria-selected', idx === selectedSaved ? 'true' : 'false');
+          tab.addEventListener('click', function(e) {
             if (e.target.closest && e.target.closest('button')) return;
             selectSaved(idx);
           });
-          row.addEventListener('keydown', function(e) {
+          tab.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectSaved(idx); }
+            else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+              /* v3.8：tablist 键盘惯例——左右方向键切换页签 */
+              e.preventDefault();
+              var n = savedLists.length;
+              if (n < 2) return;
+              var ni = (idx + (e.key === 'ArrowRight' ? 1 : -1) + n) % n;
+              selectSaved(ni);
+              var tabs = box.querySelectorAll('.list-tab:not(.add)');
+              if (tabs[ni]) tabs[ni].focus();
+            }
+            else if (e.key === 'Delete') { e.preventDefault(); deleteSaved(idx); }
           });
-          var preview = document.createElement('span');
-          preview.className = 'preview';
-          preview.title = savedLists[idx].text;
-          preview.textContent = savedLists[idx].text;
+          var name = document.createElement('span');
+          name.className = 'tname';
+          name.title = savedLists[idx].name + ' — ' + savedLists[idx].text;
+          name.textContent = savedLists[idx].name;
           var n = document.createElement('span');
           n.className = 'n';
-          n.textContent = savedLists[idx].n + ' items';
-          var del = document.createElement('button');
-          del.type = 'button';
-          del.textContent = '✕';
-          del.setAttribute('aria-label', 'Delete this saved list');
-          del.title = 'Delete this saved list';
-          del.addEventListener('click', function() { deleteSaved(idx); });
-          row.appendChild(preview);
-          row.appendChild(n);
-          row.appendChild(del);
-          box.appendChild(row);
+          n.textContent = savedLists[idx].n;
+          tab.appendChild(name);
+          tab.appendChild(n);
+          box.appendChild(tab);
         })(i);
       }
+      /* v3.11：加号在 Options 标题行；v3.12：页签不带删除按钮（入口在按钮行 Delete） */
     }
     function applySavedRow(idx) {
       optionsEl.value = savedLists[idx].text;
@@ -728,30 +1316,72 @@
       var res = savedLists[idx].res || [];
       document.getElementById('result').textContent = res.length ? RESULT_PREFIX + res[res.length - 1].n : RESULT_INIT;
       renderHistoryFor(idx);
-      document.getElementById('meta').textContent = options.length + ' options on the wheel.';
       renderSaved();
       persistLast();
     }
     function selectSaved(idx) {
       if (spinning) { renderSaved(); return; }
       if (idx === selectedSaved) return;
-      if (optionsEl.value.trim()) saveList(true);
+      updateSelectedList();
       applySavedRow(idx);
     }
     function deleteSaved(idx) {
+      var row = savedLists[idx];
+      var wasSelected = selectedSaved === idx;
+      pendingUndo = { idx: idx, row: row };
       savedLists.splice(idx, 1);
-      if (selectedSaved === idx) {
-        selectedSaved = -1;
-        document.getElementById('result').textContent = RESULT_INIT;
-        renderHistoryFor(-1);
+      if (wasSelected) {
+        /* v3.7：删除当前页签后自动切到第一个列表（页签 UI 下不应出现“无选中”空档） */
+        if (savedLists.length) {
+          applySavedRow(0);
+        } else {
+          selectedSaved = -1;
+          document.getElementById('result').textContent = RESULT_INIT;
+          renderHistoryFor(-1);
+        }
       }
       else if (selectedSaved> idx) selectedSaved--;
       renderSaved();
       persistSaved();
+      showUndoToast(row.name || 'List');
+    }
+    /* v3.12：删除当前选中的列表（按钮行 Delete 入口） */
+    function deleteSelected() {
+      if (spinning) return;
+      if (selectedSaved < 0 || selectedSaved >= savedLists.length) return;
+      deleteSaved(selectedSaved);
+    }
+
+    /* ===== v3.8：删除撤销（6 秒内可 Undo） ===== */
+    var pendingUndo = null, undoTimer = null;
+    function hideUndoToast() {
+      var t = document.getElementById('undoToast');
+      if (t) t.classList.remove('show');
+      if (undoTimer) { clearTimeout(undoTimer); undoTimer = null; }
+    }
+    function showUndoToast(name) {
+      var t = document.getElementById('undoToast');
+      if (!t) return;
+      document.getElementById('undoMsg').textContent = name + ' deleted.';
+      t.classList.add('show');
+      if (undoTimer) clearTimeout(undoTimer);
+      undoTimer = setTimeout(function () { pendingUndo = null; hideUndoToast(); }, 6000);
+    }
+    function undoDelete() {
+      if (!pendingUndo) return;
+      var at = Math.min(pendingUndo.idx, savedLists.length);
+      var row = pendingUndo.row;
+      pendingUndo = null;
+      hideUndoToast();
+      savedLists.splice(at, 0, row);
+      persistSaved();
+      applySavedRow(at);
+      /* v3.12：恢复成功不再写 meta 提示（toast 消失即恢复完成） */
     }
     function autoGrow() {
-      optionsEl.style.height = 'auto';
-      optionsEl.style.height = Math.max(46, optionsEl.scrollHeight) + 'px';
+      /* v3：textarea 已降级为“粘贴/导入”视图；此函数在所有程序化写入 optionsEl.value 的路径上被调用，
+         现在的职责是把文本同步渲染进表格（保持原调用点不变） */
+      syncTable();
     }
 
     /* ===== 优化 v2：高分屏适配 / 全屏投影 / 分享链接 / 中奖弹窗与彩带 ===== */
@@ -765,13 +1395,23 @@
       if (isFs) {
         avail = Math.min(Math.round(window.innerWidth * 0.92), Math.round(window.innerHeight * 0.70), 900);
       } else {
-        var host = canvas.parentElement;
-        avail = Math.min(440, (host && host.clientWidth) ? host.clientWidth : 440);
+        var panel = canvas.closest('.panel-wheel') || canvas.parentElement;
+        var usableW = 440, usableH = 1e9;
+        if (panel) {
+          var cs = getComputedStyle(panel);
+          usableW = panel.clientWidth - parseFloat(cs.paddingLeft || 0) - parseFloat(cs.paddingRight || 0);
+          /* 只有桌面三栏（定高 620）才受高度约束；窄屏面板高度由画布撑开，用高度会自锁 */
+          var desktop = window.matchMedia && window.matchMedia('(min-width: 1180px)').matches;
+          if (desktop) usableH = panel.clientHeight - 56; /* 按钮行 + 间距 */
+        }
+        avail = Math.min(520, usableW, usableH);
       }
       avail = Math.max(avail, 240);
       DPR = Math.min(window.devicePixelRatio || 1, 3);
       canvas.style.width = avail + 'px';
       canvas.style.height = avail + 'px';
+      /* 中心按钮按轮盘直径等比；变量挂在 .wheel-box 上供 #centerSpin 继承 */
+      if (canvas.parentElement) canvas.parentElement.style.setProperty('--wheel', avail + 'px');
       canvas.width = Math.round(avail * DPR);
       canvas.height = Math.round(avail * DPR);
       ctx.setTransform((avail * DPR) / VIEW, 0, 0, (avail * DPR) / VIEW, 0, 0);
@@ -815,36 +1455,9 @@
       }
     });
 
-    function shareList() {
-      var meta = document.getElementById('meta');
-      var items = getOptions();
-      if (!items.length) { meta.textContent = 'Add some options first, then share the wheel.'; return; }
-      var url = location.origin + location.pathname + '#l=' + encodeURIComponent(items.join('\n'));
-      var done = function () {
-        meta.textContent = 'Share link copied — paste it anywhere.';
-        track('share', { tool: 'yes-no-wheel', options: items.length });
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(done, function () { fallbackCopy(url, function (ok) { if (ok) done(); else meta.textContent = 'Copy failed'; }); });
-      } else {
-        fallbackCopy(url, function (ok) { if (ok) done(); else meta.textContent = 'Copy failed'; });
-      }
-    }
-    function readShared() {
-      var m = /(?:^|[#&])l=([^&]+)/.exec(location.hash || '');
-      if (!m) return false;
-      var raw = '';
-      try { raw = decodeURIComponent(m[1]); } catch (e) { return false; }
-      var items = itemsOf(raw);
-      if (!items.length) return false;
-      optionsEl.value = items.join(',');
-      options = getOptions();
-      autoGrow();
-      return true;
-    }
-
     function showWinner(name) {
-      if (!popupOn || !winModal) return;
+      /* v3.7：Winner popup 开关已移除，弹窗恒开 */
+      if (!winModal) return;
       var nameEl = document.getElementById('winName');
       if (nameEl) nameEl.textContent = name;
       winModal.hidden = false;
@@ -927,15 +1540,15 @@
           currentAngle = (currentAngle + total) % (Math.PI * 2);
           var idx = pickWinner();
           winnerIdx = idx;
+          lastWinnerText = options[idx] || null;
           drawWheel(currentAngle);
           document.getElementById('result').textContent = RESULT_PREFIX + options[idx];
           recordResult(options[idx], idx);
           ding();
-          document.getElementById('meta').textContent = options.length + ' options on the wheel.';
           spinning = false;
           setBtnsDisabled(false);
           showWinner(options[idx]);
-          track('spin', { options: options.length, winner: options[idx], popup: popupOn });
+          track('spin', { options: options.length, winner: options[idx] });
         }
       }
       requestAnimationFrame(step);
@@ -946,7 +1559,7 @@
       if (options.length === 0) { document.getElementById('meta').textContent = 'Please add at least one option.'; return; }
       if (spinning) return;
       hideWinner();
-      saveList(true, true);
+      updateSelectedList();
       spinning = true;
       winnerIdx = null;
       setBtnsDisabled(true);
@@ -959,18 +1572,85 @@
       animate(total, 3000);
     }
 
-    function removeLast() {
+    function removeWinner() {
       if (spinning) return;
       var list = getOptions();
       if (!list.length) return;
-      list.pop();
+      var target = -1;
+      if (lastWinnerText !== null) target = list.indexOf(lastWinnerText);
+      if (target < 0 && winnerIdx !== null && winnerIdx >= 0 && winnerIdx < list.length) target = winnerIdx;
+      var removed = (target >= 0) ? list.splice(target, 1)[0] : list.pop();
       optionsEl.value = list.join(',');
       options = getOptions();
       winnerIdx = null;
+      lastWinnerText = null;
       drawWheel(currentAngle);
-      document.getElementById('meta').textContent = options.length + ' options left.';
+      document.getElementById('meta').textContent = removed
+        ? ((target >= 0 ? 'Removed winner \u201c' : 'Removed \u201c') + removed + '\u201d. ' + list.length + ' options left.')
+        : list.length + ' options left.';
       autoGrow();
       persistLast();
+    }
+
+    /* ---------- share ---------- */
+    function shareList() {
+      var meta = document.getElementById('meta');
+      var items = getOptions();
+      if (!items.length) { meta.textContent = 'Add some options first, then share the wheel.'; return; }
+      var url = location.origin + location.pathname + '#l=' + encodeURIComponent(items.join('\n'));
+      var done = function () {
+        meta.textContent = 'Share link copied — paste it anywhere.';
+        track('share', { tool: 'yes-no-wheel', options: items.length });
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, function () { fallbackCopy(url, function (ok) { if (ok) done(); else meta.textContent = 'Copy failed'; }); });
+      } else {
+        fallbackCopy(url, function (ok) { if (ok) done(); else meta.textContent = 'Copy failed'; });
+      }
+    }
+    function readShared() {
+      var m = /(?:^|[#&])l=([^&]+)/.exec(location.hash || '');
+      if (!m) return false;
+      var raw = '';
+      try { raw = decodeURIComponent(m[1]); } catch (e) { return false; }
+      var items = itemsOf(raw);
+      if (!items.length) return false;
+      optionsEl.value = items.join(',');
+      options = getOptions();
+      autoGrow();
+      track('share_view', { tool: 'yes-no-wheel', options: items.length });
+      return true;
+    }
+
+    /* ---------- seasonal presets ---------- */
+    var PRESETS = {};
+    function loadPreset(key) {
+      if (spinning) return;
+      var p = PRESETS[key];
+      if (!p) return;
+      optionsEl.value = p.list.join(',');
+      options = getOptions();
+      winnerIdx = null;
+      lastWinnerText = null;
+      /* v3.6：预设写入选中列表（无选中列表则新建），自动保存 */
+      if (selectedSaved < 0 || selectedSaved >= savedLists.length) {
+        savedLists.push({ name: nextListName(), text: p.list.join(','), n: p.list.length, res: [] });
+        selectedSaved = savedLists.length - 1;
+      } else {
+        savedLists[selectedSaved].text = p.list.join(',');
+        savedLists[selectedSaved].n = p.list.length;
+      }
+      persistSaved();
+      renderSaved();
+      renderHistoryFor(-1);
+      drawWheel(currentAngle);
+      autoGrow();
+      document.getElementById('result').textContent = RESULT_INIT;
+      document.getElementById('meta').textContent = 'Loaded "' + p.name + '" — ' + options.length + ' options. Spin it or edit the list.';
+      persistLast();
+      track('load_preset', { tool: 'yes-no-wheel', preset: key });
+      var tool = document.querySelector('.tool');
+      if (tool && tool.scrollIntoView) tool.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function clearOptions() {
@@ -1001,7 +1681,6 @@
       document.getElementById('result').textContent = RESULT_INIT;
       renderHistoryFor(selectedSaved);
       drawWheel(currentAngle);
-      document.getElementById('meta').textContent = options.length + ' options on the wheel.';
     }
 
     optionsEl.addEventListener('input', function() {
@@ -1010,35 +1689,57 @@
       drawWheel(currentAngle);
       autoGrow();
       persistLast();
+      updateSelectedList();
     });
 
     try { muted = localStorage.getItem('myspinpick.yesNoWheel.sound') === 'off'; } catch (e) {}
     document.getElementById('muteBtn').textContent = muted ? '🔇' : '🔊';
-    try { if (localStorage.getItem(POPUP_KEY) === 'off') popupOn = false; } catch (e) {}
-    var popupChk = document.getElementById('popupChk');
-    if (popupChk) {
-      popupChk.checked = popupOn;
-      popupChk.addEventListener('change', function () {
-        popupOn = !!popupChk.checked;
-        try { localStorage.setItem(POPUP_KEY, popupOn ? 'on' : 'off'); } catch (e) {}
-        if (!popupOn) hideWinner();
-      });
-    }
     setFsBtn();
+    /* v3：样式与中心按钮、表格初始化 */
+    colors = curS().seg;
+    renderStyleChips();
+    if (centerSpin) centerSpin.addEventListener('click', function () { if (!spinning) buildAndSpin(); });
+    /* v3.8：撤销删除 */
+    var undoBtnEl = document.getElementById('undoBtn');
+    if (undoBtnEl) undoBtnEl.addEventListener('click', undoDelete);
+    (function () {
+      var row = document.getElementById('styleRow');
+      if (!row) return;
+      var chips = row.querySelectorAll('.style-swatch');
+      for (var i = 0; i < chips.length; i++) {
+        (function (chip) {
+          chip.addEventListener('click', function () { applyStyle(chip.getAttribute('data-style')); });
+        })(chips[i]);
+      }
+    })();
     options = getOptions();
-    if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
     fitCanvas();
     drawWheel(0);
     autoGrow();
     var sharedLoaded = readShared();
     loadSaved(sharedLoaded);
-    if (sharedLoaded) document.getElementById('meta').textContent = options.length + ' options loaded from a shared link — press Spin.';
+    if (sharedLoaded) { document.getElementById('meta').textContent = options.length + ' options loaded from a shared link — press Spin.'; }
 
     if (winModal) {
       var winCloseEl = document.getElementById('winClose');
       var winAgainEl = document.getElementById('winAgain');
+      var winRemoveEl = document.getElementById('winRemoveSpin');
       if (winCloseEl) winCloseEl.addEventListener('click', hideWinner);
       if (winAgainEl) winAgainEl.addEventListener('click', function () { hideWinner(); buildAndSpin(); });
+      /* v3.8：Remove & spin again——把中奖项从列表移除后自动再转 */
+      if (winRemoveEl) winRemoveEl.addEventListener('click', function () {
+        if (spinning) return;
+        if (typeof winnerIdx !== 'number' || winnerIdx < 0 || winnerIdx >= options.length) { hideWinner(); return; }
+        var items = itemsOf(optionsEl.value);
+        if (winnerIdx < items.length) items.splice(winnerIdx, 1);
+        optionsEl.value = items.join(',');
+        winnerIdx = null;
+        hideWinner();
+        autoGrow();
+        options = getOptions();
+        drawWheel(currentAngle);
+        buildAndSpin();
+      });
       winModal.addEventListener('click', function (e) { if (e.target === winModal) hideWinner(); });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !winModal.hidden) hideWinner(); });
     }
@@ -1047,12 +1748,12 @@
       var meta = document.getElementById('meta');
       var items = [];
       if (selectedSaved >= 0 && selectedSaved < savedLists.length && Array.isArray(savedLists[selectedSaved].res)) {
-        for (var i = 0; i < savedLists[selectedSaved].res.length; i++) items.push(savedLists[selectedSaved].res[i].n);
+        for (var i = 0; i < savedLists[selectedSaved].res.length; i++) items.push((i + 1) + '. ' + savedLists[selectedSaved].res[i].n);
       }
       if (!items.length) { meta.textContent = 'Nothing to copy — spin the wheel first.'; return; }
       var text = items.join('\n');
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function(){ meta.textContent = 'Copied!'; track('copy', { tool: 'yes-no-wheel' }); }).catch(function(){ fallbackCopy(text); });
+        navigator.clipboard.writeText(text).then(function(){ track('copy', { tool: 'yes-no-wheel' }); }).catch(function(){ fallbackCopy(text); });
       } else { fallbackCopy(text); }
     }
 
@@ -1063,18 +1764,17 @@
       try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
       document.body.removeChild(ta);
       if (cb) { cb(ok); return; }
-      document.getElementById('meta').textContent = ok ? 'Copied!' : 'Copy failed';
+      /* v3.15：成功不再弹 "Copied!" 提示，仅在失败时给出反馈 */
+      if (!ok) document.getElementById('meta').textContent = 'Copy failed';
       if (ok) track('copy');
     }
   </script>
-<footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);">
-      <p class="slogan" style="margin:0 0 8px;">MySpinPick — free wheel spinner &amp; random decision tools.</p>
+<footer style="max-width:960px;margin:48px auto 0;padding:24px 32px;text-align:center;font-size:14px;color:#8a90a2;border-top:1px solid rgba(128,128,128,.18);"><p class="slogan" style="margin:0 0 8px;">MySpinPick — free wheel spinner &amp; random decision tools.</p>
       <p style="margin:0;">
         <a href="/privacy-policy/" style="color:inherit;text-decoration:underline;">Privacy Policy</a> ·
         <a href="/about/" style="color:inherit;text-decoration:underline;">About</a> ·
         <a href="/contact/" style="color:inherit;text-decoration:underline;">Contact</a>
-      </p>
-    </footer>
+      </p></footer>
 
 <style>
   footer .slogan { white-space: nowrap; font-size: 14px; }

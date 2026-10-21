@@ -51,7 +51,37 @@
     input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
     .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
     .wheel-wrap { text-align: center; margin-bottom: 16px; }
+    .wheel-box { position: relative; display: inline-block; max-width: 100%; line-height: 0; }
     canvas { max-width: 100%; }
+    /* 中心 SPIN：与主页面同一个 SVG（圆盘 + 指向上方的指针一体成形，无拼缝），
+       尺寸按轮盘实际显示直径等比；--wheel 由 fitCenter() 写在 .wheel-box 上 */
+    #centerSpin {
+      --s: max(70px, calc(var(--wheel, 440px) * 0.2));
+      position: absolute; left: calc(50% - var(--s) / 2); top: calc(50% - var(--s) * 0.62);
+      width: var(--s); height: calc(var(--s) * 1.12); min-height: 0; padding: 0; border: 0;
+      background: transparent; color: #fff;
+      font-size: max(13px, calc(var(--s) * 0.17)); font-weight: 800;
+      letter-spacing: .08em; text-transform: uppercase;
+      text-shadow: 0 1px 3px rgba(15, 23, 42, .35); cursor: pointer;
+      filter: drop-shadow(0 4px 10px rgba(190, 24, 93, .38));
+      transition: transform .12s ease, opacity .12s ease;
+      transform-origin: 50% calc(var(--s) * 0.62);
+    }
+    #centerSpin:hover:not(:disabled) { transform: scale(1.05); }
+    #centerSpin:active:not(:disabled) { transform: scale(.97); }
+    #centerSpin:disabled { opacity: .82; cursor: progress; }
+    #centerSpin svg { display: block; width: 100%; height: 100%; pointer-events: none; }
+    #centerSpin .spin-txt { position: absolute; left: 0; top: calc(var(--s) * 0.62); width: 100%; transform: translateY(-50%); }
+    /* 焦点环：与主页面同一个做法，环半径 0.63s 才包得住「圆盘 + 指针」而不横切指针 */
+    #centerSpin:focus-visible { outline: none; }
+    #centerSpin::after {
+      content: ""; position: absolute; left: 50%; top: calc(var(--s) * 0.62);
+      width: calc(var(--s) * 1.26); height: calc(var(--s) * 1.26);
+      transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; opacity: 0;
+      box-shadow: 0 0 0 2px #fff, 0 0 0 5px var(--accent-dark);
+      transition: opacity .12s ease;
+    }
+    #centerSpin:focus-visible::after { opacity: 1; }
     textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
     input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
     textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
@@ -62,9 +92,19 @@
     button:disabled { background: #eff6ff; border-color: #dbeafe; color: #93c5fd; cursor: not-allowed; }
     .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
     .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
-    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    /* 与主页面一致：最新一条置顶高亮，红黄蓝渐变描边 + 外扩光晕；底色/字色走变量按对比度选 */
+    .history { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 10px; }
     .history:empty { display: none; }
-    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    .history .chip { color: var(--chipink, #fff); background-color: var(--chipc, #94a3b8); border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    .history .chip.latest { border: 3px solid transparent; padding: 3px 1px; font-weight: 700;
+      background:
+        linear-gradient(var(--chipc, #fff), var(--chipc, #fff)) padding-box,
+        linear-gradient(to right, #ef4444 0%, #facc15 50%, #3b82f6 100%) border-box;
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .92),
+        0 0 6px 1px rgba(239, 68, 68, .42),
+        0 0 11px 3px rgba(250, 204, 21, .20),
+        0 0 16px 5px rgba(59, 130, 246, .18); }
     section { margin-top: 26px; }
     h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
     section p, section li { color: #334155; font-size: 15px; }
@@ -102,10 +142,13 @@
 <h1 class="sr-only">Yes No Wheel — free embeddable decision spinner</h1>
 <div class="tool">
         <div class="wheel-wrap">
-          <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
+          <div class="wheel-box">
+            <canvas id="wheel" width="440" height="440" role="img" aria-label="Spinning wheel"></canvas>
+            <button type="button" id="centerSpin" onclick="buildAndSpin()" aria-label="Spin the wheel" title="Spin the wheel"><svg viewBox="0 0 100 112" aria-hidden="true" focusable="false"><g stroke="#fff" stroke-width="5" fill="#db2777"><circle cx="50" cy="62" r="41"/><path d="M50 3 L67 36 L33 36 Z"/></g><g fill="#db2777"><circle cx="50" cy="62" r="41"/><path d="M50 3 L67 36 L33 36 Z"/></g></svg><span class="spin-txt">Spin</span></button>
+          </div>
         </div>
         <div class="btns">
-          <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button><button type="button" class="primary" onclick="buildAndSpin()">Spin</button>
+          <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button>
           <button type="button" onclick="removeWinner()">Remove Winner</button>
           <button type="button" onclick="resetAll()">Reset</button>
         </div>
@@ -146,15 +189,51 @@
     var currentAngle = 0;
     var spinning = false;
     var historyCount = 0;
+    var winnerIdx = null;
 
+    /* 与主页面一致：编号保持时间序（1=最早），最新一条置顶并高亮 */
     function addHistory(name, colorIdx) {
       historyCount++;
+      var box = document.getElementById('history');
+      var prev = box.querySelector('.chip.latest');
+      if (prev) prev.classList.remove('latest');
       var chip = document.createElement('div');
-      chip.className = 'chip';
-      chip.style.background = colors[colorIdx % colors.length];
+      chip.className = 'chip latest';
+      var ink = chipInk(colors[colorIdx % colors.length]);
+      chip.style.setProperty('--chipc', ink.bg);
+      chip.style.setProperty('--chipink', ink.fg);
       chip.title = name;
       chip.textContent = historyCount + '. ' + name;
-      document.getElementById('history').appendChild(chip);
+      box.insertBefore(chip, box.firstChild);
+    }
+
+    /* 气泡配色：中间调颜色（如 #059669）配白配深都不到 AA 4.5。
+       先在白 / 深之间择优，再按需把底色压暗或提亮，保持色相不变 —— 与主页面同一套算法 */
+    function _srgb(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+    function _lum(c) { return 0.2126 * _srgb(c[0]) + 0.7152 * _srgb(c[1]) + 0.0722 * _srgb(c[2]); }
+    function _contrast(a, b) {
+      var x = _lum(a), y = _lum(b);
+      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+    }
+    function _hex(c) {
+      return '#' + c.map(function (v) {
+        var h = Math.round(Math.max(0, Math.min(255, v))).toString(16);
+        return h.length === 1 ? '0' + h : h;
+      }).join('');
+    }
+    function chipInk(hex) {
+      var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(String(hex || ''));
+      if (!m) return { bg: hex || '#64748b', fg: '#ffffff' };
+      var bg = [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)];
+      var white = [255, 255, 255], dark = [30, 41, 59];
+      var useWhite = _contrast(bg, white) >= _contrast(bg, dark);
+      var ink = useWhite ? white : dark;
+      for (var k = 0; k < 16 && _contrast(bg, ink) < 4.5; k++) {
+        for (var i = 0; i < 3; i++) {
+          bg[i] = useWhite ? bg[i] * 0.9 : bg[i] + (255 - bg[i]) * 0.18;
+        }
+      }
+      return { bg: _hex(bg), fg: _hex(ink) };
     }
 
     function getOptions() {
@@ -165,10 +244,11 @@
     function drawWheel(angle) {
       var n = options.length;
       var cw = canvas.width, ch = canvas.height;
-      var cx = cw / 2, cy = ch / 2, r = Math.min(cx, cy) - 12;
+      /* 与主页面同一套尺寸关系：外圈占 9px，扇形退到 rr，留出指针空间 */
+      var cx = cw / 2, cy = ch / 2, r = Math.min(cx, cy) - 24; var rr = r - 7.5;
       ctx.clearRect(0, 0, cw, ch);
       if (n === 0) {
-        ctx.fillStyle = '#e2e8f0'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#e2e8f0'; ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#64748b'; ctx.font = '16px sans-serif'; ctx.textAlign = 'center';
         ctx.fillText('Add options to spin', cx, cy);
         return;
@@ -179,11 +259,12 @@
         var end = start + slice;
         ctx.beginPath();
         ctx.moveTo(cx, cy);
-        ctx.arc(cx, cy, r, start, end);
+        ctx.arc(cx, cy, rr, start, end);
         ctx.closePath();
         ctx.fillStyle = colors[i % colors.length];
         ctx.fill();
-        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+        ctx.stroke();
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(start + slice / 2);
@@ -192,23 +273,57 @@
         ctx.font = 'bold 14px sans-serif';
         var label = options[i];
         if (label.length > 14) label = label.slice(0, 13) + '…';
-        ctx.fillText(label, r - 14, 5);
+        ctx.fillText(label, rr - 14, 5);
         ctx.restore();
       }
+      /* 中奖扇区描边：红→黄→蓝渐变，与主页面一致；只描外弧，避免从圆心射出两道辐条 */
+      if (winnerIdx !== null && winnerIdx < n) {
+        var wStart = angle + winnerIdx * slice;
+        var wEnd = wStart + slice;
+        ctx.beginPath();
+        ctx.arc(cx, cy, rr, wStart, wEnd);
+        var g = ctx.createLinearGradient(cx + Math.cos(wStart) * rr, cy + Math.sin(wStart) * rr, cx + Math.cos(wEnd) * rr, cy + Math.sin(wEnd) * rr);
+        g.addColorStop(0, '#ef4444'); g.addColorStop(0.5, '#facc15'); g.addColorStop(1, '#3b82f6');
+        ctx.strokeStyle = g; ctx.lineWidth = 4;
+        ctx.stroke();
+      }
+      /* 外圈色环 + 中心轴：改用与主页面相同的 conic 渐变，并在 1.0 回填首色闭合成环 */
+      var T = Math.PI * 2;
+      var RIM = ['#f43f5e','#f97316','#facc15','#22c55e','#3b82f6','#a855f7'];
+      var ringGrad = null, hubGrad = null;
+      if (ctx.createConicGradient) {
+        ringGrad = ctx.createConicGradient(angle, cx, cy);
+        hubGrad = ctx.createConicGradient(angle + Math.PI / 6, cx, cy);
+        for (var gi = 0; gi < RIM.length; gi++) {
+          var gstop = gi / RIM.length;
+          ringGrad.addColorStop(gstop, RIM[gi]);
+          hubGrad.addColorStop(gstop, RIM[gi]);
+        }
+        ringGrad.addColorStop(1, RIM[0]);
+        hubGrad.addColorStop(1, RIM[0]);
+      }
       ctx.beginPath();
-      ctx.moveTo(cx + r + 4, cy);
-      ctx.lineTo(cx + r - 18, cy - 12);
-      ctx.lineTo(cx + r - 18, cy + 12);
-      ctx.closePath();
-      ctx.fillStyle = '#1a202c';
+      ctx.arc(cx, cy, r, 0, T);
+      ctx.strokeStyle = ringGrad || RIM[0];
+      ctx.lineWidth = 9;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(cx, cy, 24, 0, T);
+      ctx.fillStyle = hubGrad || RIM[0];
       ctx.fill();
+      ctx.beginPath();
+      ctx.arc(cx, cy, 10, 0, T);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      /* 指针不再是画在 12 点的三角：与主页面一致，指针就是中心 SPIN 按钮上方的尖角 */
     }
 
     function pickWinner() {
+      /* 指针在 12 点方向，判定角度随之改为 Math.PI * 1.5（与主页面一致） */
       var n = options.length;
       var slice = (Math.PI * 2) / n;
       var a = ((currentAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-      var idx = Math.floor(((Math.PI * 2 - a) % (Math.PI * 2)) / slice) % n;
+      var idx = Math.floor((((Math.PI * 1.5 - a) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / slice) % n;
       return idx;
     }
 
@@ -225,7 +340,7 @@
         if (_n > 0) {
           var _slice = (Math.PI * 2) / _n;
           var _a = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-          var _idx = Math.floor(((Math.PI * 2 - _a) % (Math.PI * 2)) / _slice) % _n;
+          var _idx = Math.floor((((Math.PI * 1.5 - _a) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / _slice) % _n;
           if (_idx !== lastTickIdx) { lastTickIdx = _idx; tick(); }
         }
         if (t < 1) {
@@ -233,6 +348,8 @@
         } else {
           currentAngle = (currentAngle + total) % (Math.PI * 2);
           var idx = pickWinner();
+          winnerIdx = idx;
+          drawWheel(currentAngle);
           document.getElementById('result').textContent = RESULT_PREFIX + options[idx];
           addHistory(options[idx], idx);
           document.getElementById('meta').textContent = options.length + ' options on the wheel.';
@@ -250,6 +367,7 @@
       if (options.length === 0) { document.getElementById('meta').textContent = 'Please add at least one option.'; return; }
       if (spinning) return;
       spinning = true;
+      winnerIdx = null;
       setBtnsDisabled(true);
       document.getElementById('result').textContent = 'Spinning…';
       drawWheel(currentAngle);
@@ -262,6 +380,7 @@
       var idx = pickWinner();
       if (options.length > 0) {
         var removed = options.splice(idx, 1);
+        winnerIdx = null;
         document.getElementById('options').value = options.join('\n');
         document.getElementById('result').textContent = 'Removed: ' + removed[0];
         drawWheel(currentAngle);
@@ -291,17 +410,29 @@
     }
     function toggleMute() {
       muted = !muted;
-      try { localStorage.setItem('myspinpick.wheel.sound', muted ? 'off' : 'on'); } catch (e) {}
+      try { localStorage.setItem('myspinpick.yesNoWheel.sound', muted ? 'off' : 'on'); } catch (e) {}
       var b = document.getElementById('muteBtn');
       if (b) b.textContent = muted ? '🔇' : '🔊';
     }
     function initSound() {
-      try { muted = localStorage.getItem('myspinpick.wheel.sound') === 'off'; } catch (e) {}
+      try { muted = localStorage.getItem('myspinpick.yesNoWheel.sound') === 'off'; } catch (e) {}
       var b = document.getElementById('muteBtn');
       if (b) b.textContent = muted ? '🔇' : '🔊';
     }
 
-    function setBtnsDisabled(d) { var b = document.querySelectorAll('.btns button'); for (var i = 0; i < b.length; i++) { b[i].disabled = d; } }
+    function setBtnsDisabled(d) {
+      var b = document.querySelectorAll('.btns button');
+      for (var i = 0; i < b.length; i++) { b[i].disabled = d; }
+      var cs = document.getElementById('centerSpin');
+      if (cs) cs.disabled = d;
+    }
+
+    /* 中心按钮尺寸跟着轮盘的实际显示直径走（iframe 宽度变化时要重算） */
+    function fitCenter() {
+      var box = document.querySelector('.wheel-box'), c = document.getElementById('wheel');
+      if (box && c) box.style.setProperty('--wheel', c.getBoundingClientRect().width + 'px');
+    }
+    window.addEventListener('resize', fitCenter);
 
     function resetAll() {
       document.getElementById('options').value = 'Yes,No,Maybe,Try later';
@@ -313,6 +444,7 @@
       document.getElementById('meta').textContent = options.length + ' options on the wheel.';
       document.getElementById('history').innerHTML = '';
       historyCount = 0;
+      winnerIdx = null;
       drawWheel(0);
     }
 
@@ -324,6 +456,7 @@
     options = getOptions();
     if (options.length) { document.getElementById('meta').textContent = options.length + ' options on the wheel.'; }
     drawWheel(0);
+  fitCenter();
   initSound();</script>
 </body>
 </html>
