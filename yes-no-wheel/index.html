@@ -117,7 +117,7 @@
     {
       "@type": "Question",
       "name": "What should I do if I do not like the answer?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Spin again, or press Remove &amp; spin again to drop that option first. The wheel is a way to end a debate, not a rule — and if a result leaves you disappointed, that reaction is usually your real answer." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Spin again, or press Remove & spin again to drop that option first. The wheel is a way to end a debate, not a rule — and if a result leaves you disappointed, that reaction is usually your real answer." }
     },
     {
       "@type": "Question",
@@ -555,8 +555,12 @@ section code {
 section p + p,
 section ul + p,
 section ol + p,
-section p + ul { margin-top: 10px; }
+section p + ul,
+section p + ol { margin-top: 10px; }
 section li + li { margin-top: 6px; }
+/* 有序列表的序号默认贴在正文左边线（20px 内边距只够标记本身），
+   看起来跟段落齐平、不像列表；给到 26px 才有明确的悬挂缩进 */
+section ol { padding-left: 26px; }
   </style>
 </head>
 <body>
