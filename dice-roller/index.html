@@ -296,12 +296,12 @@
         <h2>Embed This Dice Roller on Your Site</h2>
         <p>Board-game blogs, tabletop groups and classroom pages can host the same dice roller. Paste the snippet into any HTML block — it loads the free tool from myspinpick.com, fits the width of your layout, and works on phones and desktops alike.</p>
         <p>The embed costs nothing. A small "Dice Roller by MySpinPick" credit link sits under the dice; please leave it in place.</p>
-        <pre class="embed-code" id="embed-code" aria-label="Embed code for Dice Roller">&lt;iframe src="https://myspinpick.com/embed/dice-roller/" width="100%" height="384" style="border:0;max-width:100%" title="Dice Roller by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Dice Roller">&lt;script src="https://myspinpick.com/embed/widget.js" data-widget="dice-roller" data-height="384" async&gt;&lt;/script&gt;</pre>
         <p class="embed-actions">
           <button type="button" id="embed-copy">Copy embed code</button>
           <a class="embed-preview" href="https://myspinpick.com/embed/dice-roller/" target="_blank" rel="noopener">Preview the widget</a>
         </p>
-        <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>height</b> value in the snippet.</p>
+        <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>data-height</b> value in the snippet. Need it without JavaScript? Point an iframe straight at the same <b>/embed/dice-roller/</b> URL with the same height.</p>
       <script>
         (function () {
           var btn = document.getElementById('embed-copy');

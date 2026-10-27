@@ -478,12 +478,12 @@
       <h2>Embed This Name Picker on Your Site</h2>
       <p>If you run a class, a giveaway or a livestream, you can drop the same claw-machine picker straight into your own page. Paste the snippet into any HTML block and it pulls the live tool from myspinpick.com — no sign-up, no download, and it resizes to fit whatever column you put it in.</p>
       <p>Embedding is free. The small "Random Name Picker by MySpinPick" credit link under the machine keeps the tool discoverable; please keep it.</p>
-      <pre class="embed-code" id="embed-code" aria-label="Embed code for Random Name Picker">&lt;iframe src="https://myspinpick.com/embed/name-picker/" width="100%" height="898" style="border:0;max-width:100%" title="Random Name Picker by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+      <pre class="embed-code" id="embed-code" aria-label="Embed code for Random Name Picker">&lt;script src="https://myspinpick.com/embed/widget.js" data-widget="name-picker" data-height="898" async&gt;&lt;/script&gt;</pre>
       <p class="embed-actions">
         <button type="button" id="embed-copy">Copy embed code</button>
         <a class="embed-preview" href="https://myspinpick.com/embed/name-picker/" target="_blank" rel="noopener">Preview the widget</a>
       </p>
-      <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>height</b> value in the snippet.</p>
+      <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>data-height</b> value in the snippet. Need it without JavaScript? Point an iframe straight at the same <b>/embed/name-picker/</b> URL with the same height.</p>
     <script>
       (function () {
         var btn = document.getElementById('embed-copy');

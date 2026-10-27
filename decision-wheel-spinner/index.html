@@ -699,12 +699,12 @@ section ol { padding-left: 26px; }
   <h2>Embed This Decision Wheel Spinner on Your Site</h2>
   <p>Teachers, streamers and event hosts can put a cut-down version of this wheel on their own page. Copy the snippet below into any HTML block — it loads the same free spinner from myspinpick.com with just the wheel and a list box, stretches to the width of your container, and needs no account or download.</p>
   <p>The embed is free to use. A small "Decision Wheel Spinner by MySpinPick" credit link sits under the wheel; please leave it in place so people who land on your page can find the tool again.</p>
-  <pre class="embed-code" id="embed-code" aria-label="Embed code for Decision Wheel Spinner">&lt;iframe src="https://myspinpick.com/embed/decision-wheel-spinner/" width="100%" height="972" style="border:0;max-width:100%" title="Decision Wheel Spinner by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+  <pre class="embed-code" id="embed-code" aria-label="Embed code for Decision Wheel Spinner">&lt;script src="https://myspinpick.com/embed/widget.js" data-widget="decision-wheel-spinner" data-height="972" async&gt;&lt;/script&gt;</pre>
   <p class="embed-actions">
     <button type="button" id="embed-copy">Copy embed code</button>
     <a class="embed-preview" href="https://myspinpick.com/embed/decision-wheel-spinner/" target="_blank" rel="noopener">Preview the widget</a>
   </p>
-  <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>height</b> value in the snippet.</p>
+  <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>data-height</b> value in the snippet. Need it without JavaScript? Point an iframe straight at the same <b>/embed/decision-wheel-spinner/</b> URL with the same height.</p>
 <script>
   (function () {
     var btn = document.getElementById('embed-copy');
