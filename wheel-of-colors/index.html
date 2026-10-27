@@ -705,6 +705,38 @@ section li + li { margin-top: 6px; }
               <p>Teachers also use it for color-themed activities: spin twice, then ask pupils to name and describe the two colors that came up.</p>
             </section>
 
+<section id="embed">
+  <h2>Embed This Wheel of Colors on Your Site</h2>
+  <p>Teachers, streamers and event hosts can put a cut-down version of this wheel on their own page. Copy the snippet below into any HTML block — it loads the same free spinner from myspinpick.com with just the wheel and a list box, stretches to the width of your container, and needs no account or download.</p>
+  <p>The embed is free to use. A small "Wheel of Colors by MySpinPick" credit link sits under the wheel; please leave it in place so people who land on your page can find the tool again.</p>
+  <pre class="embed-code" id="embed-code" aria-label="Embed code for Wheel of Colors">&lt;iframe src="https://myspinpick.com/embed/wheel-of-colors/" width="100%" height="972" style="border:0;max-width:100%" title="Wheel of Colors by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+  <p class="embed-actions">
+    <button type="button" id="embed-copy">Copy embed code</button>
+    <a class="embed-preview" href="https://myspinpick.com/embed/wheel-of-colors/" target="_blank" rel="noopener">Preview the widget</a>
+  </p>
+  <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>height</b> value in the snippet.</p>
+<script>
+  (function () {
+    var btn = document.getElementById('embed-copy');
+    var box = document.getElementById('embed-code');
+    if (!btn || !box) return;
+    btn.addEventListener('click', function () {
+      var done = function () {
+        if (btn.dataset.busy) return;
+        btn.dataset.busy = '1';
+        var t = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function () { btn.textContent = t; delete btn.dataset.busy; }, 1800);
+      };
+      var fallback = function () { var r = document.createRange(); r.selectNodeContents(box); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); } catch (e) {} done(); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(box.textContent).then(done, fallback);
+      } else { fallback(); }
+    });
+  })();
+</script>
+</section>
+
 <section id="related">
         <h2>Related Tools</h2>
         <div class="related">
@@ -915,9 +947,7 @@ section li + li { margin-top: 6px; }
         var wStart = angle + winnerIdx * slice;
         var wEnd = wStart + slice;
         ctx.beginPath();
-        ctx.moveTo(cx, cy);
         ctx.arc(cx, cy, rr, wStart, wEnd);
-        ctx.closePath();
         var g = ctx.createLinearGradient(cx + Math.cos(wStart) * rr, cy + Math.sin(wStart) * rr, cx + Math.cos(wEnd) * rr, cy + Math.sin(wEnd) * rr);
         g.addColorStop(0, '#ef4444'); g.addColorStop(0.5, '#facc15'); g.addColorStop(1, '#3b82f6');
         ctx.strokeStyle = g; ctx.lineWidth = 4;
