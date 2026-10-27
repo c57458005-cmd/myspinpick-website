@@ -675,7 +675,7 @@ body:not(.fs) .panel-result .history:empty::before {
   <h2>Embed This Wheel Spinner on Your Site</h2>
   <p>Teachers, streamers and event hosts can put a cut-down version of this wheel on their own page. Copy the snippet below into any HTML block — it loads the same free spinner from myspinpick.com with just the wheel and a list box, stretches to the width of your container, and needs no account or download.</p>
   <p>The embed is free to use. A small "Wheel Spinner by MySpinPick" credit link sits under the wheel; please leave it in place so people who land on your page can find the tool again.</p>
-  <pre class="embed-code" id="embed-code" aria-label="Embed code for Wheel Spinner">&lt;iframe src="https://myspinpick.com/embed/wheel-spinner/" width="100%" height="957" style="border:0;max-width:100%" title="Wheel Spinner by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+  <pre class="embed-code" id="embed-code" aria-label="Embed code for Wheel Spinner">&lt;iframe src="https://myspinpick.com/embed/wheel-spinner/" width="100%" height="972" style="border:0;max-width:100%" title="Wheel Spinner by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
   <p class="embed-actions">
     <button type="button" id="embed-copy">Copy embed code</button>
     <a class="embed-preview" href="https://myspinpick.com/embed/wheel-spinner/" target="_blank" rel="noopener">Preview the widget</a>
@@ -917,9 +917,7 @@ body:not(.fs) .panel-result .history:empty::before {
         var wStart = angle + winnerIdx * slice;
         var wEnd = wStart + slice;
         ctx.beginPath();
-        ctx.moveTo(cx, cy);
         ctx.arc(cx, cy, rr, wStart, wEnd);
-        ctx.closePath();
         var g = ctx.createLinearGradient(cx + Math.cos(wStart) * rr, cy + Math.sin(wStart) * rr, cx + Math.cos(wEnd) * rr, cy + Math.sin(wEnd) * rr);
         g.addColorStop(0, '#ef4444'); g.addColorStop(0.5, '#facc15'); g.addColorStop(1, '#3b82f6');
         ctx.strokeStyle = g; ctx.lineWidth = 4;

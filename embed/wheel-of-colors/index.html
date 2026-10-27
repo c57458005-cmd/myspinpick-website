@@ -182,7 +182,7 @@
         <button type="button" class="icon-btn" id="muteBtn" onclick="toggleMute()" aria-label="Toggle sound" title="Sound on/off">🔊</button>
         <button type="button" onclick="resetAll()" title="Reset the result and history">↺ Reset</button>
       </div>
-      <div class="result" id="result" aria-live="polite">Spin the wheel to pick a winner</div>
+      <div class="result" id="result" aria-live="polite">Spin the wheel to pick a color</div>
       <div class="history" id="history" aria-live="polite"></div>
       <p class="meta">Separate options with commas or new lines.</p>
       <textarea id="options" rows="1" aria-label="Wheel options" spellcheck="false">Red,Orange,Yellow,Green,Blue,Purple,Pink,Black,White,Teal</textarea>
@@ -282,8 +282,8 @@ var VIEW = 440, DPR = 1;
     }
 
     var colors = STYLES.classic.seg;
-    var RESULT_PREFIX = "Winner: ";
-    var RESULT_INIT = "Spin the wheel to pick a winner";
+    var RESULT_PREFIX = "Picked: ";
+    var RESULT_INIT = "Spin the wheel to pick a color";
     var options = [];
     var currentAngle = 0;
     var spinning = false;

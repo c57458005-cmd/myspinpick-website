@@ -564,7 +564,7 @@
         <h2>Embed the Wheel of Fate on Your Site</h2>
         <p>Teachers, streamers and event hosts can put this exact wheel on their own page. Copy the snippet below into any HTML block — it loads the same free wheel of fate from myspinpick.com, stretches to the width of your container, and needs no account or download.</p>
         <p>The embed is free to use. A small "Wheel of Fate by MySpinPick" credit link sits under the wheel; please leave it in place so people who land on your page can find the tool again.</p>
-        <pre class="embed-code" id="embed-code" aria-label="Embed code for Wheel of Fate">&lt;iframe src="https://myspinpick.com/embed/wheel-of-fate/" width="100%" height="1200" style="border:0;max-width:100%" title="Wheel of Fate by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+        <pre class="embed-code" id="embed-code" aria-label="Embed code for Wheel of Fate">&lt;iframe src="https://myspinpick.com/embed/wheel-of-fate/" width="100%" height="1032" style="border:0;max-width:100%" title="Wheel of Fate by MySpinPick" loading="lazy"&gt;&lt;/iframe&gt;</pre>
         <p class="embed-actions">
           <button type="button" id="embed-copy">Copy embed code</button>
           <a class="embed-preview" href="https://myspinpick.com/embed/wheel-of-fate/" target="_blank" rel="noopener">Preview the widget</a>
@@ -780,9 +780,7 @@
         var wStart = angle + winnerIdx * slice;
         var wEnd = wStart + slice;
         ctx.beginPath();
-        ctx.moveTo(cx, cy);
         ctx.arc(cx, cy, rr, wStart, wEnd);
-        ctx.closePath();
         var g = ctx.createLinearGradient(cx + Math.cos(wStart) * rr, cy + Math.sin(wStart) * rr, cx + Math.cos(wEnd) * rr, cy + Math.sin(wEnd) * rr);
         g.addColorStop(0, '#ef4444'); g.addColorStop(0.5, '#facc15'); g.addColorStop(1, '#3b82f6');
         ctx.strokeStyle = g; ctx.lineWidth = 4;
@@ -794,10 +792,15 @@
       if (ctx.createConicGradient) {
         ringGrad = ctx.createConicGradient(angle, cx, cy);
         hubGrad = ctx.createConicGradient(angle + Math.PI / 6, cx, cy);
-        for (var gi = 0; gi < RIMC.length; gi++) {
-          ringGrad.addColorStop(gi / (RIMC.length - 1), RIMC[gi]);
-          hubGrad.addColorStop(gi / (RIMC.length - 1), RIMC[gi]);
+        var rimN = RIMC.length;
+        for (var gi = 0; gi < rimN; gi++) {
+          var gstop = gi / rimN;
+          ringGrad.addColorStop(gstop, RIMC[gi]);
+          hubGrad.addColorStop(gstop, RIMC[gi]);
         }
+        /* 闭合色环：1.0 回填首色，消除 12 点方向的硬接口 */
+        ringGrad.addColorStop(1, RIMC[0]);
+        hubGrad.addColorStop(1, RIMC[0]);
       }
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, T);

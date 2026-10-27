@@ -131,7 +131,9 @@
         <div class="total" id="total"></div>
         <div class="btns">
           <button type="button" id="rollBtn" class="primary" onclick="roll()">Roll Dice</button>
+          <button type="button" onclick="copyResult()">Copy Result</button>
         </div>
+        <div class="meta" id="meta" aria-live="polite"></div>
       </div>
 </main>
 <footer class="embed-foot">
@@ -229,6 +231,23 @@
         rollTimer = null;
       }, maxDur + 60);
     }
-    roll();</script>
+    roll();    function copyResult() {
+      if (rollTimer) { document.getElementById('meta').textContent = 'Wait for the roll to finish.'; return; }
+      var box = document.getElementById('total');
+      var text = box ? box.textContent.trim() : '';
+      if (!text || text === 'Rolling…' || text.indexOf('Total: ') !== 0) { document.getElementById('meta').textContent = 'Nothing to copy — roll the dice first.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy', { tool: 'dice-roller' }); }).catch(function(){ fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
+    }
+  </script>
 </body>
 </html>

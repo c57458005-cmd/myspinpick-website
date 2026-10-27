@@ -100,6 +100,7 @@
           <div class="valrow"><code id="rgb">rgb(37, 99, 235)</code><button onclick="copy('rgb')">Copy</button></div>
           <div class="valrow"><code id="hsl">hsl(221, 83%, 53%)</code><button onclick="copy('hsl')">Copy</button></div>
         </div>
+        <div class="meta" id="meta" aria-live="polite"></div>
       </div>
 </main>
 <footer class="embed-foot">
@@ -154,9 +155,35 @@
       document.getElementById('hsl').textContent = 'hsl(' + hsl[0] + ', ' + hsl[1] + '%, ' + hsl[2] + '%)';
     }
     function copy(which) {
-      var txt = document.getElementById(which).textContent;
-      if (navigator.clipboard) navigator.clipboard.writeText(txt);
-      track('copy', { tool: 'color-picker', which: which });
+      var el = document.getElementById(which);
+      var text = el ? el.textContent.trim() : '';
+      var meta = document.getElementById('meta');
+      if (!text) { if (meta) meta.textContent = 'Nothing to copy yet.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          if (meta) meta.textContent = 'Copied!';
+          track('copy', { tool: 'color-picker', which: which });
+        }).catch(function () { fallbackCopy(text, which); });
+      } else {
+        fallbackCopy(text, which);
+      }
+    }
+
+    function fallbackCopy(text, which) {
+      var meta = document.getElementById('meta');
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        if (meta) meta.textContent = 'Copied!';
+        track('copy', { tool: 'color-picker', which: which });
+      } catch (e) {
+        if (meta) meta.textContent = 'Copy failed. Select the value and copy it manually.';
+      }
+      document.body.removeChild(ta);
     }
     document.getElementById('picker').addEventListener('input', update);
     update();</script>

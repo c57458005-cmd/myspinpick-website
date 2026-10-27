@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Random Name Picker — Embeddable Widget | MySpinPick</title>
+<meta name="description" content="Embed this free random name picker on your own site or classroom page. Claw machine reveal, no ads, no sign-up." />
+<meta name="robots" content="noindex, follow" />
+<link rel="canonical" href="https://myspinpick.com/name-picker/" />
+<meta name="theme-color" content="#db2777" />
 <script>
-  /* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for Math.random().
+/* CSPRNG helper: crypto-secure uniform [0,1). Drop-in for Math.random().
      Uses the Web Crypto API (crypto.getRandomValues) so every spin, draw and
      shuffle on this page is backed by a cryptographically secure random source.
      Falls back to Math.random() only if Web Crypto is unavailable. */
@@ -14,22 +22,14 @@
     return Math.random();
   }
 </script>
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Random Name Picker — Embeddable Widget | MySpinPick</title>
-<meta name="description" content="Embed this free random name picker on your own site. Draw a name with a claw machine. No sign-up." />
-<meta name="robots" content="noindex, follow" />
-<link rel="canonical" href="https://myspinpick.com/name-picker/" />
-<meta name="theme-color" content="#db2777" />
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-VYS6D8Q5NS"></script>
 <script>
-    window.dataLayer = window.dataLayer || [];
+window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-VYS6D8Q5NS');
     function track(name, params) { if (typeof gtag === 'function') { gtag('event', name, params); } }
-  </script>
+</script>
 <style>
     :root {
       --bg: #f6f8fb; --card: #ffffff; --ink: #1a202c; --muted: #64748b;
@@ -50,7 +50,7 @@
 
     input[type="checkbox"] { accent-color: var(--accent); }
     .tool { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
-    textarea { width: 100%; min-height: 120px; resize: vertical; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
+    textarea { width: 100%; min-height: 46px; height: 46px; overflow: hidden; resize: none; border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit; color: var(--ink); }
     textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
     .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
     button { border: 1px solid #93c5fd; background: #dbeafe; color: #1e40af; padding: 9px 16px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
@@ -60,6 +60,7 @@
     button.primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
     button.primary:disabled { background: #f9a8d4; border-color: #f9a8d4; }
     .meta { font-size: 14px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+    .meta:empty { display: none; }
     .opt { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); margin: 4px 0 2px; }
 
     /* claw machine */
@@ -73,11 +74,10 @@
     @keyframes blink { 0%,100% { opacity: 1 } 50% { opacity: .25 } }
 
     .cabinet { position: relative; height: 196px; border-radius: 12px; overflow: hidden; background: linear-gradient(180deg,#ffffff 0%,#fff1f6 58%,#ffe4ef 100%); border: 1px solid #fbcfe8; box-shadow: inset 0 -20px 26px -18px rgba(219,39,119,.35); }
-    .cabinet.shaking { animation: shake .26s linear infinite; }
-    @keyframes shake { 0%{transform:translate(0,0)} 25%{transform:translate(-1.6px,1px)} 50%{transform:translate(1.6px,-1px)} 75%{transform:translate(-1px,-1.4px)} 100%{transform:translate(0,0)} }
     .rail { position: absolute; top: 10px; left: 10px; right: 10px; height: 4px; border-radius: 2px; background: linear-gradient(90deg,#cbd5e1,#94a3b8,#cbd5e1); box-shadow: 0 1px 0 #fff; }
 
     .claw { position: absolute; top: 10px; left: 0; width: 44px; margin-left: -22px; transform: translateX(180px); transition: transform .5s cubic-bezier(.4,0,.2,1); z-index: 3; }
+    .claw.idle { transition: none; }
     .cable { width: 3px; height: 20px; margin: 0 auto; background: linear-gradient(180deg,#94a3b8,#e2e8f0); transition: height .55s cubic-bezier(.4,0,.2,1); }
     .claw-head { position: relative; width: 44px; height: 22px; margin: 0 auto; }
     .claw-base { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 26px; height: 10px; border-radius: 5px; background: linear-gradient(180deg,#f472b6,#db2777); box-shadow: 0 1px 3px rgba(0,0,0,.2); }
@@ -97,28 +97,65 @@
     .toy .tag { display: inline-block; max-width: 64px; margin-top: 2px; padding: 1px 6px; border-radius: 999px; background: #fff; border: 1px solid #fbcfe8; font-size: 10px; font-weight: 700; color: #9d174d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .toy.hot .face { animation: pop .13s ease; }
     @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.3) rotate(-8deg)} 100%{transform:scale(1)} }
+    /* 待机时娃娃在机箱里随机滚动：每个娃娃的时长/延迟/幅度由 JS 随机注入 */
+    @media (prefers-reduced-motion: no-preference) {
+      .toys .toy { animation: wander var(--wdur, 3.4s) ease-in-out var(--wdel, 0s) infinite; }
+    }
+    @keyframes wander {
+      0%   { transform: translate(0,0) rotate(0deg); }
+      25%  { transform: translate(var(--wx1,5px), var(--wy1,-5px)) rotate(var(--wr1,4deg)); }
+      50%  { transform: translate(var(--wx2,-4px), var(--wy2,2px)) rotate(0deg); }
+      75%  { transform: translate(var(--wx3,4px), var(--wy3,6px)) rotate(var(--wr2,-4deg)); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
     .glass-shine { position: absolute; inset: 0; pointer-events: none; z-index: 4; background: linear-gradient(115deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 36%,rgba(255,255,255,0) 64%,rgba(255,255,255,.25) 100%); }
-    .hole { position: absolute; left: 8px; bottom: 6px; width: 62px; height: 26px; border-radius: 8px; background: linear-gradient(180deg,#831843,#4c0519); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; letter-spacing: .1em; color: #fbcfe8; box-shadow: inset 0 3px 6px rgba(0,0,0,.5); z-index: 2; }
+    /* 落物口：仅作为爪子的落点定位，不显示（原来的深色 PRIZE 标签已移除） */
+    .hole { position: absolute; left: 8px; bottom: 6px; width: 62px; height: 26px; z-index: 2; }
     .hole.hit { animation: holePop .35s ease; }
     @keyframes holePop { 0%{transform:scale(1)} 45%{transform:scale(1.12)} 100%{transform:scale(1)} }
 
-    .chute { margin-top: 10px; display: flex; align-items: center; gap: 8px; }
-    .chute-label { font-size: 9px; font-weight: 800; letter-spacing: .12em; color: #fff; background: var(--accent); padding: 10px 6px; border-radius: 8px; writing-mode: vertical-rl; text-orientation: mixed; }
-    .prize-slot { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; background: #fff; border: 2px dashed #f9a8d4; border-radius: 12px; font-size: 19px; font-weight: 800; color: var(--accent); padding: 6px 10px; word-break: break-word; }
+    .chute { margin-top: 10px; display: flex; align-items: stretch; gap: 8px; }
+    .prize-slot { flex: 0 0 calc(50% - 4px); min-height: 44px; display: flex; align-items: center; justify-content: center; background: #fff; border: 2px dashed #f9a8d4; border-radius: 12px; font-size: 15px; font-weight: 800; color: var(--accent); padding: 4px 8px; word-break: break-word; text-align: center; line-height: 1.25; }
+    .chute #pick { flex: 1 1 0; min-width: 0; margin: 0; padding: 8px; font-size: 14px; white-space: nowrap; }
+    /* 首次进入页面：Pick 按钮闪动 3 秒提示可点 */
+    @media (prefers-reduced-motion: no-preference) {
+      .chute #pick.attn { animation: attnPulse 1s ease-in-out 3; }
+    }
+    @keyframes attnPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(219,39,119,.55); }
+      50%      { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(219,39,119,0); }
+    }
     .prize-slot.win { border-style: solid; border-color: var(--accent); background: linear-gradient(180deg,#fff,#fff1f6); box-shadow: 0 6px 16px rgba(219,39,119,.18); animation: winPulse .5s ease; }
     @keyframes winPulse { 0%{transform:scale(.92)} 60%{transform:scale(1.07)} 100%{transform:scale(1)} }
     .confetti { position: absolute; width: 8px; height: 8px; border-radius: 2px; pointer-events: none; z-index: 9; animation: fall 1.15s ease-in forwards; }
     @keyframes fall { 0% { transform: translateY(-12px) rotate(0); opacity: 1 } 100% { transform: translateY(230px) rotate(560deg); opacity: 0 } }
     .machine-foot { margin-top: 9px; height: 10px; border-radius: 5px; background: linear-gradient(90deg,var(--accent),#f472b6,var(--accent)); opacity: .5; }
-    .sound-btn { background: #fff; border: 1px solid var(--border); color: var(--muted); padding: 9px 14px; }
-    .sound-btn:hover { background: #f8fafc; border-color: var(--accent); color: var(--accent); }
+    .btns.nowrap { flex-wrap: nowrap; }
+    @media (max-width: 640px) { .btns.nowrap { flex-wrap: wrap; } }
+    @media (max-width: 480px) { .btns.nowrap { gap: 6px; } .btns.nowrap button { padding: 9px 10px; font-size: 13px; } }
+    .icon-btn { width: 46px; padding-left: 0; padding-right: 0; font-size: 16px; }
+    .btns.list-btns { justify-content: flex-start; margin: 8px 0 0; }
+    .saved-head { margin-top: 18px; }
+    .saved-head .label { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .saved-hint { font-size: 13px; color: var(--muted); margin: 2px 0 8px; }
+    .saved-row { display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; margin-bottom: 6px; cursor: pointer; }
+    .saved-row.selected { background: #fbeaf0; border-color: #f4c0d1; }
+    .saved-row .preview { flex: 1; min-width: 0; font-size: 13px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .saved-row .n { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+    .saved-row button { flex: 0 0 20px; width: 20px; height: 20px; min-width: 20px; min-height: 20px; aspect-ratio: 1; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+    .saved-row button:hover { background: #fee2e2; border-color: #fca5a5; }
 
-    .result { font-size: 18px; font-weight: 700; text-align: center; color: var(--accent); min-height: 28px; margin-top: 4px; }
-    .order-list { max-width: 420px; margin: 10px auto 0; text-align: left; font-size: 15px; color: #334155; }
-    .order-list li { margin: 3px 0 3px 20px; }
-    .history { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 10px; }
+    .history { margin-top: 10px; }
     .history:empty { display: none; }
-    .history .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+    .history .hist-head { margin: 0 0 8px; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .batch { border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; background: #f8fafc; }
+    .batch-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .batch-head .b-label { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .02em; text-transform: uppercase; }
+    .batch-head .b-count { font-size: 12px; color: var(--muted); }
+    .batch-head .b-del { flex: 0 0 20px; width: 20px; height: 20px; min-width: 20px; min-height: 20px; aspect-ratio: 1; padding: 0; box-sizing: border-box; border-radius: 50%; font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; margin-left: auto; background: #fef2f2; border-color: #fecaca; color: #dc2626; cursor: pointer; }
+    .batch-head .b-del:hover { background: #fee2e2; border-color: #fca5a5; }
+    .batch-chips { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+    .batch .chip { color: #fff; border-radius: 8px; padding: 6px 4px; font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
     section { margin-top: 26px; }
     h2 { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 10px; }
     section p, section li { color: #334155; font-size: 15px; }
@@ -132,36 +169,49 @@
     details p { margin-top: 8px; color: #475569; }
     footer { margin: 30px 0 24px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
     footer a { color: var(--accent); }
-    @media (max-width: 640px) { .history { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px) { .batch-chips { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 640px) { h1 { font-size: 21px; } .brand-mini span { display: none; } }
     @media (max-width: 480px) { h1 { font-size: 20px; } button { min-height: 44px; } }
-  
-
-    /* ===================== /embed/ shell overrides ===================== */
-    html, body { margin: 0; padding: 0; }
-    body.embed { background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; }
-    .embed-main { flex: 1 1 auto; padding: 12px; }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-               overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-    .embed-foot { flex: 0 0 auto; padding: 8px 12px 12px; text-align: center;
-                  font-size: 12px; line-height: 1.4; color: var(--muted);
-                  border-top: 1px solid var(--border); background: var(--card); }
-    .embed-foot a { color: var(--accent); font-weight: 600; text-decoration: none; }
-    .embed-foot a:hover { text-decoration: underline; }
-    .embed-foot .by { margin: 0 5px; }
+    /* /embed/ 嵌入板块 */
+    #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #embed .embed-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 10px 0 0; }
+    #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
+    #embed .embed-preview:hover { text-decoration: underline; }
+    #embed .embed-hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+  </style>
+<style>
+  footer .slogan { white-space: nowrap; font-size: 14px; }
+  @media (max-width: 640px) { footer .slogan { font-size: 10.5px; } }
+</style>
+<style>
+  /* 嵌入外壳：只补布局与页脚，工具本身样式全部沿用主页面 */
+  html, body { margin: 0; padding: 0; }
+  body.embed { min-height: 100vh; display: flex; flex-direction: column; }
+  .embed-main { flex: 1 1 auto; padding: 12px; }
+  .embed-main .tool { margin: 0; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+             overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  footer.embed-foot { flex: 0 0 auto; margin: 0; padding: 8px 12px 12px;
+    border-top: 1px solid var(--border); text-align: center; font-size: 12px;
+    line-height: 1.4; color: var(--muted); background: var(--card); }
+  footer.embed-foot a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  footer.embed-foot a:hover { text-decoration: underline; }
+  footer.embed-foot .by { margin: 0 5px; }
+  @media (max-width: 480px) { .embed-main { padding: 8px; } }
 </style>
 </head>
 <body class="embed">
-<main class="embed-main">
-<h1 class="sr-only">Random Name Picker — free embeddable claw machine</h1>
-<div class="machine" id="machine" aria-hidden="true">
-        <div class="machine-top">
+  <div class="embed-main">
+    <h1 class="sr-only">Random Name Picker — free embeddable claw machine</h1>
+<main class="tool">
+      <div class="machine" id="machine">
+        <div class="machine-top" aria-hidden="true">
           <span class="m-brand"><span style="color:#ef4444">My</span><span style="color:#f59e0b">Spin</span><span style="color:#3b82f6">Pick</span></span>
           <span class="m-lights"><i></i><i></i><i></i></span>
         </div>
-        <div class="cabinet" id="cabinet">
+        <div class="cabinet" id="cabinet" aria-hidden="true">
           <div class="rail"></div>
-          <div class="hole" id="hole">PRIZE</div>
+          <div class="hole" id="hole"></div>
           <div class="toys" id="toys"></div>
           <div class="claw" id="claw">
             <div class="cable" id="cable"></div>
@@ -175,90 +225,344 @@
           <div class="glass-shine"></div>
         </div>
         <div class="chute">
-          <span class="chute-label">PRIZE</span>
-          <div class="prize-slot" id="prizeSlot">Your winner appears here 🧸</div>
+          <div class="prize-slot" id="prizeSlot" role="status" aria-live="polite"></div>
+          <button type="button" class="primary" id="pick">🕹️ Pick</button>
         </div>
-        <div class="machine-foot"></div>
+        <div class="machine-foot" aria-hidden="true"></div>
       </div>
 
-      <div class="btns">
-        <button class="primary" id="pick">🕹️ Pick One</button>
-        <button id="shuffle">🔀 Shuffle Order</button>
-        <button id="reset">Reset</button>
-        <button class="sound-btn" id="soundBtn" aria-pressed="true">🔊 Sound</button>
+      <div class="btns nowrap">
+        <button type="button" class="icon-btn" id="soundBtn" aria-label="Toggle sound" title="Sound on/off">🔊</button>
+        <button type="button" id="reset" title="Clear this list's results and start a new round">Reset</button>
+        <button type="button" id="copyBtn">Copy Result</button>
       </div>
-
-      <p class="meta" id="meta">0 names in the pool.</p>
-
-      <textarea id="names" aria-label="Names, one per line" placeholder="Enter names, one per line (or comma separated)&#10;e.g.&#10;Alice&#10;Bob&#10;Charlie" spellcheck="false">Alice
-Bob
-Charlie
-Diana
-Ethan</textarea>
-
-
 
       <div class="opt">
         <input type="checkbox" id="removeWinner" />
         <label for="removeWinner">Remove winner after pick (no repeats)</label>
       </div>
-      <div class="opt">
-        <span>Presets:</span>
-        <button id="presetClassroom" style="padding:5px 10px;font-size:13px;">Classroom</button>
-        <button id="presetGiveaway" style="padding:5px 10px;font-size:13px;">Giveaway</button>
-        <button id="presetClaw" style="padding:5px 10px;font-size:13px;">Claw Machine</button>
-      </div>
+      <p class="meta" id="meta"></p>
 
-      <div class="opt timer-row">
-        <span>⏱️ Response timer:</span>
-        <select id="timerSec" aria-label="Response timer length">
-          <option value="0">Off</option>
-          <option value="10">10s</option>
-          <option value="20">20s</option>
-          <option value="30">30s</option>
-          <option value="60">60s</option>
-          <option value="120">120s</option>
-        </select>
-        <button id="timerToggle" disabled>Start</button>
-        <button id="timerReset">Reset</button>
-      </div>
-      <p class="timer-display" id="timerDisplay" aria-live="polite" style="display:none;">0:30</p>
-      <p class="result" id="result"></p>
-      <ol class="order-list" id="orderList" style="display:none;"></ol>
       <div class="history" id="history"></div>
-</main>
-<footer class="embed-foot">
-  <a href="https://myspinpick.com/name-picker/" target="_blank" rel="noopener">Random Name Picker</a>
-  <span class="by">by</span>
-  <a href="https://myspinpick.com/" target="_blank" rel="noopener">MySpinPick</a>
-</footer>
 
-    <!-- /embed/ 专用埋点：把「父页面域名」记下来，才能知道谁真的嵌了我们 -->
-    <script>
-      (function () {
-        var host = 'direct';
-        try { host = document.referrer ? new URL(document.referrer).hostname : 'direct'; } catch (e) { host = 'direct'; }
-        /* 自己域（直接打开嵌入页）与本地预览不算「被第三方嵌入」，否则会污染这份名单 */
-        if (!host || host === 'myspinpick.com' || host === 'www.myspinpick.com' ||
-            /^(localhost|127\..*|0\.0\.0\.0$|10\..*|192\.168\..*)/.test(host)) {
-          host = 'direct';
-        }
-        if (typeof gtag === 'function') {
-          gtag('event', 'embed_view', { embed_tool: 'name-picker', parent_host: host });
-        }
-      })();
-    </script>
-<script>(function() {
+      <textarea id="names" rows="1" aria-label="Names, comma separated" placeholder="Enter names, separated by commas&#10;e.g. Alice,Bob,Charlie" spellcheck="false">Alice,Bob,Charlie,Diana,Ethan</textarea>
+
+      <div class="btns list-btns">
+        <button type="button" id="saveBtn">💾 Save</button>
+        <button type="button" id="clearBtn">Clear</button>
+        <button type="button" id="removeBtn">Remove</button>
+      </div>
+
+      <div class="saved-head"><span class="label">Saved lists</span></div>
+      <p class="saved-hint">Tip: save your frequently used lists for quick reuse — each list keeps its own results.</p>
+      <div id="savedLists"></div>
+    </main>
+  </div>
+
+  <footer class="embed-foot">
+    <a href="https://myspinpick.com/name-picker/" target="_blank" rel="noopener">Random Name Picker</a>
+    <span class="by">by</span>
+    <a href="https://myspinpick.com/" target="_blank" rel="noopener">MySpinPick</a>
+  </footer>
+
+  <!-- /embed/ 专用埋点：把「父页面域名」记下来，才能知道谁真的嵌了我们 -->
+  <script>
+    (function () {
+      var host = 'direct';
+      try { host = document.referrer ? new URL(document.referrer).hostname : 'direct'; } catch (e) { host = 'direct'; }
+      if (!host || host === 'myspinpick.com' || host === 'www.myspinpick.com' ||
+          /^(localhost|127\..*|0\.0\.0\.0$|10\..*|192\.168\..*)/.test(host)) {
+        host = 'direct';
+      }
+      if (typeof gtag === 'function') {
+        gtag('event', 'embed_view', { embed_tool: 'name-picker', parent_host: host });
+      }
+    })();
+  </script>
+  <script>
+(function() {
       var namesEl = document.getElementById('names');
       var metaEl = document.getElementById('meta');
-      var resultEl = document.getElementById('result');
-      var orderListEl = document.getElementById('orderList');
       var historyEl = document.getElementById('history');
       var prizeEl = document.getElementById('prizeSlot');
       var pickBtn = document.getElementById('pick');
-      var shuffleBtn = document.getElementById('shuffle');
+      var resetBtn = document.getElementById('reset');
+      var copyBtn = document.getElementById('copyBtn');
+      var saveBtn = document.getElementById('saveBtn');
+      var clearBtn = document.getElementById('clearBtn');
+      var removeBtn = document.getElementById('removeBtn');
+      var savedBoxEl = document.getElementById('savedLists');
       var removeChk = document.getElementById('removeWinner');
       var rolling = false;
+
+      /* ---------- saved lists (wheel-spinner engine pattern) ---------- */
+      var SAVED_KEY = 'myspinpick.namePicker.savedLists';
+      var SAVED_MAX = 20;
+      var LAST_KEY = 'myspinpick.namePicker.last';
+      var savedLists = [];
+      var selectedSaved = -1;
+
+      function itemsOf(text) {
+        return String(text).split(/[\n,]+/).map(function(s){ return s.trim(); }).filter(Boolean);
+      }
+      function keyOf(text) {
+        return itemsOf(text).map(function(s){ return s.toLowerCase(); }).sort().join('|');
+      }
+      function loadSaved() {
+        try {
+          var s = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]');
+          if (Array.isArray(s)) {
+            savedLists = s.filter(function(x){ return x && typeof x.text === 'string'; }).slice(0, SAVED_MAX);
+            var migrated = false;
+            for (var i = 0; i < savedLists.length; i++) {
+              var before = savedLists[i].res;
+              savedLists[i].res = migrateRes(before);
+              if (JSON.stringify(before) !== JSON.stringify(savedLists[i].res)) migrated = true;
+            }
+            if (migrated) { try { localStorage.setItem(SAVED_KEY, JSON.stringify(savedLists)); } catch (e) {} }
+          }
+        } catch (e) { savedLists = []; }
+        var last = null;
+        try { last = JSON.parse(localStorage.getItem(LAST_KEY) || 'null'); } catch (e) {}
+        if (last && typeof last.text === 'string') {
+          namesEl.value = itemsOf(last.text).join(',');
+          if (typeof last.sel === 'number' && last.sel >= 0 && last.sel < savedLists.length) selectedSaved = last.sel;
+          if (typeof last.chk === 'boolean') removeChk.checked = last.chk;
+        }
+        renderHistoryFor(selectedSaved);
+        renderSaved();
+        autoGrow();
+      }
+      function persistLast() {
+        try { localStorage.setItem(LAST_KEY, JSON.stringify({ text: namesEl.value, sel: selectedSaved, chk: removeChk.checked })); } catch (e) {}
+      }
+      function persistSaved() {
+        try { localStorage.setItem(SAVED_KEY, JSON.stringify(savedLists)); } catch (e) {}
+        persistLast();
+      }
+      function saveList(silent, autoSelect, newBatch) {
+        var items = itemsOf(namesEl.value);
+        if (!items.length) return;
+        var k0 = keyOf(namesEl.value);
+        if (selectedSaved >= 0 && selectedSaved < savedLists.length && keyOf(savedLists[selectedSaved].text) === k0) {
+          savedLists[selectedSaved] = { text: items.join(','), n: items.length, res: savedLists[selectedSaved].res || [] };
+          renderSaved();
+          persistSaved();
+          if (newBatch) startBatch();
+          return;
+        }
+        var k = keyOf(namesEl.value);
+        for (var i = 0; i < savedLists.length; i++) {
+          if (keyOf(savedLists[i].text) === k) {
+            if (!silent || autoSelect) { selectedSaved = i; renderSaved(); persistLast(); }
+            return;
+          }
+        }
+        savedLists.unshift({ text: items.join(','), n: items.length, res: [] });
+        if (savedLists.length > SAVED_MAX) savedLists.pop();
+        if (!silent || autoSelect) selectedSaved = 0;
+        if (newBatch) startBatch();
+        renderSaved();
+        persistSaved();
+      }
+      function renderSaved() {
+        savedBoxEl.innerHTML = '';
+        for (var i = 0; i < savedLists.length; i++) {
+          (function(idx) {
+            var row = document.createElement('div');
+            row.className = 'saved-row' + (idx === selectedSaved ? ' selected' : '');
+            row.setAttribute('role', 'button');
+            row.setAttribute('tabindex', '0');
+            row.addEventListener('click', function(e) {
+              if (e.target.closest && e.target.closest('button')) return;
+              selectSaved(idx);
+            });
+            row.addEventListener('keydown', function(e) {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectSaved(idx); }
+            });
+            var preview = document.createElement('span');
+            preview.className = 'preview';
+            preview.title = savedLists[idx].text;
+            preview.textContent = savedLists[idx].text;
+            var n = document.createElement('span');
+            n.className = 'n';
+            n.textContent = savedLists[idx].n + ' names';
+            var del = document.createElement('button');
+            del.type = 'button';
+            del.textContent = '✕';
+            del.setAttribute('aria-label', 'Delete this saved list');
+            del.title = 'Delete this saved list';
+            del.addEventListener('click', function() { deleteSaved(idx); });
+            row.appendChild(preview);
+            row.appendChild(n);
+            row.appendChild(del);
+            savedBoxEl.appendChild(row);
+          })(i);
+        }
+      }
+      function applySavedRow(idx) {
+        namesEl.value = savedLists[idx].text;
+        selectedSaved = idx;
+        resetMachine();
+        randomizeFaces();
+        randomizeShelf();
+        prizeEl.textContent = '';
+        prizeEl.classList.remove('win');
+        renderHistoryFor(idx);
+        updateMeta();
+        autoGrow();
+        renderSaved();
+        persistLast();
+      }
+      function selectSaved(idx) {
+        if (rolling) { renderSaved(); return; }
+        if (idx === selectedSaved) return;
+        if (namesEl.value.trim()) saveList(true);
+        applySavedRow(idx);
+      }
+      function deleteSaved(idx) {
+        savedLists.splice(idx, 1);
+        if (selectedSaved === idx) {
+          selectedSaved = -1;
+          renderHistoryFor(-1);
+        }
+        else if (selectedSaved > idx) selectedSaved--;
+        renderSaved();
+        persistSaved();
+      }
+      function clearOptions() {
+        if (rolling) return;
+        namesEl.value = '';
+        selectedSaved = -1;
+        persistLast();
+        resetAll();
+        autoGrow();
+      }
+      function removeLast() {
+        if (rolling) return;
+        var list = parseNames();
+        if (!list.length) return;
+        list.pop();
+        namesEl.value = list.join(',');
+        updateMeta();
+        syncShelf();
+        persistLast();
+        autoGrow();
+      }
+      /* 结果按「批次」记录：一张卡片 = 一个名单的一轮，
+         连续抽取不断追加到当前卡片；Reset / Clear / 保存为新名单 时结束本轮、开新卡片。
+         res = [ { t: 时间戳, picks: [名字,...] }, ... ]，仅保留最近 BATCH_MAX 批 */
+      var BATCH_MAX = 20;
+
+      /* 旧版平铺格式 [{n:"x"}] → 迁移为单批次，避免存量记录丢失 */
+      function migrateRes(res) {
+        if (!Array.isArray(res) || !res.length) return [];
+        if (res[0] && typeof res[0] === "object" && Array.isArray(res[0].picks)) return res;
+        var flat = res.filter(function(x){ return x && typeof x.n === "string"; }).map(function(x){ return x.n; });
+        if (!flat.length) return [];
+        return [{ t: 0, picks: flat }];
+      }
+
+      /* 结束当前轮：下一次 recordResult 会开一张新卡片 */
+      function startBatch() { batchClosed = true; }
+      var batchClosed = false;
+
+      function recordResult(name) {
+        if (!(selectedSaved >= 0 && selectedSaved < savedLists.length)) {
+          /* 兜底：万一没有选中的名单，先自动存一条，保证结果一定有地方落 */
+          saveList(true, true);
+        }
+        if (selectedSaved >= 0 && selectedSaved < savedLists.length) {
+          var R = savedLists[selectedSaved].res;
+          if (!Array.isArray(R)) { R = []; savedLists[selectedSaved].res = R; }
+          /* 追加到最末一张卡片（即当前轮）；startBatch 标记轮结束时才开新卡片。
+             切名单不影响 —— 每张卡片的记录随各自名单走，切回来即恢复。 */
+          var last = (R.length && !batchClosed) ? R[R.length - 1] : null;
+          if (!last || !Array.isArray(last.picks)) {
+            R.push({ t: Date.now(), picks: [] });
+            last = R[R.length - 1];
+          }
+          batchClosed = false;
+          last.picks.push(name);
+          if (last.picks.length > 200) last.picks.shift();
+          if (R.length > BATCH_MAX) R.shift();
+          persistSaved();
+        }
+        renderHistoryFor(selectedSaved);
+      }
+
+      function batchTime(t) {
+        if (!t) return "";
+        var d = new Date(t);
+        var hh = ("0" + d.getHours()).slice(-2), mm = ("0" + d.getMinutes()).slice(-2);
+        return hh + ":" + mm;
+      }
+
+      /* 结果常驻展示：不再依赖「Remove winner after pick」勾选，
+         只要本轮抽过就有记录。批次倒序，最新的一轮在最上面。 */
+      function renderHistoryFor(idx) {
+        historyEl.innerHTML = '';
+        if (!(idx >= 0 && idx < savedLists.length)) return;
+        var res = savedLists[idx].res || [];
+        var cards = [];
+        for (var b = res.length - 1; b >= 0; b--) {
+          var batch = res[b];
+          var picks = (batch && batch.picks) || [];
+          if (!picks.length) continue;
+          cards.push(buildBatchCard(idx, b, batch, picks));
+        }
+        if (!cards.length) return;
+        var head = document.createElement('div');
+        head.className = 'hist-head';
+        head.textContent = 'Results';
+        historyEl.appendChild(head);
+        for (var c = 0; c < cards.length; c++) historyEl.appendChild(cards[c]);
+      }
+
+      function buildBatchCard(idx, bi, batch, picks) {
+        var card = document.createElement('div');
+        card.className = 'batch';
+        var head = document.createElement('div');
+        head.className = 'batch-head';
+        var lb = document.createElement('span');
+        lb.className = 'b-label';
+        lb.textContent = "Batch " + (bi + 1);
+        var ct = document.createElement('span');
+        ct.className = 'b-count';
+        var tm = batchTime(batch.t);
+        ct.textContent = picks.length + (picks.length > 1 ? " picks" : " pick") + (tm ? " \u00b7 " + tm : "");
+        var del = document.createElement('button');
+        del.type = "button";
+        del.className = "b-del";
+        del.textContent = "\u2715";
+        del.setAttribute("aria-label", "Delete this batch");
+        del.title = "Delete this batch";
+        del.addEventListener("click", function() { deleteBatch(idx, bi); });
+        head.appendChild(lb); head.appendChild(ct); head.appendChild(del);
+        var chips = document.createElement('div');
+        chips.className = "batch-chips";
+        for (var j = 0; j < picks.length; j++) {
+          var chip = document.createElement('div');
+          chip.className = "chip";
+          chip.style.background = chipColor(j);
+          chip.title = picks[j];
+          chip.textContent = (j + 1) + ". " + picks[j];
+          chips.appendChild(chip);
+        }
+        card.appendChild(head); card.appendChild(chips);
+        return card;
+      }
+
+      function deleteBatch(idx, bi) {
+        if (rolling) return;
+        if (!(idx >= 0 && idx < savedLists.length)) return;
+        var R = savedLists[idx].res;
+        if (!Array.isArray(R)) return;
+        R.splice(bi, 1);
+        persistSaved();
+        renderHistoryFor(idx);
+        renderSaved();
+      }
 
       /* ---------- claw machine parts ---------- */
       var machineEl = document.getElementById('machine');
@@ -280,15 +584,18 @@ Ethan</textarea>
       /* ---------- sound ---------- */
       var actx = null;
       var muted = false;
-      try { muted = localStorage.getItem('sp_mute') === '1'; } catch (e) {}
+      var SOUND_KEY = 'myspinpick.namePicker.sound';
+      try {
+        var sv = localStorage.getItem(SOUND_KEY);
+        muted = sv ? sv === 'off' : localStorage.getItem('sp_mute') === '1';
+      } catch (e) {}
       function syncSoundBtn() {
-        soundBtn.textContent = muted ? '\uD83D\uDD07 Muted' : '\uD83D\uDD0A Sound';
-        soundBtn.setAttribute('aria-pressed', muted ? 'false' : 'true');
+        soundBtn.textContent = muted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
       }
       syncSoundBtn();
       soundBtn.addEventListener('click', function() {
         muted = !muted;
-        try { localStorage.setItem('sp_mute', muted ? '1' : '0'); } catch (e) {}
+        try { localStorage.setItem(SOUND_KEY, muted ? 'off' : 'on'); } catch (e) {}
         syncSoundBtn();
         if (!muted) tone(880, .07, 'square', .04);
       });
@@ -327,17 +634,54 @@ Ethan</textarea>
           toyEls.push(t);
         }
       })();
-      function paintToys(list) {
+      /* 货架：8 个娃娃位，''=空位。抽奖只在「名单」里随机，货架只负责展示 ——
+         所以点击 Pick 时不重排货架；名单超过 8 个、中奖名字不在架上时，
+         等钩爪落下去遮住娃娃的那一刻把名字换给它，一次只动一个。 */
+      var shelf = ['','','','','','','',''];
+      var shelfTimer = null;
+      function renderShelf() {
         for (var i = 0; i < 8; i++) {
-          var t = toyEls[i];
-          if (i < list.length) {
+          var t = toyEls[i], nm = shelf[i];
+          if (nm) {
             t.style.display = '';
             var tag = t.querySelector('.tag');
-            if (tag.textContent !== list[i]) { tag.textContent = list[i]; t.classList.add('hot'); setTimeout((function(el){return function(){ el.classList.remove('hot'); };})(t), 140); }
+            if (tag.textContent !== nm) { tag.textContent = nm; t.classList.add('hot'); setTimeout((function(el){return function(){ el.classList.remove('hot'); };})(t), 140); }
           } else {
             t.style.display = 'none';
           }
         }
+      }
+      /* 货架补货来源：
+         - 没勾「不重复」→ 全部名单（可重复抽，娃娃抓走还会补回来）；
+         - 勾了「不重复」→ 只显示还没被抓走的名字，抓走的立即下架，
+           抽到所剩不足 8 个时货架开始变空，全部抽完即清空。 */
+      function shelfSource() {
+        if (!removeChk.checked) return parseNames();
+        var used = currentBatchPicks();
+        return parseNames().filter(function(n){ return used.indexOf(n) === -1; });
+      }
+      /* 整柜重新随机上货：进页面 / Reset / 切换名单时用 */
+      function randomizeShelf() {
+        var names = shuffleArr(shelfSource().slice()).slice(0, 8);
+        for (var i = 0; i < 8; i++) shelf[i] = names[i] || '';
+        renderShelf();
+      }
+      /* 只清掉「已经不在剩余名单里」的名字 + 补空位，不做随机重排 ——
+         免得打字或抽奖的时候娃娃自己乱跳（那正是用户说的"没意义的重新排序"）。 */
+      function syncShelf() {
+        var names = shelfSource();
+        var dirty = false;
+        for (var i = 0; i < 8; i++) {
+          if (shelf[i] && names.indexOf(shelf[i]) < 0) { shelf[i] = ''; dirty = true; }
+        }
+        for (var s = 0; s < 8; s++) {
+          if (!shelf[s]) {
+            for (var k = 0; k < names.length; k++) {
+              if (shelf.indexOf(names[k]) < 0) { shelf[s] = names[k]; dirty = true; break; }
+            }
+          }
+        }
+        if (dirty) renderShelf();
       }
       function randomizeFaces() {
         var pool = FACES.slice();
@@ -360,49 +704,107 @@ Ethan</textarea>
         }
       }
 
-      function buildDisplay(pool, winner) {
-        var rest = pool.filter(function(n) { return n !== winner; });
-        shuffleArr(rest);
-        var shown;
-        if (pool.length <= 8) { shown = pool.slice(); }
-        else { shown = rest.slice(0, 7); shown.push(winner); }
-        window.__capFace = FACES[Math.floor(cryptoRandom() * FACES.length)];
-        return shuffleArr(shown);
-      }
-
       function parseNames() {
         return namesEl.value.split(/[\n,]+/).map(function(s){ return s.trim(); }).filter(Boolean);
       }
+      /* 当前这一轮（最后一张批次卡片）已经抽走的名字。
+         注意：结果区现在常驻显示，所以池子不能再从 DOM 里读 chip，
+         必须只读「当前批次」的数据，否则关掉「不重复」后名字也回不来。 */
+      function currentBatchPicks() {
+        if (!(selectedSaved >= 0 && selectedSaved < savedLists.length)) return [];
+        var R = savedLists[selectedSaved].res;
+        if (!Array.isArray(R) || !R.length) return [];
+        var last = R[R.length - 1];
+        return (last && Array.isArray(last.picks)) ? last.picks : [];
+      }
       function pool() {
-        var used = Array.prototype.slice.call(historyEl.querySelectorAll('.chip')).map(function(c){ return c.textContent; });
-        return parseNames().filter(function(n){ return used.indexOf(n) === -1; });
+        var names = parseNames();
+        /* 关掉「不重复」，或上一轮已结束（batchClosed，等待下一次抽取开新卡片）时，池子都是满的 */
+        if (!removeChk.checked || batchClosed) return names;
+        var used = currentBatchPicks();
+        return names.filter(function(n){ return used.indexOf(n) === -1; });
       }
       function updateMeta() {
-        var total = parseNames().length;
-        var left = pool().length;
-        metaEl.textContent = total ? (left + ' of ' + total + ' names in the pool.') : 'Enter names below to start.';
+        /* 不再显示 "N of M names in the pool."：这一行只留给临时提示
+           （如 Saved list updated. / All names have been picked…），无提示时整行隐藏 */
+        if (metaEl.textContent) metaEl.textContent = '';
         pickBtn.disabled = rolling;
-        shuffleBtn.disabled = rolling;
+        resetBtn.disabled = rolling;
+        copyBtn.disabled = rolling;
+        saveBtn.disabled = rolling;
+        clearBtn.disabled = rolling;
+        removeBtn.disabled = rolling;
       }
       function chipColor(i) {
         var colors = ['#db2777','#0ea5e9','#22c55e','#f59e0b','#8b5cf6','#ef4444','#14b8a6','#eab308'];
         return colors[i % colors.length];
       }
-      function addToHistory(name) {
-        var chip = document.createElement('div');
-        chip.className = 'chip';
-        chip.textContent = name;
-        chip.style.background = chipColor(historyEl.children.length);
-        historyEl.appendChild(chip);
-      }
 
       function setClawX(px) { clawEl.style.transform = 'translateX(' + px + 'px)'; }
       function setCable(px) { cableEl.style.height = px + 'px'; }
+
+      /* ---------- 待机动画：钩爪自动左右巡游 ----------
+         用 rAF 逐帧改 transform（而不是 CSS 动画），这样点击 Pick 时可以直接
+         从当前帧的位置继续落到目标上，接缝看不出来。 */
+      var swayRAF = null;
+      var REDUCE = false;
+      try { REDUCE = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) {}
+
+      function stopSway() {
+        if (swayRAF) { cancelAnimationFrame(swayRAF); swayRAF = null; }
+        clawEl.classList.remove('idle');
+      }
+      /* 巡游 = 在整个横向区间里随机挑下一个点，跑过去、停一下、再挑下一个。
+         不像正弦那样只在中间来回蹭：下一次落点默认挑在"柜子的另一半"，
+         所以观感上是钩爪左右横扫整条轨道、满场乱走的真娃娃机。 */
+      function roamRange() {
+        var w = cabinetEl.clientWidth || 320;
+        return [26, Math.max(34, w - 26)];
+      }
+      function startSway() {
+        if (REDUCE || swayRAF || rolling) return;
+        clawEl.classList.add('idle');   /* 必须关掉 .5s 过渡，否则逐帧赋值会被过渡拖住 */
+        var range = roamRange();
+        var x = (range[0] + range[1]) / 2;
+        var from = x, to = x, t0 = performance.now(), dur = 0, pause = 0, moving = false;
+        setClawX(x);
+        function plan(now) {
+          var rr = roamRange(), span = rr[1] - rr[0], mid = rr[0] + span / 2;
+          from = x;
+          /* 优先落到柜子的另一半，保证每次位移都横跨整个区间；
+             留 20% 概率纯随机，免得变成机械的左右横跳。 */
+          if (cryptoRandom() < 0.8) {
+            var wantRight = x <= mid;
+            to = wantRight ? (mid + cryptoRandom() * (rr[1] - mid))
+                           : (rr[0] + cryptoRandom() * (mid - rr[0]));
+          } else {
+            to = rr[0] + cryptoRandom() * span;
+          }
+          t0 = now;
+          dur = Math.min(1700, Math.max(480, Math.abs(to - from) * 5.6));  /* 约 160px/s */
+          pause = 60 + cryptoRandom() * 320;
+          moving = true;
+        }
+        (function loop(now) {
+          if (rolling) { swayRAF = null; clawEl.classList.remove('idle'); return; }
+          if (!moving) {
+            if (now >= t0) plan(now);
+          } else {
+            var u = Math.min(1, (now - t0) / dur);
+            var e = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;   /* easeInOutCubic */
+            x = from + (to - from) * e;
+            setClawX(x);
+            if (u >= 1) { moving = false; t0 = now + pause; }
+          }
+          swayRAF = requestAnimationFrame(loop);
+        })(performance.now());
+      }
       function resetMachine() {
         gripEl.innerHTML = '';
         clawHeadEl.classList.remove('closed');
         setCable(20);
-        setClawX(cabinetEl.clientWidth ? cabinetEl.clientWidth / 2 : 160);
+        /* 巡游中不要去抢钩爪位置，否则会闪一下又回到巡游轨迹 */
+        if (!swayRAF) setClawX(cabinetEl.clientWidth ? cabinetEl.clientWidth / 2 : 160);
         prizeEl.classList.remove('win');
         for (var i = 0; i < 8; i++) {
           if (toyEls[i].parentNode !== toysEl) toysEl.appendChild(toyEls[i]);
@@ -410,64 +812,74 @@ Ethan</textarea>
           toyEls[i].style.top = SLOTS[i][1] + '%';
           toyEls[i].classList.remove('dropping');
         }
+        randomizeWander();
+      }
+
+      /* 给每个娃娃随机一套「滚动」参数，让机箱里的娃娃动起来像真的被搅动 */
+      function randomizeWander() {
+        function r(a, b) { return (a + cryptoRandom() * (b - a)).toFixed(1); }
+        for (var i = 0; i < 8; i++) {
+          var s = toyEls[i].style;
+          s.setProperty('--wdur', (2.6 + cryptoRandom() * 2.2).toFixed(2) + 's');
+          s.setProperty('--wdel', (-cryptoRandom() * 3).toFixed(2) + 's');
+          s.setProperty('--wx1', r(3, 8) + 'px');  s.setProperty('--wy1', r(-7, -3) + 'px'); s.setProperty('--wr1', r(3, 7) + 'deg');
+          s.setProperty('--wx2', r(-8, -3) + 'px'); s.setProperty('--wy2', r(1, 5) + 'px');
+          s.setProperty('--wx3', r(2, 6) + 'px');  s.setProperty('--wy3', r(3, 7) + 'px');  s.setProperty('--wr2', r(-7, -3) + 'deg');
+        }
       }
 
       function runClaw() {
         if (rolling) return Promise.resolve();
         var p = pool();
         if (!p.length) {
-          resultEl.textContent = '⚠️ Please enter at least one name first.';
+          metaEl.textContent = parseNames().length
+            ? 'All names have been picked in this round — press Reset to start a new round.'
+            : 'Enter names below to start.';
           namesEl.focus();
           return Promise.resolve();
         }
         rolling = true;
         updateMeta();
-        resultEl.textContent = '';
-        orderListEl.style.display = 'none';
-        resetMachine();
-        prizeEl.textContent = 'Shuffling…';
-        cabinetEl.classList.add('shaking');
-        tone(150, .5, 'sawtooth', .028);
-        randomizeFaces();
-        gripEl.innerHTML = '<div class="toy fake"><span class="face">' + FACES[Math.floor(cryptoRandom() * FACES.length)] + '</span></div>';
+        saveList(true, true);
+        /* 不再「整柜震动 + 重新排序」：那一段对结果没有任何影响（中奖人是在之后才随机的），
+           纯属假动作，而且会把用户正在看的娃娃全换掉、让抓取看起来是演的。
+           现在直接从「当前这一柜」里挑一个抓手，钩爪落下去就抓。 */
+        stopSway();                          /* 巡游结束，接管钩爪 */
+        void clawEl.offsetWidth;             /* 先让去掉 .idle 后的过渡生效，落爪才有动画 */
+        clawHeadEl.classList.remove('closed');
+        setCable(20);
+        prizeEl.textContent = '';
+        prizeEl.classList.remove('win');
 
-        var flick = p.slice();
-        var step = 0;
-        return new Promise(function(resolve) {
-          (function tick() {
-            shuffleArr(flick);
-            paintToys(flick.slice(0, Math.min(8, flick.length)));
-            var face = gripEl.querySelector('.face');
-            if (face) face.textContent = FACES[Math.floor(cryptoRandom() * FACES.length)];
-            tone(500 + cryptoRandom() * 280, .035, 'square', .02);
-            step++;
-            if (step < 12) { setTimeout(tick, 70); } else { resolve(); }
-          })();
+        var winner = p[Math.floor(cryptoRandom() * p.length)];
+        var visIdx = [];
+        for (var vi = 0; vi < 8; vi++) { if (shelf[vi]) visIdx.push(vi); }
+        if (!visIdx.length) randomizeShelf();
+        visIdx = [];
+        for (var vi2 = 0; vi2 < 8; vi2++) { if (shelf[vi2]) visIdx.push(vi2); }
+        var idx = shelf.indexOf(winner);
+        if (idx < 0) idx = visIdx.length ? visIdx[Math.floor(cryptoRandom() * visIdx.length)] : 0;
+        var toy = toyEls[idx];
+        var targetX = toy.offsetLeft + toy.offsetWidth / 2;
+        var needSwap = shelf[idx] !== winner;
+
+        return wait(150).then(function() {
+          tone(250, .28, 'sawtooth', .03);
+          setClawX(targetX);
+          return wait(520);
         }).then(function() {
-          cabinetEl.classList.remove('shaking');
-          var winner = p[Math.floor(cryptoRandom() * p.length)];
-          var shown = buildDisplay(p, winner);
-          paintToys(shown);
-          window.__capFace = FACES[Math.floor(cryptoRandom() * FACES.length)];
-          var face = gripEl.querySelector('.face');
-          if (face) face.textContent = window.__capFace;
-          var idx = Math.max(0, shown.indexOf(winner));
-          var toy = toyEls[idx];
-          var targetX = toy.offsetLeft + toy.offsetWidth / 2;
-          var origLeft = toy.style.left, origTop = toy.style.top;
-          return wait(200).then(function() {
-            tone(250, .28, 'sawtooth', .03);
-            setClawX(targetX);
-            return wait(480);
-          }).then(function() {
-            tone(320, .45, 'sine', .035);
-            setCable(Math.max(26, toy.offsetTop - 40));
-            return wait(560);
+          tone(320, .45, 'sine', .035);
+          /* 钩爪正从娃娃上方落下，这一刻换名字基本看不见 —— 只动这一个娃娃 */
+          if (needSwap) { shelf[idx] = winner; renderShelf(); }
+          setCable(Math.max(26, toy.offsetTop - 13));
+          return wait(560);
           }).then(function() {
             clawHeadEl.classList.add('closed');
             tone(920, .07, 'square', .05);
             return wait(320);
           }).then(function() {
+            var wface = toy.querySelector('.face');
+            gripEl.innerHTML = '<div class="toy fake"><span class="face">' + (wface ? wface.textContent : '\uD83E\uDDD8') + '</span></div>';
             if (toy) toy.style.display = 'none';
             return wait(140);
           }).then(function() {
@@ -489,153 +901,148 @@ Ethan</textarea>
             setTimeout(function() { holeEl.classList.remove('hit'); }, 420);
             prizeEl.textContent = '🏆 ' + winner;
             prizeEl.classList.add('win');
-            resultEl.textContent = '🏆 Winner: ' + winner;
             confetti();
             fanfare();
-            if (removeChk.checked) addToHistory(winner);
+            recordResult(winner);
             track('pick_name', { method: 'claw_machine' });
-            autoStartTimer();
             setTimeout(function() { gripEl.innerHTML = ''; }, 900);
+            /* 被夹走的位置空出来，下次抽奖前补一个新名字（名单都抽完了就空着，
+               正好呼应"全部抽完"的状态） */
+            shelf[idx] = '';
+            syncShelf();
             rolling = false;
             updateMeta();
+            startSway();   /* 抓完后钩爪继续巡游 */
           });
-        });
       }
 
-      /* ---------- classroom response timer ---------- */
-      var timerSel = document.getElementById('timerSec');
-      var timerDisplayEl = document.getElementById('timerDisplay');
-      var timerToggle = document.getElementById('timerToggle');
-      var timerResetBtn = document.getElementById('timerReset');
-      var timerTotal = 0, timerLeft = 0, timerId = null, timerRunning = false;
-
-      function fmtTime(s) {
-        s = Math.max(0, Math.ceil(s));
-        var m = Math.floor(s / 60), r = s % 60;
-        return m + ':' + (r < 10 ? '0' : '') + r;
-      }
-      function paintTimer() {
-        if (timerTotal <= 0) { timerToggle.disabled = true; timerToggle.textContent = 'Start'; return; }
-        timerToggle.disabled = false;
-        timerToggle.textContent = timerRunning ? 'Pause' : (timerLeft > 0 && timerLeft < timerTotal ? 'Resume' : 'Start');
-        timerDisplayEl.classList.toggle('running', timerRunning);
-        if (!timerRunning && timerLeft > 0) timerDisplayEl.textContent = fmtTime(timerLeft);
-      }
-      function stopTick() { if (timerId) { clearInterval(timerId); timerId = null; } timerRunning = false; }
-      function setTimerTotal(sec) {
-        stopTick();
-        timerTotal = sec;
-        timerLeft = sec;
-        timerDisplayEl.classList.remove('running', 'up');
-        timerDisplayEl.style.display = sec > 0 ? '' : 'none';
-        if (sec > 0) timerDisplayEl.textContent = fmtTime(sec);
-        paintTimer();
-      }
-      function startTimer() {
-        if (timerTotal <= 0 || timerRunning) return;
-        if (timerLeft <= 0) timerLeft = timerTotal;
-        timerRunning = true;
-        var endAt = Date.now() + timerLeft * 1000;
-        timerId = setInterval(function() {
-          timerLeft = (endAt - Date.now()) / 1000;
-          if (timerLeft <= 0) {
-            timerLeft = 0;
-            stopTick();
-            timerDisplayEl.classList.remove('running');
-            timerDisplayEl.classList.add('up');
-            timerDisplayEl.textContent = "\u23f0 Time's up!";
-            timerToggle.textContent = 'Start';
-            tone(880, .16, 'square', .05);
-            tone(660, .16, 'square', .05, .22);
-            tone(440, .3, 'square', .05, .44);
-            track('timer_finished', { seconds: timerTotal });
-          } else {
-            timerDisplayEl.textContent = fmtTime(timerLeft);
-          }
-        }, 100);
-        track('timer_started', { seconds: timerTotal });
-        paintTimer();
-      }
-      function pauseTimer() { if (!timerRunning) return; stopTick(); paintTimer(); }
-      function autoStartTimer() {
-        if (timerTotal <= 0) return;
-        stopTick();
-        timerLeft = timerTotal;
-        timerDisplayEl.classList.remove('up');
-        startTimer();
-      }
-      function resetTimerView() {
-        stopTick();
-        timerLeft = timerTotal;
-        timerDisplayEl.classList.remove('up');
-        if (timerTotal > 0) timerDisplayEl.textContent = fmtTime(timerTotal);
-        paintTimer();
-      }
-      timerSel.addEventListener('change', function() { setTimerTotal(parseInt(timerSel.value, 10) || 0); });
-      timerToggle.addEventListener('click', function() { if (timerRunning) { pauseTimer(); } else { startTimer(); } });
-      timerResetBtn.addEventListener('click', resetTimerView);
-      document.getElementById('reset').addEventListener('click', resetTimerView);
-
-      pickBtn.addEventListener('click', function() { runClaw(); });
-
-      shuffleBtn.addEventListener('click', function() {
-        var all = parseNames();
-        if (!all.length) {
-          resultEl.textContent = '⚠️ Please enter at least one name first.';
-          orderListEl.style.display = 'none';
-          namesEl.focus();
-          return;
-        }
-        for (var i = all.length - 1; i> 0; i--) {
-          var j = Math.floor(cryptoRandom() * (i + 1));
-          var t = all[i]; all[i] = all[j]; all[j] = t;
-        }
-        resultEl.textContent = '';
-        prizeEl.classList.remove('win');
-        prizeEl.textContent = '🔀 Random order ready';
-        orderListEl.style.display = 'block';
-        orderListEl.innerHTML = all.map(function(n, idx) { return '<li>' + n + '</li>'; }).join('');
-        track('shuffle_names', { count: all.length });
+      pickBtn.addEventListener('click', function() {
+        pickBtn.classList.remove('attn');   /* 用户已经会点了，提示动画立即撤掉 */
+        runClaw();
       });
 
-      document.getElementById('reset').addEventListener('click', function() {
-        historyEl.innerHTML = '';
-        resultEl.textContent = '';
-        orderListEl.style.display = 'none';
-        prizeEl.textContent = 'Your winner appears here 🧸';
+      function resetAll() {
+        if (rolling) return;
+        prizeEl.classList.remove('win');
+        /* Reset = 清空这一名单的结果 + 结束本轮，下一抽重新从 Batch 1 开始 */
+        if (selectedSaved >= 0 && selectedSaved < savedLists.length) {
+          savedLists[selectedSaved].res = [];
+          persistSaved();
+        }
+        startBatch();
+        renderHistoryFor(selectedSaved);
+        prizeEl.textContent = '';
         resetMachine();
         randomizeFaces();
-        paintToys(parseNames().slice(0, 8));
+        randomizeShelf();
         updateMeta();
-      });
+      }
+      resetBtn.addEventListener('click', resetAll);
 
-      document.getElementById('presetClassroom').addEventListener('click', function() {
-        namesEl.value = ['Alice','Bob','Charlie','Diana','Ethan','Fiona','George','Hannah'].join('\n');
-        timerSel.value = '30';
-        setTimerTotal(30);
-        document.getElementById('reset').click();
+      saveBtn.addEventListener('click', function() {
+        var items = itemsOf(namesEl.value);
+        if (!items.length) { metaEl.textContent = 'Nothing to save — the names box is empty.'; return; }
+        var before = selectedSaved;
+        saveList(false, true, true);
+        metaEl.textContent = (selectedSaved === before && before >= 0) ? 'Saved list updated.' : 'List saved.';
       });
-      document.getElementById('presetGiveaway').addEventListener('click', function() {
-        namesEl.value = ['@sunny_dreams','@moonlight_99','@pixel_pete','@luckycharm','@nightowl','@starcatcher'].join('\n');
-        document.getElementById('reset').click();
-      });
-      document.getElementById('presetClaw').addEventListener('click', function() {
-        namesEl.value = ['🧸 Teddy','🚗 Racer','🦄 Unicorn','🐸 Froggy','🤖 Robot','🐰 Bunny','🐲 Dragon','🐙 Octo'].join('\n');
-        document.getElementById('reset').click();
-      });
+      clearBtn.addEventListener('click', clearOptions);
+      removeBtn.addEventListener('click', removeLast);
 
+      namesEl.addEventListener('paste', function(e) {
+        e.preventDefault();
+        var t = (e.clipboardData || window.clipboardData).getData('text') || '';
+        t = t.split(/[\n,]+/).map(function(s){ return s.trim(); }).filter(Boolean).join(',');
+        if (!t) return;
+        var s = namesEl.selectionStart, epos = namesEl.selectionEnd;
+        namesEl.value = namesEl.value.slice(0, s) + t + namesEl.value.slice(epos);
+        namesEl.setSelectionRange(s + t.length, s + t.length);
+        namesEl.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+      namesEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          var s = namesEl.selectionStart, epos = namesEl.selectionEnd;
+          namesEl.value = namesEl.value.slice(0, s) + ',' + namesEl.value.slice(epos);
+          namesEl.setSelectionRange(s + 1, s + 1);
+          namesEl.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
+      /* 文本框高度自适应：随内容长高，超过窗口 40%（160–320px 之间）后改为内部滚动 */
+      function taCap() {
+        return Math.max(160, Math.min(320, Math.round(window.innerHeight * 0.4)));
+      }
+      function autoGrow() {
+        var cap = taCap();
+        namesEl.style.height = 'auto';
+        var h = namesEl.scrollHeight;
+        namesEl.style.height = Math.max(46, Math.min(h, cap)) + 'px';
+        namesEl.style.overflowY = h > cap ? 'auto' : 'hidden';
+      }
+      window.addEventListener('resize', autoGrow);
       namesEl.addEventListener('input', function() {
         updateMeta();
-        paintToys(parseNames().slice(0, 8));
+        /* 打字时不要立刻重排货架（会让人眼花），停手 350ms 再对齐：
+           只清掉已不存在的名字 + 补空位，不随机重排 */
+        clearTimeout(shelfTimer);
+        shelfTimer = setTimeout(syncShelf, 350);
+        persistLast();
+        autoGrow();
       });
-      removeChk.addEventListener('change', updateMeta);
+      removeChk.addEventListener('change', function() {
+        /* 开关「不重复」等于换一轮：池子按新规则重置，下一次抽取另开一张批次卡片 */
+        if (removeChk.checked) startBatch();
+        updateMeta();
+        renderHistoryFor(selectedSaved);
+        persistLast();
+      });
       window.addEventListener('resize', function() {
-        if (!rolling) setClawX(cabinetEl.clientWidth / 2);
+        if (!rolling && !swayRAF) setClawX(cabinetEl.clientWidth / 2);
       });
+      loadSaved();
       updateMeta();
       resetMachine();
       randomizeFaces();
-      paintToys(parseNames().slice(0, 8));
-    })();</script>
+      randomizeShelf();
+      startSway();                                      /* 进页面钩爪就开始左右巡游 */
+      /* 首次进入：Pick 闪动 3 秒提示可点。等 load 后再起算，
+         否则图片加载慢时用户几乎看不到这段提示。 */
+      function flashPick() {
+        pickBtn.classList.add('attn');
+        setTimeout(function() { pickBtn.classList.remove('attn'); }, 3100);
+      }
+      if (document.readyState === 'complete') { flashPick(); }
+      else { window.addEventListener('load', flashPick); }
+
+      copyBtn.addEventListener('click', copyResult);
+
+      function copyResult() {
+        var items = [];
+        if (selectedSaved >= 0 && selectedSaved < savedLists.length && Array.isArray(savedLists[selectedSaved].res)) {
+          var RB = savedLists[selectedSaved].res;
+          for (var i = 0; i < RB.length; i++) {
+            var pk = (RB[i] && RB[i].picks) || [];
+            for (var k = 0; k < pk.length; k++) items.push(pk[k]);
+          }
+        }
+        if (!items.length) {
+          var chips = historyEl.querySelectorAll('.batch .chip');
+          for (var j = 0; j < chips.length; j++) items.push(chips[j].textContent);
+        }
+        if (!items.length) { metaEl.textContent = 'Nothing to copy — pick a name first.'; return; }
+        var text = items.join('\n');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function(){ metaEl.textContent = 'Copied!'; track('copy', { tool: 'name-picker' }); }).catch(function(){ fallbackCopy(text); });
+        } else { fallbackCopy(text); }
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); metaEl.textContent = 'Copied!'; track('copy'); }
+        catch (e) { metaEl.textContent = 'Copy failed'; }
+        document.body.removeChild(ta);
+      }
+    })();
+  </script>
 </body>
 </html>

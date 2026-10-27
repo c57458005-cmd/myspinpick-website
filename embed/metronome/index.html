@@ -98,7 +98,9 @@
         <input type="range" id="bpm" aria-label="Tempo (BPM)" min="40" max="240" value="120" />
         <div class="btns">
           <button type="button" class="primary" id="toggle" onclick="toggle()">Start</button>
+          <button type="button" onclick="copyResult()">Copy Result</button>
         </div>
+        <div class="meta" id="meta" aria-live="polite"></div>
       </div>
 </main>
 <footer class="embed-foot">
@@ -167,6 +169,22 @@
       bpm = parseInt(e.target.value, 10);
       document.getElementById('bpmVal').textContent = bpm;
       if (running) { clearInterval(timer); loop(); }
-    });</script>
+    });    function copyResult() {
+      var box = document.querySelector('.bpm');
+      var text = box ? box.textContent.replace(/\s+/g, ' ').trim() : '';
+      if (!text) { document.getElementById('meta').textContent = 'Nothing to copy yet.'; return; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ document.getElementById('meta').textContent = 'Copied!'; track('copy', { tool: 'metronome' }); }).catch(function(){ fallbackCopy(text); });
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); document.getElementById('meta').textContent = 'Copied!'; track('copy'); }
+      catch (e) { document.getElementById('meta').textContent = 'Copy failed'; }
+      document.body.removeChild(ta);
+    }
+  </script>
 </body>
 </html>
