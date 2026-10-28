@@ -38,7 +38,9 @@
     'metronome':              { h: 408, t: 'Metronome by MySpinPick',               a: 'Online metronome' },
     'color-picker':           { h: 482, t: 'Color Picker by MySpinPick',            a: 'Color picker' },
     'name-picker':            { h: 898, t: 'Random Name Picker by MySpinPick',      a: 'Random name picker' },
-    'random-number-generator': { h: 585, t: 'Random Number Generator by MySpinPick', a: 'Random number generator' }
+    'random-number-generator': { h: 585, t: 'Random Number Generator by MySpinPick', a: 'Random number generator' },
+    'secret-santa-name-picker': { h: 460, t: 'Secret Santa Name Picker by MySpinPick', a: 'Secret Santa name picker' },
+    'random-letter-picker':   { h: 436, t: 'Random Letter Picker by MySpinPick',    a: 'Random letter picker' }
   };
 
   var has = Object.prototype.hasOwnProperty;

@@ -185,6 +185,12 @@
     /* ---- tool-specific ---- */
     .result { margin-top:14px; background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:12px 14px; font-size:16px; white-space:pre-wrap; min-height:40px; }
 
+    /* /embed/ 嵌入板块 */
+    #embed .embed-code { margin: 0; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.6; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #embed .embed-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 10px 0 0; }
+    #embed .embed-preview { font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none; }
+    #embed .embed-preview:hover { text-decoration: underline; }
+    #embed .embed-hint { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 </style>
 </head>
 <body>
@@ -243,6 +249,38 @@
               <p>Timing does more for a gift exchange than any rule you can write down. Draw a few weeks before the party so there is time to shop, and keep the assignments to yourself until the day of the swap.</p>
               <p>Some groups reveal the givers only after the gifts are opened, which turns the exchange into a small second round of fun as everyone works out who had whom.</p>
             </section>
+
+<section id="embed">
+  <h2>Embed This Secret Santa Name Picker on Your Site</h2>
+  <p>Gift-exchange organisers can put the draw on their own page. Paste the snippet below into any HTML block — it loads the same free picker from myspinpick.com with an editable name box and a Draw Names button, stretches to the width of your container, and needs no account or download. The pairings are shuffled in the visitor's browser, so no name list is ever sent anywhere.</p>
+  <p>The embed is free to use. A small "Secret Santa Name Picker by MySpinPick" credit link sits under the controls; please leave it in place so people who land on your page can find the tool again.</p>
+  <pre class="embed-code" id="embed-code" aria-label="Embed code for Secret Santa Name Picker">&lt;script src="https://myspinpick.com/embed/widget.js" data-widget="secret-santa-name-picker" data-height="460" async&gt;&lt;/script&gt;</pre>
+  <p class="embed-actions">
+    <button type="button" id="embed-copy">Copy embed code</button>
+    <a class="embed-preview" href="https://myspinpick.com/embed/secret-santa-name-picker/" target="_blank" rel="noopener">Preview the widget</a>
+  </p>
+  <p class="embed-hint">The widget is responsive and works on phones. To change its height, edit the <b>data-height</b> value in the snippet. Need it without JavaScript? Point an iframe straight at the same <b>/embed/secret-santa-name-picker/</b> URL with the same height.</p>
+  <script>
+    (function () {
+      var btn = document.getElementById('embed-copy');
+      var box = document.getElementById('embed-code');
+      if (!btn || !box) return;
+      btn.addEventListener('click', function () {
+        var done = function () {
+          if (btn.dataset.busy) return;
+          btn.dataset.busy = '1';
+          var t = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(function () { btn.textContent = t; delete btn.dataset.busy; }, 1800);
+        };
+        var fallback = function () { var r = document.createRange(); r.selectNodeContents(box); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); } catch (e) {} done(); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(box.textContent).then(done, fallback);
+        } else { fallback(); }
+      });
+    })();
+  </script>
+</section>
 
 <section id="related">
         <h2>Related Tools</h2>
